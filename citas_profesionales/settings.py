@@ -20,6 +20,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'general', # modulo de la pagina principal
+    'cliente', # modulo de la aplicacion de clientes
+    'profesional', # modeulo de la aplicacion de profesionales
 ]
 
 MIDDLEWARE = [
