@@ -1,0 +1,114 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+*.sqlite
+db.sqlite3
+local_settings.py
+media/
+staticfiles/
+
+# If using Django's collectstatic
+/static/
+
+# Ignore .env or similar environment files
+.env
+.env.*
+*.env
+
+# Ignore IDE/editor configs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+.pyenv/
+
+# pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# mypy
+.mypy_cache/
+
+# Pyre type checker
+.pyre/
+
+# pytype
+.pytype/
+
+# coverage
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+
+# pytest
+.cache/
+nosetests.xml
+test.db
+junit-xml-output.xml
+
+# Sphinx documentation
+docs/_build/
+
+# pyinstaller
+*.manifest
+*.spec
+build/
+dist/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Gunicorn
+gunicorn.pid
+
+# Docker
+*.pid
+*.seed
+docker-compose.override.yml
+
+# Node (if using webpack, npm, etc.)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Localization
+*.mo
+
+# Secrets
+secrets.json
+
+# VS Code settings (optional)
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+
+# System files
+ehthumbs.db
+Icon?
+Desktop.ini
