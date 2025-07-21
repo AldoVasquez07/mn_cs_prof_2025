@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'general', # modulo de la pagina principal
     'cliente', # modulo de la aplicacion de clientes
     'profesional', # modeulo de la aplicacion de profesionales
+    'sistema', # modulo de la aplicacion de sistemas
 ]
 
 MIDDLEWARE = [
