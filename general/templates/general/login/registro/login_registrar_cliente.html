@@ -1,0 +1,62 @@
+{% extends 'general/base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'general/css/login/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+</div>
+
+<div class="container">
+    <div class="card">
+
+        <!-- Register Form -->
+        <div id="registerForm" class="form-container">
+            <div class="logo">
+                <h1>Crear Cuenta</h1>
+                <p>Únete a nuestra comunidad</p>
+            </div>
+            <form>
+                <div class="form-group">
+                    <input type="text" placeholder="Nombre completo" required>
+                    <div class="input-highlight"></div>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Correo electrónico" required>
+                    <div class="input-highlight"></div>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Contraseña" required>
+                    <div class="input-highlight"></div>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Confirmar contraseña" required>
+                    <div class="input-highlight"></div>
+                </div>
+                <button type="submit" class="btn">
+                    <span class="btn-text">Crear Cuenta</span>
+                </button>
+            </form>
+            <div class="toggle-link">
+                <a href="#" id="showLogin">¿Ya tienes cuenta? Inicia sesión</a>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="form-container hidden">
+            <div class="success-message">
+                <h3>¡Éxito!</h3>
+                <p id="successText"></p>
+            </div>
+            <button class="btn" id="backToLogin">Volver al inicio</button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'general/js/login/registro/login_registro.js' %}"></script>
+{% endblock %}

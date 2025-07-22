@@ -1,161 +1,155 @@
+{% extends 'general/base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block styles %}
+<link rel="stylesheet" href="{% static 'general/css/main_page_citas.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultas profesionales</title>
-    <link rel="stylesheet" href="{% static 'general/css/main_page_citas.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link rel="shortcut icon" href="{% static 'general/img/logo/logo_principal.png' %}">
-</head>
+{% block content %}
+<header class="header" id="header">
+    <nav class="nav container">
+        <a href="#" class="nav-logo"><img src="{% static 'general/img/logo/logo_principal.png' %}" alt="logo image"
+                class="nav-logo-img">Consultas profesionales</a>
 
-<body>
-    <header class="header" id="header">
-        <nav class="nav container">
-            <a href="#" class="nav-logo"><img src="{% static 'general/img/logo/logo_principal.png' %}" alt="logo image"
-                    class="nav-logo-img">Consultas profesionales</a>
-
-            <div class="nav-menu" id="nav-menu">
-                <ul class="nav-list">
-                    <li class="nav-list"><a href="#home" class="nav-link active-link">Inicio</a></li>
-                    <li class="nav-list"><a href="#features" class="nav-link">¿Cómo funcionamos?</a></li>
-                    <li class="nav-list"><a href="{% url 'cliente:login_cliente' %}" class="nav-link">Iniciar Sesión</a></li>
-                    <li class="nav-list"><a href="{% url 'cliente:login_cliente' %}" class="nav-link">Registrarme</a></li>
-                    <li class="nav-list"><a href="{% url 'general:seleccion_tipo_usuario' %}" class="nav-link">¿Eres un profesional?</a></li>
-                </ul>
-                <div class="nav-close" id="nav-close">
-                    <i class="fas fa-times"></i>
-                </div>
-            </div>
-            <div class="nav-toggle" id="nav-toggle">
-                <i class="fas fa-th-large"></i>
-            </div>
-        </nav>
-    </header>
-
-    <section class="home" id="home">
-        <div class="home-container container grid">
-            <div class="home-data">
-                <h1 class="home-title"><span>Consigue</span> más <span>clientes</span> e <span>ingresos</span></h1>
-                <p class="home-description">Consultoría profesional en un solo lugar.</p>
-                <div class="search-container">
-                    <div class="input-group">
-                        <input type="text" placeholder="Profesión" id="profession">
-                        <i class="ri-briefcase-line input-icon"></i>
-                    </div>
-
-                    <div class="input-group">
-                        <input type="text" placeholder="Ciudad" id="city">
-                        <i class="ri-map-pin-line input-icon"></i>
-                    </div>
-
-                    <a href="#" class="search-button">
-                        Buscar
-                        <i class="ri-arrow-right-line button-icon"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="home-img image">
-                <img src="{% static 'general/img/contenido/main_cita_profesional.png' %}" class="mockup"
-                    alt="Aplicación de citas profesionales" loading="lazy">
+        <div class="nav-menu" id="nav-menu">
+            <ul class="nav-list">
+                <li class="nav-list"><a href="#home" class="nav-link active-link">Inicio</a></li>
+                <li class="nav-list"><a href="#features" class="nav-link">¿Cómo funcionamos?</a></li>
+                <li class="nav-list"><a href="{% url 'cliente:login_cliente' %}" class="nav-link">Iniciar Sesión</a>
+                </li>
+                <li class="nav-list"><a href="{% url 'cliente:login_cliente' %}" class="nav-link">Registrarme</a></li>
+                <li class="nav-list"><a href="{% url 'general:seleccion_tipo_usuario' %}" class="nav-link">¿Eres un
+                        profesional?</a></li>
+            </ul>
+            <div class="nav-close" id="nav-close">
+                <i class="fas fa-times"></i>
             </div>
         </div>
-    </section>
-
-    <section class="features section" id="features">
-        <h2 class="section-title">¿Cómo funciona este sitio?</h2>
-        <div class="feature-container container grid">
-            <div class="feature-img image">
-                <img src="{% static 'general/img/contenido/citas_profesionales.png' %}" class="mockup"
-                    alt="Interfaz de la aplicación" loading="lazy">
-            </div>
-
-            <div class="feature-inside">
-                <ul>
-                    <li>
-                        <div class="feature-icon">
-                            <i class="fas fa-user-md" aria-hidden="true"></i>
-                        </div>
-                        <h3>¿Necesitas una consulta?</h3>
-                        <p>Aquí puedes agendar tus consultas con los mejores profesionales.</p>
-                    </li>
-
-                    <li>
-                        <div class="feature-icon">
-                            <i class="fas fa-laptop-medical" aria-hidden="true"></i>
-                        </div>
-                        <h3>Consultas presenciales u online</h3>
-                        <p>Puedes gestionar tus consultas de manera virtual o presencial, ¡Como mejor se te acomode!</p>
-                    </li>
-
-                    <li>
-                        <div class="feature-icon">
-                            <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
-                        </div>
-                        <h3>¿Necesitas consultar precios?</h3>
-                        <p>En esta página puedes encontrar diferentes profesionales y precios, ¡Elije el que más se te
-                            acomode!</p>
-                    </li>
-                </ul>
-            </div>
+        <div class="nav-toggle" id="nav-toggle">
+            <i class="fas fa-th-large"></i>
         </div>
-    </section>
+    </nav>
+</header>
 
-    <footer class="footer section">
-        <div class="footer-container container grid">
-            <div class="footer-content">
-                <a href="#" class="footer-logo"><img src="" alt=""><img
-                        src="{% static 'general/img/logo/logo_principal.png' %}" alt="logo image"
-                        class="footer-logo-img">Sistemas Suministros Soportes y Servicios</a>
-                <h3 class="footer-title">Para más aplicaciones<br> consulta a continuación</h3>
-
-                <div class="footer-subscribe">
-                    <input type="email" placeholder="Ingresa tu correo" class="footer-input">
-                    <button class="button button-flex footer-button">
-                        Enviar
-                        <i class="ri-arrow-right-up-line button-icon"></i>
-                    </button>
+<section class="home" id="home">
+    <div class="home-container container grid">
+        <div class="home-data">
+            <h1 class="home-title"><span>Consigue</span> más <span>clientes</span> e <span>ingresos</span></h1>
+            <p class="home-description">Consultoría profesional en un solo lugar.</p>
+            <div class="search-container">
+                <div class="input-group">
+                    <input type="text" placeholder="Profesión" id="profession">
+                    <i class="ri-briefcase-line input-icon"></i>
                 </div>
-            </div>
-            <div class="footer-content">
-                <h3 class="footer-title">Nuestra dirección</h3>
-                <ul class="footer-data">
-                    <li class="footer-information">United States of America</li>
-                    <li class="footer-information">815 Porto Mio Way</li>
-                    <li class="footer-information">Las Vegas, NV</li>
-                </ul>
-            </div>
-            <div class="footer-content">
-                <h3 class="footer-title">Contáctanos</h3>
-                <ul class="footer-data">
-                    <li class="footer-information">+1 (702) 487 3678</li>
-                    <div class="footer-social">
-                        <a href="#" class="footer-social-link"><i class="ri-facebook-fill"></i></a>
-                        <a href="#" class="footer-social-link"><i class="ri-instagram-line"></i></a>
-                        <a href="#" class="footer-social-link"><i class="ri-twitter-x-line"></i></a>
-                    </div>
-                </ul>
-            </div>
-            <div class="footer-content">
-                <h3 class="footer-title">Nuestros servicios</h3>
-                <ul class="footer-data">
-                    <li class="footer-information-link"><a href="#">Pricing</a></li>
-                    <li class="footer-information-link"><a href="#">Features</a></li>
-                    <li class="footer-information-link"><a href="#">FAQ</a></li>
-                </ul>
+
+                <div class="input-group">
+                    <input type="text" placeholder="Ciudad" id="city">
+                    <i class="ri-map-pin-line input-icon"></i>
+                </div>
+
+                <a href="#" class="search-button">
+                    Buscar
+                    <i class="ri-arrow-right-line button-icon"></i>
+                </a>
             </div>
         </div>
-        <p class="footer-copy">&#169; <span>Sistemas Suministros Soportes y Servicios</span>. Todos los derechos
-            reservados</p>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="{% static 'general/js/main_page_citas.js' %}"></script>
-</body>
 
-</html>
+        <div class="home-img image">
+            <img src="{% static 'general/img/contenido/main_cita_profesional.png' %}" class="mockup"
+                alt="Aplicación de citas profesionales" loading="lazy">
+        </div>
+    </div>
+</section>
+
+<section class="features section" id="features">
+    <h2 class="section-title">¿Cómo funciona este sitio?</h2>
+    <div class="feature-container container grid">
+        <div class="feature-img image">
+            <img src="{% static 'general/img/contenido/citas_profesionales.png' %}" class="mockup"
+                alt="Interfaz de la aplicación" loading="lazy">
+        </div>
+
+        <div class="feature-inside">
+            <ul>
+                <li>
+                    <div class="feature-icon">
+                        <i class="fas fa-user-md" aria-hidden="true"></i>
+                    </div>
+                    <h3>¿Necesitas una consulta?</h3>
+                    <p>Aquí puedes agendar tus consultas con los mejores profesionales.</p>
+                </li>
+
+                <li>
+                    <div class="feature-icon">
+                        <i class="fas fa-laptop-medical" aria-hidden="true"></i>
+                    </div>
+                    <h3>Consultas presenciales u online</h3>
+                    <p>Puedes gestionar tus consultas de manera virtual o presencial, ¡Como mejor se te acomode!</p>
+                </li>
+
+                <li>
+                    <div class="feature-icon">
+                        <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
+                    </div>
+                    <h3>¿Necesitas consultar precios?</h3>
+                    <p>En esta página puedes encontrar diferentes profesionales y precios, ¡Elije el que más se te
+                        acomode!</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<footer class="footer section">
+    <div class="footer-container container grid">
+        <div class="footer-content">
+            <a href="#" class="footer-logo"><img src="" alt=""><img
+                    src="{% static 'general/img/logo/logo_principal.png' %}" alt="logo image"
+                    class="footer-logo-img">Sistemas Suministros Soportes y Servicios</a>
+            <h3 class="footer-title">Para más aplicaciones<br> consulta a continuación</h3>
+
+            <div class="footer-subscribe">
+                <input type="email" placeholder="Ingresa tu correo" class="footer-input">
+                <button class="button button-flex footer-button">
+                    Enviar
+                    <i class="ri-arrow-right-up-line button-icon"></i>
+                </button>
+            </div>
+        </div>
+        <div class="footer-content">
+            <h3 class="footer-title">Nuestra dirección</h3>
+            <ul class="footer-data">
+                <li class="footer-information">United States of America</li>
+                <li class="footer-information">815 Porto Mio Way</li>
+                <li class="footer-information">Las Vegas, NV</li>
+            </ul>
+        </div>
+        <div class="footer-content">
+            <h3 class="footer-title">Contáctanos</h3>
+            <ul class="footer-data">
+                <li class="footer-information">+1 (702) 487 3678</li>
+                <div class="footer-social">
+                    <a href="#" class="footer-social-link"><i class="ri-facebook-fill"></i></a>
+                    <a href="#" class="footer-social-link"><i class="ri-instagram-line"></i></a>
+                    <a href="#" class="footer-social-link"><i class="ri-twitter-x-line"></i></a>
+                </div>
+            </ul>
+        </div>
+        <div class="footer-content">
+            <h3 class="footer-title">Nuestros servicios</h3>
+            <ul class="footer-data">
+                <li class="footer-information-link"><a href="#">Pricing</a></li>
+                <li class="footer-information-link"><a href="#">Features</a></li>
+                <li class="footer-information-link"><a href="#">FAQ</a></li>
+            </ul>
+        </div>
+    </div>
+    <p class="footer-copy">&#169; <span>Sistemas Suministros Soportes y Servicios</span>. Todos los derechos
+        reservados</p>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="{% static 'general/js/main_page_citas.js' %}"></script>
+{% endblock %}
