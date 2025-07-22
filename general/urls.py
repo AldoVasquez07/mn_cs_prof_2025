@@ -6,4 +6,5 @@ app_name = 'general'
 urlpatterns = [
     # Página principal
     path('', main_content_page, name='main_page_citas'),
+    path('tipo-registro/', seleccion_tipo_usuario, name='seleccion_tipo_usuario'),
 ]
