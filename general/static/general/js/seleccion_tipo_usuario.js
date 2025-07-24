@@ -8,7 +8,6 @@ backButton.addEventListener('click', function () {
         this.style.transform = '';
     }, 150);
 
-    // Aquí puedes agregar la lógica de navegación
     console.log('Navegando hacia atrás...');
 });
 
@@ -18,29 +17,23 @@ loginButton.addEventListener('click', function () {
         this.style.transform = '';
     }, 150);
 
-    // Aquí puedes agregar la lógica de login
     console.log('Redirigiendo a login...');
 });
 
-// Selección de cartas
 const cards = document.querySelectorAll('.card');
 let selectedCard = null;
 
 cards.forEach(card => {
     card.addEventListener('click', function () {
-        // Remover selección anterior
         if (selectedCard) {
             selectedCard.classList.remove('selected');
         }
 
-        // Agregar selección actual
         this.classList.add('selected');
         selectedCard = this;
 
-        // Crear efecto de partículas
         createParticles(this);
 
-        // Vibrar ligeramente otros elementos
         cards.forEach(otherCard => {
             if (otherCard !== this) {
                 otherCard.style.transform = 'translateY(5px) scale(0.98)';

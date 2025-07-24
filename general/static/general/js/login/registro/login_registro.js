@@ -21,20 +21,17 @@ function switchForms(hideForm, showForm) {
     }, 300);
 }
 
-// Evento para "¿Ya tienes cuenta?" (opcional, recarga el formulario)
 if (showLoginLink) {
     showLoginLink.addEventListener('click', (e) => {
         e.preventDefault();
-        switchForms(registerForm, registerForm); // No hay login, solo recarga animación
+        switchForms(registerForm, registerForm);
     });
 }
 
-// Botón de volver desde mensaje de éxito
 backToLoginBtn.addEventListener('click', () => {
     switchForms(successMessage, registerForm);
 });
 
-// Envío del formulario de registro
 document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
