@@ -55,6 +55,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'citas_profesionales.wsgi.application'
 
+AUTH_USER_MODEL = 'sistema.Usuario'
 
 DATABASES = {
     'default': {
