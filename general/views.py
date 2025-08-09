@@ -10,6 +10,14 @@ def seleccion_tipo_usuario(request):
 
 
 def login_inicio_sesion(request):
+    print('*'*50)
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        
+        print(f"Email: {email}, Password: {password}")
+    print('*'*50)
+    
     return render(request, 'general/login/inicio_sesion/login_iniciar_sesion.html')
 
 

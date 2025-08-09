@@ -23,52 +23,6 @@ function switchForms(hideForm, showForm) {
     }, 300);
 }
 
-// Event listeners for form switching
-showRegisterLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    switchForms(loginForm, registerForm);
-});
-
-showLoginLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    switchForms(registerForm, loginForm);
-});
-
-backToLoginBtn.addEventListener('click', () => {
-    switchForms(successMessage, loginForm);
-});
-
-// Form submission handlers
-document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const btn = form.querySelector('.btn');
-        const btnText = btn.querySelector('.btn-text');
-        const isLogin = form.closest('#loginForm') !== null;
-
-        // Add loading state
-        btnText.innerHTML = '<div class="loading"></div>Procesando...';
-        btn.disabled = true;
-
-        setTimeout(() => {
-            // Reset button
-            btnText.textContent = isLogin ? 'Iniciar Sesión' : 'Crear Cuenta';
-            btn.disabled = false;
-
-            // Show success message
-            successText.textContent = isLogin
-                ? 'Has iniciado sesión correctamente.'
-                : 'Tu cuenta ha sido creada exitosamente.';
-
-            switchForms(isLogin ? loginForm : registerForm, successMessage);
-
-            // Reset form
-            form.reset();
-        }, 2000);
-    });
-});
-
 // Input animations
 document.querySelectorAll('input').forEach(input => {
     input.addEventListener('focus', () => {
