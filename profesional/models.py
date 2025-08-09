@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Profesional(models.Model):
-    persona = models.OneToOneField('sistema.Persona', on_delete=models.CASCADE, related_name='profesional')
+    persona = models.OneToOneField('sistema.Usuario', on_delete=models.CASCADE, related_name='profesional')
     especialidad = models.ForeignKey('sistema.Especialidad', on_delete=models.SET_NULL, null=True, blank=True, related_name='profesionales')
     experiencia = models.TextField(blank=True)
     organizacion = models.ForeignKey('organizacion.Organizacion', on_delete=models.SET_NULL, null=True, blank=True, related_name='profesionales')
