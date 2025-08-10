@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
+from datetime import datetime
+from django.core.exceptions import ValidationError
 
 class Pais(models.Model):
     nombre = models.CharField(max_length=100)
@@ -36,12 +39,33 @@ class Usuario(AbstractUser):
     telefono = models.CharField(max_length=20, blank=True)
     ciudad = models.ForeignKey(Ciudad, on_delete=models.SET_NULL, null=True, blank=True)
     calificacion = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+    rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, blank=True)
     flag = models.BooleanField(default=True)
-
+    
     def __str__(self):
         return f'{self.first_name} {self.apellido_paterno} {self.apellido_materno}'
-
     
+
+    def clean(self):
+        super().clean()
+        
+        if Usuario.objects.filter(documento_identidad=self.documento_identidad).exclude(id=self.id).exists():
+            raise ValueError("El documento de identidad ya está en uso.")
+        
+        if Usuario.objects.filter(email=self.email).exclude(id=self.id).exists():
+            raise ValueError("El correo electrónico ya está en uso.")
+
+        if isinstance(self.fecha_nacimiento, str):
+            self.fecha_nacimiento = datetime.strptime(self.fecha_nacimiento, "%Y-%m-%d").date()
+
+        if self.fecha_nacimiento and self.fecha_nacimiento > timezone.now().date():
+            raise ValidationError("La fecha de nacimiento no puede ser futura.")
+        
+    def save(self, *args, **kwargs):
+        if not self.username:
+            self.username = self.email
+        super().save(*args, **kwargs)
+
 
 class LogProcesos(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)

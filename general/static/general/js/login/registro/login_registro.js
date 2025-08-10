@@ -32,31 +32,6 @@ backToLoginBtn.addEventListener('click', () => {
     switchForms(successMessage, registerForm);
 });
 
-document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const btn = form.querySelector('.btn');
-        const btnText = btn.querySelector('.btn-text');
-
-        // Estado cargando
-        btnText.innerHTML = '<div class="loading"></div>Procesando...';
-        btn.disabled = true;
-
-        setTimeout(() => {
-            // Restaurar botón
-            btnText.textContent = 'Crear Cuenta';
-            btn.disabled = false;
-
-            // Mostrar mensaje de éxito
-            successText.textContent = 'Tu cuenta ha sido creada exitosamente.';
-            switchForms(registerForm, successMessage);
-
-            // Limpiar formulario
-            form.reset();
-        }, 2000);
-    });
-});
 
 // Animaciones de inputs
 document.querySelectorAll('input').forEach(input => {
@@ -69,11 +44,3 @@ document.querySelectorAll('input').forEach(input => {
     });
 });
 
-// Tecla ESC para volver desde el mensaje de éxito
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        if (!successMessage.classList.contains('hidden')) {
-            switchForms(successMessage, registerForm);
-        }
-    }
-});

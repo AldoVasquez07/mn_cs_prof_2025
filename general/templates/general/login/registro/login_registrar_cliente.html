@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block styles %}
-<link rel="stylesheet" href="{% static 'general/css/registro/registro.css' %}">
+<link rel="stylesheet" href="{% static 'general/css/registro/registro_cliente.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -21,31 +21,47 @@
                 <h1>Crear Cuenta</h1>
                 <p>Únete a nuestra comunidad</p>
             </div>
-            <form>
+
+            <div class="logo">
+                {% if mensaje %}
+                <p>{{ mensaje }}...</p>
+                {% endif %}
+            </div>
+
+            <form method="POST" action="{% url 'general:login_registro_cliente' %}">
+                {% csrf_token %}
                 <div class="form-grid">
                     <div class="form-group">
-                        <input type="text" placeholder="Nombre completo" required>
+                        <input type="text" name="nombre_cliente" placeholder="Nombre completo" required>
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <input type="text" placeholder="Apellido paterno" required>
+                        <input type="text" name="apellido_paterno_cliente" placeholder="Apellido paterno" required>
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <input type="text" placeholder="Apellido materno" required>
+                        <input type="text" name="apellido_materno_cliente" placeholder="Apellido materno" required>
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <input type="text" placeholder="Documento de identidad" required>
+                        <input type="text" name="documento_identidad_cliente" placeholder="Documento de identidad"
+                            required>
+                        <div class="input-highlight"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="date" name="fecha_nacimiento_cliente" placeholder="Fecha de nacimiento"
+                            required>
                         <div class="input-highlight"></div>
                     </div>
 
                     <div class="form-group">
                         {% if ciudades %}
-                        <select id="select-ciudad" required>
+                        <select id="select-ciudad" name="ciudad_cliente" required>
                             <option value="">Seleccione una ciudad</option>
                             {% for ciudad in ciudades %}
-                            <option value="{{ ciudad.id }}" data-codigo="{{ ciudad.pais.codigo }}">{{ ciudad.nombre }}</option>
+                            <option value="{{ ciudad.id }}" data-codigo="{{ ciudad.pais.codigo }}">{{ ciudad.nombre }}
+                            </option>
                             {% endfor %}
                         </select>
                         {% else %}
@@ -58,25 +74,34 @@
                     <div class="phone-group">
                         <div class="form-group prefix-select">
                             <select id="select-codigo" required>
-                                <option value="">Seleccione una ciudad</option>
+                                <option value="">-</option>
                             </select>
                             <div class="input-highlight"></div>
                         </div>
                         <div class="form-group phone-input">
-                            <input type="tel" placeholder="Teléfono" required>
+                            <input
+                                type="tel"
+                                name="telefono_cliente"
+                                placeholder="975 234 567"
+                                pattern="[0-9]{1,14}"
+                                title="Ingrese un número de teléfono válido"
+                                minlength="9"
+                                maxlength="15"
+                                required>
                             <div class="input-highlight"></div>
                         </div>
                     </div>
                     <div class="form-group full-width">
-                        <input type="email" placeholder="Correo electrónico" required>
+                        <input type="email" name="correo_cliente" placeholder="Correo electrónico" required>
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <input type="password" placeholder="Contraseña" required>
+                        <input type="password" name="contrasena_cliente" placeholder="Contraseña" required>
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <input type="password" placeholder="Confirmar contraseña" required>
+                        <input type="password" name="confirmar_contrasena_cliente" placeholder="Confirmar contraseña"
+                            required>
                         <div class="input-highlight"></div>
                     </div>
                 </div>
@@ -87,15 +112,6 @@
             <div class="toggle-link">
                 <a href="{% url 'general:login_inicio_sesion' %}">¿Ya tienes cuenta? Inicia sesión</a>
             </div>
-        </div>
-
-        <!-- Success Message -->
-        <div id="successMessage" class="form-container hidden">
-            <div class="success-message">
-                <h3>¡Éxito!</h3>
-                <p id="successText"></p>
-            </div>
-            <button class="btn" id="backToLogin">Volver al inicio</button>
         </div>
     </div>
 </div>
