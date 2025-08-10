@@ -39,18 +39,26 @@
                         <input type="text" placeholder="Documento de identidad" required>
                         <div class="input-highlight"></div>
                     </div>
+
                     <div class="form-group">
-                        <input type="text" placeholder="Ciudad" required>
+                        {% if ciudades %}
+                        <select id="select-ciudad" required>
+                            <option value="">Seleccione una ciudad</option>
+                            {% for ciudad in ciudades %}
+                            <option value="{{ ciudad.id }}" data-codigo="{{ ciudad.pais.codigo }}">{{ ciudad.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        {% else %}
+                        <select disabled>
+                            <option value="">No hay ciudades disponibles</option>
+                        </select>
+                        {% endif %}
                         <div class="input-highlight"></div>
                     </div>
                     <div class="phone-group">
                         <div class="form-group prefix-select">
-                            <select required>
-                                <option value="+51">+51</option>
-                                <option value="+1">+1</option>
-                                <option value="+34">+34</option>
-                                <option value="+52">+52</option>
-                                <option value="+54">+54</option>
+                            <select id="select-codigo" required>
+                                <option value="">Seleccione una ciudad</option>
                             </select>
                             <div class="input-highlight"></div>
                         </div>
@@ -93,4 +101,5 @@
 </div>
 
 <script src="{% static 'general/js/login/registro/login_registro.js' %}"></script>
+<script src="{% static 'general/js/login/registro/login_registro_cliente.js' %}"></script>
 {% endblock %}

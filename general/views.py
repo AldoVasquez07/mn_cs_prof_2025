@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from sistema.models import Ciudad
 
 
 def main_content_page(request):
@@ -18,11 +19,17 @@ def login_inicio_sesion(request):
         print(f"Email: {email}, Password: {password}")
     print('*'*50)
     
+    # Aun falta generar la logica de registrarse (ahora lo termino xd)
+    
     return render(request, 'general/login/inicio_sesion/login_iniciar_sesion.html')
 
 
 def login_registro_cliente(request):
-    return render(request, 'general/login/registro/login_registrar_cliente.html')
+    ciudades = Ciudad.objects.filter(flag=True).order_by('nombre')
+    
+    return render(request,'general/login/registro/login_registrar_cliente.html',
+                  {'ciudades': ciudades})
+
 
 
 def login_registro_profesional(request):
