@@ -11,17 +11,29 @@ def seleccion_tipo_usuario(request):
 
 
 def login_inicio_sesion(request):
-    print('*'*50)
+    mensaje = None
+    menu = {
+        'cliente': 'general:login_registro_cliente',
+        'profesional': 'general:login_registro_profesional',
+        'organizacion': 'general:login_registro_organizacion'
+    }
+    
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
         
-        print(f"Email: {email}, Password: {password}")
-    print('*'*50)
-    
-    # Aun falta generar la logica de registrarse (ahora lo termino xd)
-    
-    return render(request, 'general/login/inicio_sesion/login_iniciar_sesion.html')
+        usuario = Usuario.objects.filter(email=email, password=password).first()
+        
+        if usuario:
+            for m in menu:
+                if usuario.rol.nombre == m:
+                    print(f"Redirigiendo a {menu[m]}")
+                    # return redirect(menu[m])
+        else:
+            mensaje = "El usuario no existe o la contraseña es incorrecta."
+
+    return render(request, 'general/login/inicio_sesion/login_iniciar_sesion.html',
+                  {'mensaje':mensaje})
 
 
 def login_registro_cliente(request):
