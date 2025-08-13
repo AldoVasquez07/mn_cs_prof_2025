@@ -32,33 +32,38 @@
                 {% csrf_token %}
                 <div class="form-grid">
                     <div class="form-group">
+                        <label for="nombre_cliente">Nombre completo</label>
                         <input type="text" name="nombre_cliente" placeholder="Nombre completo" required>
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
+                        <label for="apellido_paterno_cliente">Apellido paterno</label>
                         <input type="text" name="apellido_paterno_cliente" placeholder="Apellido paterno" required>
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
+                        <label for="apellido_materno_cliente">Apellido materno</label>
                         <input type="text" name="apellido_materno_cliente" placeholder="Apellido materno" required>
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <input type="text" name="documento_identidad_cliente" placeholder="Documento de identidad"
+                        <label for="documento_identidad_cliente">Documento de identidad</label>
+                        <input type="text" name="documento_identidad_cliente" placeholder="74152615"
                             required>
                         <div class="input-highlight"></div>
                     </div>
 
                     <div class="form-group">
-                        <input type="date" name="fecha_nacimiento_cliente" placeholder="Fecha de nacimiento"
-                            required>
+                        <label for="fecha_nacimiento_cliente">Fecha de nacimiento</label>
+                        <input type="date" name="fecha_nacimiento_cliente" placeholder="Fecha de nacimiento" required>
                         <div class="input-highlight"></div>
                     </div>
 
                     <div class="form-group">
                         {% if ciudades %}
+                        <label for="ciudad_cliente">Ciudad</label>
                         <select id="select-ciudad" name="ciudad_cliente" required>
-                            <option value="">Seleccione una ciudad</option>
+                            <option value="">Seleccionar</option>
                             {% for ciudad in ciudades %}
                             <option value="{{ ciudad.id }}" data-codigo="{{ ciudad.pais.codigo }}">{{ ciudad.nombre }}
                             </option>
@@ -66,41 +71,39 @@
                         </select>
                         {% else %}
                         <select disabled>
-                            <option value="">No hay ciudades disponibles</option>
+                            <option value="">No disponible</option>
                         </select>
                         {% endif %}
                         <div class="input-highlight"></div>
                     </div>
                     <div class="phone-group">
                         <div class="form-group prefix-select">
-                            <select id="select-codigo" required>
+                            <label for="prefijo">Prefijo</label>
+                            <select id="select-codigo" name="prefijo" required>
                                 <option value="">-</option>
                             </select>
                             <div class="input-highlight"></div>
                         </div>
                         <div class="form-group phone-input">
-                            <input
-                                type="tel"
-                                name="telefono_cliente"
-                                placeholder="975 234 567"
-                                pattern="[0-9]{1,14}"
-                                title="Ingrese un número de teléfono válido"
-                                minlength="9"
-                                maxlength="15"
-                                required>
+                            <label for="telefono_cliente">Telefono</label>
+                            <input type="tel" name="telefono_cliente" placeholder="975 234 567" pattern="[0-9]{1,14}"
+                                title="Ingrese un número de teléfono válido" minlength="9" maxlength="15" required>
                             <div class="input-highlight"></div>
                         </div>
                     </div>
                     <div class="form-group full-width">
-                        <input type="email" name="correo_cliente" placeholder="Correo electrónico" required>
+                        <label for="correo_cliente">Correo</label>
+                        <input type="email" name="correo_cliente" placeholder="mi.correo@gmail.com" required>
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <input type="password" name="contrasena_cliente" placeholder="Contraseña" required>
+                        <label for="contrasena_cliente">Contraseña</label>
+                        <input type="password" name="contrasena_cliente" placeholder="**************" required>
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <input type="password" name="confirmar_contrasena_cliente" placeholder="Confirmar contraseña"
+                        <label for="confirmar_contrasena_cliente">Confirme su conrtaseña</label>
+                        <input type="password" name="confirmar_contrasena_cliente" placeholder="**************"
                             required>
                         <div class="input-highlight"></div>
                     </div>
