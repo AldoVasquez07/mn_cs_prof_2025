@@ -78,9 +78,16 @@ class LogProcesos(models.Model):
         return f'{self.proceso} - {self.fecha}'
 
 
+class Profesion(models.Model):
+    nombre = models.TextField(max_length=150, unique=True)
+    descripcion = models.TextField(blank=True, null=True)
+    flag = models.BooleanField(default=True)
+
+
 class Especialidad(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
     descripcion = models.TextField(blank=True, null=True)
+    profesion = models.ForeignKey(Profesion, on_delete=models.CASCADE, related_name='especialidades', null=True)
     flag = models.BooleanField(default=True)
 
     def __str__(self):
