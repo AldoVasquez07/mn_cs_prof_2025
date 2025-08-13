@@ -11,8 +11,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
+    padding: 40px 0;
 }
 
 /* Animated Background */
@@ -30,6 +32,14 @@ body::before {
     animation: backgroundShift 20s ease-in-out infinite;
     z-index: -1;
     opacity: 0.3;
+}
+
+
+
+@media (max-height: 750px) {
+    body {
+        display: block;
+    }
 }
 
 @keyframes backgroundShift {
@@ -92,11 +102,12 @@ body::before {
     }
 }
 
+
 .container {
     position: relative;
     width: 100%;
-    max-width: 600px; /* Increased to accommodate columns */
-    margin: 0 20px;
+    max-width: 600px;
+    margin: 0 auto;
     perspective: 1000px;
 }
 
@@ -235,6 +246,13 @@ body::before {
 
 .form-group.phone-input {
     margin-bottom: 0;
+}
+
+.form-group label {
+    color: #ffffffcc !important;
+    font-size: 17px;
+    font-weight: 400;
+    text-shadow: 0 2px 7px #a5a5a5cc;
 }
 
 .form-group input,

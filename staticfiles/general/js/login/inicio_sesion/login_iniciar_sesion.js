@@ -34,21 +34,6 @@ document.querySelectorAll('input').forEach(input => {
     });
 });
 
-// Add floating animation to card on mouse move
-document.addEventListener('mousemove', (e) => {
-    const card = document.querySelector('.card');
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-
-    card.style.transform = `translateY(-10px) rotateX(${y / 20}deg) rotateY(${x / 20}deg)`;
-});
-
-document.addEventListener('mouseleave', () => {
-    const card = document.querySelector('.card');
-    card.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
-});
-
 // Keyboard navigation
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
