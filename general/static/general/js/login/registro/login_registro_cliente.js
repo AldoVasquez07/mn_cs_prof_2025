@@ -12,3 +12,27 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+
+document.addEventListener("DOMContentLoaded", function(){
+    const selectProfesion = document.getElementById("select-profesion");
+    const selectEspecialidad = document.getElementById("select-especialidad");
+
+    selectProfesion.addEventListener("change", function(){
+        const especialidadesData = this.options[this.selectedIndex].dataset.codigo;
+        
+        selectEspecialidad.innerHTML = `<option value="">Seleccione una especialidad</option>`;
+
+        if (!especialidadesData) return;
+
+        // Parsear siempre como JSON
+        const especialidades = JSON.parse(especialidadesData);
+
+        especialidades.forEach(esp => {
+            const option = document.createElement("option");
+            option.value = esp;
+            option.textContent = esp;
+            selectEspecialidad.appendChild(option);
+        });
+    });
+});
