@@ -30,8 +30,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
         especialidades.forEach(esp => {
             const option = document.createElement("option");
-            option.value = esp;
-            option.textContent = esp;
+            option.value = esp.id;
+            option.textContent = esp.nombre;
             selectEspecialidad.appendChild(option);
         });
     });
