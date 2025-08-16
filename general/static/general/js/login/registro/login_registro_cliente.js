@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function(){
     selectProfesion.addEventListener("change", function(){
         const especialidadesData = this.options[this.selectedIndex].dataset.codigo;
         
-        selectEspecialidad.innerHTML = `<option value="">Seleccione una especialidad</option>`;
+        selectEspecialidad.innerHTML = `<option value="">Seleccionar</option>`;
 
         if (!especialidadesData) return;
 

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from sistema.models import Ciudad, Usuario, Rol, AspectosNegocio
 from cliente.models import Cliente
 from profesional.models import Profesion, Especialidad, Profesional
+from sistema.forms import RegistrarUsuarioForm
 import json
 
 
@@ -81,66 +82,53 @@ def login_registro_cliente(request):
 
 
 def login_registro_profesional(request):
+    # Objetos de Ciudad para el combo-box
     ciudades = Ciudad.objects.filter(flag=True).order_by('nombre')
+    # Objetos de Profesion para el combo-box
     profesiones = Profesion.objects.filter(flag=True).order_by('nombre')
     mensaje = None
     
+    # Integrando especialidades en formato json en las profesiones
     for profesion in profesiones:
         profesion.especialidades_json = json.dumps(
             list(profesion.especialidades.values('id', 'nombre'))
         )
-        
-        print(profesiones)
-        
     
     if request.method == 'POST':
-        contrasena_profesional = request.POST.get('contrasena_profesional')
-        confirmar_contrasena_profesional = request.POST.get('confirmar_contrasena_profesional')
+        form_user = RegistrarUsuarioForm(request.POST)
         
-        if contrasena_profesional != confirmar_contrasena_profesional:
-            return render(request, 'general/login/registro/login_registrar_profesional.html',
-                          {'ciudades': ciudades, 'profesiones':profesiones, 'mensaje': 'Las contraseñas no coinciden.'})
-        
-        nuevo_usuario = Usuario(
-            first_name=request.POST.get('nombre_profesional'),
-            email=request.POST.get('correo_profesional'),
-            password=contrasena_profesional,
-            apellido_paterno=request.POST.get('apellido_paterno_profesional'),
-            apellido_materno=request.POST.get('apellido_materno_profesional'),
-            fecha_nacimiento=request.POST.get('fecha_nacimiento_profesional'),
-            documento_identidad=request.POST.get('documento_identidad_profesional'),
-            telefono=request.POST.get('telefono_profesional'),
-            ciudad=Ciudad.objects.filter(id=request.POST.get('ciudad_profesional')).first(),
-            rol=Rol.objects.filter(nombre='profesional').first()
-        )
-        
-        nuevos_aspectos_negocio = AspectosNegocio(
-            direccion=request.POST.get('direccion_profesional'),
-            hora_apertura=request.POST.get('hora_apertura_profesional'),
-            hora_cierre=request.POST.get('hora_cierre_profesional')
-        )
-        
-        nuevo_profesional = Profesional(
-            usuario=nuevo_usuario,
-            especialidad=Especialidad.objects.filter(id=request.POST.get('especialidad_profesional')).first(),
-            aspectos_negocio=nuevos_aspectos_negocio
-        )
-        
-        try:
-            nuevo_usuario.clean()
-            nuevos_aspectos_negocio.clean()
-            
+        if form_user.is_valid():
+            nuevo_usuario = form_user.save(commit=False)
+            nuevo_usuario.set_password(form_user.cleaned_data['password'])
+            nuevo_usuario.rol = Rol.objects.get(nombre='profesional')
+            nuevo_usuario.ciudad = Ciudad.objects.get(id=request.POST.get('ciudad_profesional'))
             nuevo_usuario.save()
-            nuevos_aspectos_negocio.save()
-            nuevo_profesional.save()
-                  
+        
+            nuevos_aspectos_negocio = AspectosNegocio(
+                direccion=request.POST.get('direccion_profesional'),
+                hora_apertura=request.POST.get('hora_apertura_profesional'),
+                hora_cierre=request.POST.get('hora_cierre_profesional')
+            )
+            
+            nuevo_profesional = Profesional(
+                usuario=nuevo_usuario,
+                especialidad=Especialidad.objects.filter(id=request.POST.get('especialidad_profesional')).first(),
+                aspectos_negocio=nuevos_aspectos_negocio
+            )
+        
             return redirect('general:login_inicio_sesion')
-        except Exception as e:
-            return render(request, 'general/login/registro/login_registrar_profesional.html',
-                          {'ciudades': ciudades, 'profesiones':profesiones, 'mensaje': str(e)})
 
-    return render(request,'general/login/registro/login_registrar_profesional.html',
-                  {'ciudades': ciudades, 'profesiones': profesiones, 'mensaje': mensaje})
+        else:
+            mensaje = form_user.errors
+    else:
+        form_user = RegistrarUsuarioForm()
+    
+    return render(request, 'general/login/registro/login_registrar_profesional.html', {
+        'ciudades': ciudades,
+        'profesiones': profesiones,
+        'mensaje': mensaje,
+        'form_user': form_user
+    })
 
 
 def login_registro_organizacion(request):

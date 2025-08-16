@@ -18,8 +18,8 @@
         <!-- Register Form -->
         <div id="registerForm" class="form-container">
             <div class="logo">
-                <h1>Crear Cuenta</h1>
-                <p>Únete a nuestra comunidad</p>
+                <h1>Crea tu cuenta profesional</h1>
+                <p>Únete a nuestra comunidad de profesionales</p>
             </div>
 
             <div class="logo">
@@ -32,30 +32,24 @@
                 {% csrf_token %}
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="nombre_profesional">Nombre completo</label>
-                        <input type="text" name="nombre_profesional" placeholder="Nombre completo" required>
+                        {{ form_user.first_name.label_tag }} {{ form_user.first_name }}
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <label for="apellido_paterno_profesional">Apellido paterno</label>
-                        <input type="text" name="apellido_paterno_profesional" placeholder="Apellido paterno" required>
+                        {{ form_user.apellido_paterno.label_tag }} {{ form_user.apellido_paterno }}
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <label for="apellido_materno_profesional">Apellido materno</label>
-                        <input type="text" name="apellido_materno_profesional" placeholder="Apellido materno" required>
+                        {{ form_user.apellido_materno.label_tag }} {{ form_user.apellido_materno }}
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <label for="documento_identidad_profesional">Documento de identidad</label>
-                        <input type="text" name="documento_identidad_profesional" placeholder="74152615" required>
+                        {{ form_user.documento_identidad.label_tag }} {{ form_user.documento_identidad }}
                         <div class="input-highlight"></div>
                     </div>
 
                     <div class="form-group">
-                        <label for="fecha_nacimiento_profesional">Fecha de nacimiento</label>
-                        <input type="date" name="fecha_nacimiento_profesional" placeholder="Fecha de nacimiento"
-                            required>
+                        {{ form_user.fecha_nacimiento.label_tag }} {{ form_user.fecha_nacimiento }}
                         <div class="input-highlight"></div>
                     </div>
 
@@ -85,10 +79,7 @@
                             <div class="input-highlight"></div>
                         </div>
                         <div class="form-group phone-input">
-                            <label for="telefono_profesional">Telefono</label>
-                            <input type="tel" name="telefono_profesional" placeholder="975 234 567"
-                                pattern="[0-9]{1,14}" title="Ingrese un número de teléfono válido" minlength="9"
-                                maxlength="15" required>
+                            {{ form_user.telefono.label_tag }} {{ form_user.telefono }}
                             <div class="input-highlight"></div>
                         </div>
                     </div>
@@ -141,19 +132,15 @@
 
 
                     <div class="form-group full-width">
-                        <label for="correo_profesional">Correo</label>
-                        <input type="email" name="correo_profesional" placeholder="mi.correo@gmail.com" required>
+                        {{ form_user.email.label_tag }} {{ form_user.email }}
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <label for="contrasena_profesional">Contraseña</label>
-                        <input type="password" name="contrasena_profesional" placeholder="**************" required>
+                        {{ form_user.password.label_tag }} {{ form_user.password }}
                         <div class="input-highlight"></div>
                     </div>
                     <div class="form-group">
-                        <label for="confirmar_contrasena_profesional">Confirme su conrtaseña</label>
-                        <input type="password" name="confirmar_contrasena_profesional" placeholder="**************"
-                            required>
+                        {{ form_user.confirmar_contrasena.label_tag }} {{ form_user.confirmar_contrasena }}
                         <div class="input-highlight"></div>
                     </div>
                 </div>
