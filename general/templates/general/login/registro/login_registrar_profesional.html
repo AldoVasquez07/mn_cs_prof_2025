@@ -111,22 +111,23 @@
                     </div>
 
                     <div class="form-group full-width">
-                        <label for="direccion_profesional">Direccion</label>
-                        <input type="text" name="direccion_profesional" placeholder="Av. Mi Dirección" required>
+                        <!-- <label for="direccion_profesional">Direccion</label>
+                        <input type="text" name="direccion_profesional" placeholder="Av. Mi Dirección" required> -->
+                        {{ form_aspectos_negocio.direccion.label_tag }} {{ form_aspectos_negocio.direccion }}
                         <div class="input-highlight"></div>
                     </div>
 
                     <div class="form-group">
-                        <label for="hora_apertura_profesional">Hora de apertura</label>
-                        <input type="time" name="hora_apertura_profesional" placeholder="08:00"
-                            required>
+                        <!-- <label for="hora_apertura_profesional">Hora de apertura</label>
+                        <input type="time" name="hora_apertura_profesional" placeholder="08:00" required> -->
+                        {{ form_aspectos_negocio.hora_apertura.label_tag }} {{ form_aspectos_negocio.hora_apertura }}
                         <div class="input-highlight"></div>
                     </div>
 
                     <div class="form-group">
-                        <label for="hora_cierre_profesional">Hora de cierre</label>
-                        <input type="time" name="hora_cierre_profesional" placeholder="18:00"
-                            required>
+                        <!-- <label for="hora_cierre_profesional">Hora de cierre</label>
+                        <input type="time" name="hora_cierre_profesional" placeholder="18:00" required> -->
+                        {{ form_aspectos_negocio.hora_cierre.label_tag }} {{ form_aspectos_negocio.hora_cierre }}
                         <div class="input-highlight"></div>
                     </div>
 
