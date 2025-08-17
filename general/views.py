@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from sistema.models import Ciudad, Usuario, Rol, AspectosNegocio
 from cliente.models import Cliente
 from profesional.models import Profesion, Especialidad, Profesional
-from sistema.forms import RegistrarUsuarioForm
+from sistema.forms import RegistrarUsuarioForm, RegistrarAspectosNegocioForm
 import json
+from django.forms.utils import ErrorDict
 
 
 def main_content_page(request):
@@ -96,38 +97,58 @@ def login_registro_profesional(request):
     
     if request.method == 'POST':
         form_user = RegistrarUsuarioForm(request.POST)
+        form_aspectos_negocio = RegistrarAspectosNegocioForm(request.POST)
         
-        if form_user.is_valid():
+        if form_user.is_valid() and form_aspectos_negocio.is_valid():
+            # Creando instancia de Usuario para registrar al cliente
             nuevo_usuario = form_user.save(commit=False)
             nuevo_usuario.set_password(form_user.cleaned_data['password'])
             nuevo_usuario.rol = Rol.objects.get(nombre='profesional')
             nuevo_usuario.ciudad = Ciudad.objects.get(id=request.POST.get('ciudad_profesional'))
-            nuevo_usuario.save()
-        
-            nuevos_aspectos_negocio = AspectosNegocio(
-                direccion=request.POST.get('direccion_profesional'),
-                hora_apertura=request.POST.get('hora_apertura_profesional'),
-                hora_cierre=request.POST.get('hora_cierre_profesional')
-            )
             
-            nuevo_profesional = Profesional(
-                usuario=nuevo_usuario,
-                especialidad=Especialidad.objects.filter(id=request.POST.get('especialidad_profesional')).first(),
-                aspectos_negocio=nuevos_aspectos_negocio
-            )
+            nuevos_aspectos_negocio = form_aspectos_negocio.save(commit=False)
+
+            try:
+                nuevo_usuario.clean()
+                nuevo_usuario.save()
+                
+                nuevos_aspectos_negocio.clean()
+                nuevos_aspectos_negocio.save()
+                
+                nuevo_profesional = Profesional(
+                    usuario=nuevo_usuario,
+                    especialidad=Especialidad.objects.filter(id=request.POST.get('especialidad_profesional')).first(),
+                    aspectos_negocio=nuevos_aspectos_negocio
+                )
+                
+                nuevo_profesional.save()
+            except (Exception, ValueError, ValidationError) as ex:
+                return render(request, 'general/login/registro/login_registrar_profesional.html', {
+                    'ciudades': ciudades,
+                    'profesiones': profesiones,
+                    'mensaje': str(ex),
+                    'form_user': form_user,
+                    'form_aspectos_negocio': form_aspectos_negocio
+                })
         
             return redirect('general:login_inicio_sesion')
 
         else:
-            mensaje = form_user.errors
+            mensaje = ErrorDict()
+            mensaje.update(form_user.errors)
+            mensaje.update(form_aspectos_negocio.errors)
+
     else:
         form_user = RegistrarUsuarioForm()
+        form_aspectos_negocio = RegistrarAspectosNegocioForm()
+        mensaje = None
     
     return render(request, 'general/login/registro/login_registrar_profesional.html', {
         'ciudades': ciudades,
         'profesiones': profesiones,
         'mensaje': mensaje,
-        'form_user': form_user
+        'form_user': form_user,
+        'form_aspectos_negocio': form_aspectos_negocio
     })
 
 

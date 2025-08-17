@@ -51,16 +51,17 @@ class Usuario(AbstractUser):
         super().clean()
         
         if Usuario.objects.filter(documento_identidad=self.documento_identidad).exclude(id=self.id).exists():
-            raise ValueError("El documento de identidad ya está en uso.")
+            raise ValidationError("El documento de identidad ya está en uso.")
         
         if Usuario.objects.filter(email=self.email).exclude(id=self.id).exists():
-            raise ValueError("El correo electrónico ya está en uso.")
+            raise ValidationError("El correo electrónico ya está en uso.")
 
         if isinstance(self.fecha_nacimiento, str):
             self.fecha_nacimiento = datetime.strptime(self.fecha_nacimiento, "%Y-%m-%d").date()
 
         if self.fecha_nacimiento and self.fecha_nacimiento > timezone.now().date():
             raise ValidationError("La fecha de nacimiento no puede ser futura.")
+    
         
     def save(self, *args, **kwargs):
         if not self.username:

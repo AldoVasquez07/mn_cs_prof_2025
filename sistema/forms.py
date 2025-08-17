@@ -1,5 +1,5 @@
 from django import forms
-from .models import Usuario
+from .models import Usuario, AspectosNegocio
 from django.core.exceptions import ValidationError
 
 
@@ -60,3 +60,24 @@ class RegistrarUsuarioForm(forms.ModelForm):
             raise ValidationError('Las contraseñas no coinciden')
             
         return cleaned_data
+    
+    
+class RegistrarAspectosNegocioForm(forms.ModelForm):
+    class Meta:
+        model = AspectosNegocio
+        
+        fields = [
+            'direccion', 'hora_apertura', 'hora_cierre'
+        ]
+        
+        widgets = {
+            'direccion': forms.TextInput(attrs={'placeholder': 'Av. Mi direccion', 'required': True}),
+            'hora_apertura': forms.TimeInput(attrs={'type': 'time', 'required': True}),
+            'hora_cierre': forms.TimeInput(attrs={'type': 'time', 'required': True}),
+        }
+        
+        labels = {
+            'direccion': 'Dirección',
+            'hora_apertura': 'Hora de Apertura',
+            'hora_cierre': 'Hora de Cierre',
+        }
