@@ -5,6 +5,7 @@ from profesional.models import Profesion, Especialidad, Profesional
 from sistema.forms import RegistrarUsuarioForm, RegistrarAspectosNegocioForm
 import json
 from django.forms.utils import ErrorDict
+from django.contrib.auth import authenticate, login
 
 
 def main_content_page(request):
@@ -26,12 +27,19 @@ def login_inicio_sesion(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        
-        usuario = Usuario.objects.filter(email=email, password=password).first()
+        usuario = authenticate(request, username=email, password=password)
+        # usuario = Usuario.objects.filter(email=email, password=password).first()
+        print(usuario)
         print("ACCEDI")
         if usuario:
+            print("ACCEDI1")
+            
             for m in menu:
+                print("ACCEDI2")
+                
                 if usuario.rol.nombre == m:
+                    print("ACCEDI3")
+                    
                     return redirect(menu[m])
         else:
             mensaje = "El usuario no existe o la contraseña es incorrecta."
