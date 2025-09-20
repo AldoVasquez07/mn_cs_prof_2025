@@ -19,7 +19,7 @@ def login_inicio_sesion(request):
     mensaje = None
     menu = {
         'cliente': 'general:login_registro_cliente',
-        'profesional': 'general:login_registro_profesional',
+        'profesional': 'profesional:home_profesional',
         'organizacion': 'general:login_registro_organizacion'
     }
     
@@ -28,12 +28,11 @@ def login_inicio_sesion(request):
         password = request.POST.get('password')
         
         usuario = Usuario.objects.filter(email=email, password=password).first()
-        
+        print("ACCEDI")
         if usuario:
             for m in menu:
                 if usuario.rol.nombre == m:
-                    print(f"Redirigiendo a {menu[m]}")
-                    # return redirect(menu[m])
+                    return redirect(menu[m])
         else:
             mensaje = "El usuario no existe o la contraseña es incorrecta."
 
