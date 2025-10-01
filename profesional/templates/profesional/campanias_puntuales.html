@@ -1,79 +1,7 @@
+{% extends 'profesional/base_home.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- Boxicons -->
-	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="{% static 'profesional/css/home_profesional.css' %}">
-	<title>Consultor - Crear Campaña</title>
-</head>
-
-<body>
-	<!-- SIDEBAR -->
-	<section id="sidebar">
-		<a href="#" class="brand">
-			<i class='bx bxs-buildings bx-lg'></i>
-			<span class="text">Consultor</span>
-		</a>
-		<ul class="side-menu top">
-			<li class="active">
-				<a href="#">
-					<i class='bx bx-grid-alt bx-sm'></i>
-					<span class="text">Campañas puntuales</span>
-				</a>
-			</li>
-			<li>
-				<a href="#">
-					<i class='bx bx-user bx-sm'></i>
-					<span class="text">Clientes</span>
-				</a>
-			</li>
-			<li>
-				<a href="#">
-					<i class='bx bx-message-square-dots bx-sm'></i>
-					<span class="text">Bandeja de entrada</span>
-				</a>
-			</li>
-			<li>
-				<a href="#">
-					<i class='bx bx-pie-chart-alt-2 bx-sm'></i>
-					<span class="text">Productividad e ingresos</span>
-				</a>
-			</li>
-			<li>
-				<a href="#">
-					<i class='bx bx-calendar bx-sm'></i>
-					<span class="text">Horarios</span>
-				</a>
-			</li>
-			<li>
-				<a href="#">
-					<i class='bx bx-credit-card bx-sm'></i>
-					<span class="text">Planes</span>
-				</a>
-			</li>
-			<li>
-				<a href="#">
-					<i class='bx bx-cog bx-sm'></i>
-					<span class="text">Ajustes</span>
-				</a>
-			</li>
-		</ul>
-		<ul class="side-menu bottom">
-			<li>
-				<a href="#" class="logout">
-					<i class='bx bx-log-out bx-sm'></i>
-					<span class="text">Logout</span>
-				</a>
-			</li>
-		</ul>
-	</section>
-	<!-- SIDEBAR -->
-
+{% block content %}
 	<!-- CONTENT -->
 	<section id="content">
 		<!-- NAVBAR -->
@@ -183,8 +111,4 @@
 		<!-- MAIN -->
 	</section>
 	<!-- CONTENT -->
-
-	<script src="{% static 'profesional/js/home_profesional.js' %}"></script>
-</body>
-
-</html>
+{% endblock %}

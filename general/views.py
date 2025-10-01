@@ -20,7 +20,7 @@ def login_inicio_sesion(request):
     mensaje = None
     menu = {
         'cliente': 'general:login_registro_cliente',
-        'profesional': 'profesional:home_profesional',
+        'profesional': 'profesional:campanias_puntuales_option',
         'organizacion': 'general:login_registro_organizacion'
     }
     
