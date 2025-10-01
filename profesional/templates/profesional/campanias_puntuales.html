@@ -1,6 +1,10 @@
 {% extends 'profesional/base_home.html' %}
 {% load static %}
 
+{% block styles %}
+	<link rel="stylesheet" href="{% static 'profesional/css/campanias_puntuales.css' %}">
+{% endblock %}
+
 {% block content %}
 	<!-- CONTENT -->
 	<section id="content">
@@ -111,4 +115,8 @@
 		<!-- MAIN -->
 	</section>
 	<!-- CONTENT -->
+{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'profesional/js/campanias_puntuales.js' %}"></script>
 {% endblock %}
