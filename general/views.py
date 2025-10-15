@@ -1,3 +1,13 @@
+# general/views.py
+# -------------------------------------------------------------
+# Vistas principales del módulo "general".
+# Incluye las funciones para:
+# - Mostrar la página principal.
+# - Seleccionar tipo de usuario.
+# - Iniciar sesión.
+# - Registrar clientes, profesionales y organizaciones.
+# -------------------------------------------------------------
+
 from django.shortcuts import render, redirect
 from sistema.models import Ciudad, Usuario, Rol, AspectosNegocio
 from cliente.models import Cliente
@@ -8,16 +18,33 @@ from django.forms.utils import ErrorDict
 from django.contrib.auth import authenticate, login
 
 
+# -------------------------------------------------------------
+# Página principal
+# -------------------------------------------------------------
 def main_content_page(request):
+    """Renderiza la página principal del sistema."""
     return render(request, 'general/main_page_citas.html')
 
 
+# -------------------------------------------------------------
+# Selección del tipo de usuario
+# -------------------------------------------------------------
 def seleccion_tipo_usuario(request):
+    """Muestra la página para elegir el tipo de usuario (cliente, profesional, organización)."""
     return render(request, 'general/seleccion_tipo_usuario.html')
 
 
+# -------------------------------------------------------------
+# Inicio de sesión general
+# -------------------------------------------------------------
 def login_inicio_sesion(request):
+    """
+    Permite a los usuarios iniciar sesión según su rol.
+    Redirige a la sección correspondiente (cliente, profesional u organización).
+    """
     mensaje = None
+
+    # Diccionario que asocia roles con sus rutas de inicio
     menu = {
         'cliente': 'general:login_registro_cliente',
         'profesional': 'profesional:campanias_puntuales_option',
@@ -27,20 +54,30 @@ def login_inicio_sesion(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+
+        # Autenticación mediante el sistema de usuarios de Django
         usuario = authenticate(request, username=email, password=password)
         
         if usuario:
+            # Redirige al módulo correspondiente según el rol del usuario
             for m in menu:
                 if usuario.rol.nombre == m:
                     return redirect(menu[m])
         else:
             mensaje = "El usuario no existe o la contraseña es incorrecta."
 
-    return render(request, 'general/login/inicio_sesion/login_iniciar_sesion.html',
-                  {'mensaje':mensaje})
+    return render(
+        request,
+        'general/login/inicio_sesion/login_iniciar_sesion.html',
+        {'mensaje': mensaje}
+    )
 
 
+# -------------------------------------------------------------
+# Registro de clientes
+# -------------------------------------------------------------
 def login_registro_cliente(request):
+    """Permite registrar un nuevo usuario con rol de cliente."""
     ciudades = Ciudad.objects.filter(flag=True).order_by('nombre')
     mensaje = None
     
@@ -48,10 +85,15 @@ def login_registro_cliente(request):
         contrasena_cliente = request.POST.get('contrasena_cliente')
         confirmar_contrasena_cliente = request.POST.get('confirmar_contrasena_cliente')
         
+        # Validar coincidencia de contraseñas
         if contrasena_cliente != confirmar_contrasena_cliente:
-            return render(request, 'general/login/registro/login_registrar_cliente.html',
-                          {'ciudades': ciudades, 'mensaje': 'Las contraseñas no coinciden.'})
+            return render(
+                request,
+                'general/login/registro/login_registrar_cliente.html',
+                {'ciudades': ciudades, 'mensaje': 'Las contraseñas no coinciden.'}
+            )
         
+        # Crear objeto Usuario
         nuevo_usuario = Usuario(
             first_name=request.POST.get('nombre_cliente'),
             email=request.POST.get('correo_cliente'),
@@ -66,29 +108,45 @@ def login_registro_cliente(request):
         )
         
         try:
+            # Validar y guardar usuario
             nuevo_usuario.clean()
             nuevo_usuario.save()
-            
+
+            # Crear instancia Cliente asociada al usuario
             nuevo_cliente = Cliente(usuario=nuevo_usuario)
             nuevo_cliente.save()
-            
+
+            # Redirigir al inicio de sesión tras registro exitoso
             return redirect('general:login_inicio_sesion')
+
         except Exception as e:
-            return render(request, 'general/login/registro/login_registrar_cliente.html',
-                          {'ciudades': ciudades, 'mensaje': str(e)})
+            # Captura errores de validación o base de datos
+            return render(
+                request,
+                'general/login/registro/login_registrar_cliente.html',
+                {'ciudades': ciudades, 'mensaje': str(e)}
+            )
 
-    return render(request,'general/login/registro/login_registrar_cliente.html',
-                  {'ciudades': ciudades, 'mensaje': mensaje})
+    # Renderizar formulario vacío por defecto
+    return render(
+        request,
+        'general/login/registro/login_registrar_cliente.html',
+        {'ciudades': ciudades, 'mensaje': mensaje}
+    )
 
 
+# -------------------------------------------------------------
+# Registro de profesionales
+# -------------------------------------------------------------
 def login_registro_profesional(request):
-    # Objetos de Ciudad para el combo-box
+    """Permite registrar un nuevo usuario con rol de profesional."""
+
+    # Obtener datos para los campos de selección
     ciudades = Ciudad.objects.filter(flag=True).order_by('nombre')
-    # Objetos de Profesion para el combo-box
     profesiones = Profesion.objects.filter(flag=True).order_by('nombre')
     mensaje = None
     
-    # Integrando especialidades en formato json en las profesiones
+    # Agregar lista de especialidades en formato JSON para cada profesión
     for profesion in profesiones:
         profesion.especialidades_json = json.dumps(
             list(profesion.especialidades.values('id', 'nombre'))
@@ -99,57 +157,80 @@ def login_registro_profesional(request):
         form_aspectos_negocio = RegistrarAspectosNegocioForm(request.POST)
         
         if form_user.is_valid() and form_aspectos_negocio.is_valid():
-            # Creando instancia de Usuario para registrar al cliente
+            # Crear instancia de usuario sin guardar todavía
             nuevo_usuario = form_user.save(commit=False)
             nuevo_usuario.set_password(form_user.cleaned_data['password'])
             nuevo_usuario.rol = Rol.objects.get(nombre='profesional')
             nuevo_usuario.ciudad = Ciudad.objects.get(id=request.POST.get('ciudad_profesional'))
             
+            # Crear instancia de aspectos de negocio
             nuevos_aspectos_negocio = form_aspectos_negocio.save(commit=False)
 
             try:
+                # Validar y guardar entidades relacionadas
                 nuevo_usuario.clean()
                 nuevo_usuario.save()
                 
                 nuevos_aspectos_negocio.clean()
                 nuevos_aspectos_negocio.save()
                 
+                # Asociar al modelo Profesional
                 nuevo_profesional = Profesional(
                     usuario=nuevo_usuario,
-                    especialidad=Especialidad.objects.filter(id=request.POST.get('especialidad_profesional')).first(),
+                    especialidad=Especialidad.objects.filter(
+                        id=request.POST.get('especialidad_profesional')
+                    ).first(),
                     aspectos_negocio=nuevos_aspectos_negocio
                 )
                 
                 nuevo_profesional.save()
+
             except (Exception, ValueError, ValidationError) as ex:
-                return render(request, 'general/login/registro/login_registrar_profesional.html', {
-                    'ciudades': ciudades,
-                    'profesiones': profesiones,
-                    'mensaje': str(ex),
-                    'form_user': form_user,
-                    'form_aspectos_negocio': form_aspectos_negocio
-                })
+                # Manejo de errores de validación o guardado
+                return render(
+                    request,
+                    'general/login/registro/login_registrar_profesional.html',
+                    {
+                        'ciudades': ciudades,
+                        'profesiones': profesiones,
+                        'mensaje': str(ex),
+                        'form_user': form_user,
+                        'form_aspectos_negocio': form_aspectos_negocio
+                    }
+                )
         
+            # Registro exitoso → redirigir al inicio de sesión
             return redirect('general:login_inicio_sesion')
 
         else:
+            # Consolidar errores de ambos formularios
             mensaje = ErrorDict()
             mensaje.update(form_user.errors)
             mensaje.update(form_aspectos_negocio.errors)
 
     else:
+        # Inicialización de formularios vacíos
         form_user = RegistrarUsuarioForm()
         form_aspectos_negocio = RegistrarAspectosNegocioForm()
         mensaje = None
     
-    return render(request, 'general/login/registro/login_registrar_profesional.html', {
-        'ciudades': ciudades,
-        'profesiones': profesiones,
-        'mensaje': mensaje,
-        'form_user': form_user,
-        'form_aspectos_negocio': form_aspectos_negocio
-    })
+    # Renderizar plantilla con contexto completo
+    return render(
+        request,
+        'general/login/registro/login_registrar_profesional.html',
+        {
+            'ciudades': ciudades,
+            'profesiones': profesiones,
+            'mensaje': mensaje,
+            'form_user': form_user,
+            'form_aspectos_negocio': form_aspectos_negocio
+        }
+    )
 
 
+# -------------------------------------------------------------
+# Registro de organizaciones
+# -------------------------------------------------------------
 def login_registro_organizacion(request):
+    """Renderiza el formulario de registro de organizaciones (no implementado aún)."""
     return render(request, 'general/login/registro/login_registrar_organizacion.html')
