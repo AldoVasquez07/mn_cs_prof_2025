@@ -11,4 +11,6 @@ urlpatterns = [
     path('horarios-option/', horarios_option, name='horarios_option'),
     path('planes-option/', planes_option, name='planes_option'),
     path('ajustes-option/', ajustes_option, name='ajustes_option'),
+    path('prediction-acv-option/', prediction_acv_option, name='prediction_acv_option'),
+    path('prediction-acv-option/realizar/', realizar_prediccion_acv, name='realizar_prediccion_acv'),
 ]

@@ -92,6 +92,17 @@
 					<span class="text">Ajustes</span>
 				</a>
 			</li>
+
+			{% if choice == 8 %}
+			<li class="active">
+            {% else %}
+			<li>
+            {% endif %}
+				<a href="{% url 'profesional:prediction_acv_option' %}">
+					<i class='bx bx-brain bx-sm'></i>
+					<span class="text">Predicción ACV</span>
+				</a>
+			</li>
 		</ul>
 		<ul class="side-menu bottom">
 			<li>
@@ -108,7 +119,7 @@
 
 	<script src="{% static 'profesional/js/base_home.js' %}"></script>
 
-	{% block scritps %}
+	{% block scripts %}
 	{% endblock %}
 </body>
 

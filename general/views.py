@@ -28,18 +28,10 @@ def login_inicio_sesion(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         usuario = authenticate(request, username=email, password=password)
-        # usuario = Usuario.objects.filter(email=email, password=password).first()
-        print(usuario)
-        print("ACCEDI")
+        
         if usuario:
-            print("ACCEDI1")
-            
             for m in menu:
-                print("ACCEDI2")
-                
                 if usuario.rol.nombre == m:
-                    print("ACCEDI3")
-                    
                     return redirect(menu[m])
         else:
             mensaje = "El usuario no existe o la contraseña es incorrecta."
