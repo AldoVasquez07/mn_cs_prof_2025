@@ -36,17 +36,17 @@ def campanias_puntuales_option(request):
 
 def clientes_option(request):
     """Renderiza la vista de clientes."""
-    return render(request, 'profesional/campanias_puntuales.html', {"choice": 2})
+    return render(request, 'profesional/clientes.html', {"choice": 2})
 
 
 def bandeja_entrada_option(request):
     """Renderiza la vista de bandeja de entrada."""
-    return render(request, 'profesional/campanias_puntuales.html', {"choice": 3})
+    return render(request, 'profesional/bandeja_entrada.html', {"choice": 3})
 
 
 def productividad_ingresos_option(request):
     """Renderiza la vista de productividad e ingresos."""
-    return render(request, 'profesional/campanias_puntuales.html', {"choice": 4})
+    return render(request, 'profesional/productividad_ingresos.html', {"choice": 4})
 
 
 def horarios_option(request):

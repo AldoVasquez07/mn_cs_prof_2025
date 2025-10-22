@@ -1,0 +1,125 @@
+{% extends 'profesional/base_home.html' %}
+{% load static %}
+
+{% block styles %}
+	<link rel="stylesheet" href="{% static 'profesional/css/clientes.css' %}">
+{% endblock %}
+
+{% block content %}
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu bx-sm'></i>
+			<div class="nav-title">
+				<span>Clientes</span>
+			</div>
+			<form action="#">
+				<div class="form-input">
+					<input type="search" placeholder="Buscar por...">
+					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+				</div>
+			</form>
+			
+			<!-- Dark/Light Mode Toggle -->
+			<input type="checkbox" class="checkbox" id="switch-mode" hidden />
+			<label class="swith-lm" for="switch-mode">
+				<i class="bx bxs-moon"></i>
+				<i class="bx bx-sun"></i>
+				<div class="ball"></div>
+			</label>
+
+			<!-- Profile Menu -->
+			<a href="#" class="profile" id="profileIcon">
+				<img src="https://ui-avatars.com/api/?name=Usuario&background=3C91E6&color=fff" alt="Profile">
+			</a>
+			<div class="profile-menu" id="profileMenu">
+				<ul>
+					<li><a href="#">Mi Perfil</a></li>
+					<li><a href="#">Configuración</a></li>
+					<li><a href="#">Cerrar Sesión</a></li>
+				</ul>
+			</div>
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<div class="clientes-container">
+				<div class="header-section">
+					<h1 class="page-title">Clientes</h1>
+					<div class="header-actions">
+						<button class="btn-importar">Importar clientes</button>
+						<button class="btn-agregar">Agregar cliente</button>
+					</div>
+				</div>
+				
+				<!-- Tabla de Clientes -->
+				<div class="table-container">
+					<table class="clientes-table">
+						<thead>
+							<tr>
+								<th>
+									Cliente
+									<i class='bx bx-sort-alt-2'></i>
+								</th>
+								<th>
+									Email
+									<i class='bx bx-sort-alt-2'></i>
+								</th>
+								<th>
+									Teléfono
+									<i class='bx bx-sort-alt-2'></i>
+								</th>
+								<th>
+									Última visita
+									<i class='bx bx-sort-alt-2'></i>
+								</th>
+								<th>
+									Siguiente visita
+									<i class='bx bx-sort-alt-2'></i>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Hernán Alvarado Torres</td>
+								<td><a href="#" class="link-email">Agregar email</a></td>
+								<td>+51 980 236 432</td>
+								<td>16-12-2024 12:00</td>
+								<td><a href="#" class="link-cita">Crear cita</a></td>
+							</tr>
+							<tr>
+								<td>Hernán Alvarado Torres</td>
+								<td><a href="#" class="link-email">Agregar email</a></td>
+								<td>+51 980 236 432</td>
+								<td>16-12-2024 12:00</td>
+								<td><a href="#" class="link-cita">Crear cita</a></td>
+							</tr>
+							<tr>
+								<td>Hernán Alvarado Torres</td>
+								<td><a href="#" class="link-email">Agregar email</a></td>
+								<td>+51 980 236 432</td>
+								<td>16-12-2024 12:00</td>
+								<td><a href="#" class="link-cita">Crear cita</a></td>
+							</tr>
+							<tr>
+								<td>Hernán Alvarado Torres</td>
+								<td><a href="#" class="link-email">Agregar email</a></td>
+								<td>+51 980 236 432</td>
+								<td>16-12-2024 12:00</td>
+								<td><a href="#" class="link-cita">Crear cita</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</main>
+		<!-- MAIN -->
+	</section>
+	<!-- CONTENT -->
+{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'profesional/js/clientes.js' %}"></script>
+{% endblock %}
