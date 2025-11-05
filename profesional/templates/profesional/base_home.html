@@ -103,7 +103,7 @@
 					<span class="text">Perfil</span>
 				</a>
 			</li> -->
-
+			{% if modelo_predictivo %}
 			{% if choice and choice == 7 %}
 			<li class="active">
             {% else %}
@@ -114,6 +114,7 @@
 					<span class="text">Predicción ACV</span>
 				</a>
 			</li>
+			{% endif %}
 		</ul>
 		<ul class="side-menu bottom">
 			<li>

@@ -16,7 +16,7 @@ from sistema.forms import RegistrarUsuarioForm, RegistrarAspectosNegocioForm
 import json
 from django.forms.utils import ErrorDict
 from django.contrib.auth import authenticate, login
-
+from django.urls import reverse
 
 # -------------------------------------------------------------
 # Página principal
@@ -44,24 +44,40 @@ def login_inicio_sesion(request):
     """
     mensaje = None
 
-    # Diccionario que asocia roles con sus rutas de inicio
+    # Diccionario de rutas por rol
     menu = {
         'cliente': 'general:login_registro_cliente',
         'profesional': 'profesional:campanias_puntuales_option',
         'organizacion': 'general:login_registro_organizacion'
     }
-    
+
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        # Autenticación mediante el sistema de usuarios de Django
         usuario = authenticate(request, username=email, password=password)
-        
+
         if usuario:
-            # Redirige al módulo correspondiente según el rol del usuario
+            login(request, usuario)  # Establece la sesión de Django
+
+            # Verifica el rol y redirige según corresponda
             for m in menu:
-                if usuario.rol.nombre == m:
+                if usuario.rol and usuario.rol.nombre == m:
+                    estado = False
+                    try:
+                        if (
+                            usuario.profesional and
+                            usuario.profesional.especialidad and
+                            usuario.profesional.especialidad.profesion and
+                            usuario.profesional.especialidad.profesion.nombre == "Neurología"
+                        ):
+                            estado = True
+                    except AttributeError:
+                        pass
+
+                    # Guarda en sesión el estado del modelo predictivo
+                    request.session['modelo_predictivo'] = estado
+
                     return redirect(menu[m])
         else:
             mensaje = "El usuario no existe o la contraseña es incorrecta."
@@ -71,7 +87,6 @@ def login_inicio_sesion(request):
         'general/login/inicio_sesion/login_iniciar_sesion.html',
         {'mensaje': mensaje}
     )
-
 
 # -------------------------------------------------------------
 # Registro de clientes

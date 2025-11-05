@@ -12,6 +12,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import logging
+from django.contrib.auth.decorators import login_required
 
 # -------------------------------------------------------------
 # CONFIGURACIÓN DE LOGGING
@@ -26,50 +27,85 @@ logger = logging.getLogger(__name__)
 API_BASE_URL = "http://localhost:5000"
 
 
+
 # -------------------------------------------------------------
 # VISTAS DEL PANEL PROFESIONAL (simples renders con "choice")
 # -------------------------------------------------------------
 def campanias_puntuales_option(request):
     """Renderiza la vista de campañas puntuales."""
-    return render(request, 'profesional/campanias_puntuales.html', {"choice": 1})
+    modelo_predictivo = request.session.get('modelo_predictivo', False)
+    return render(request, 'profesional/campanias_puntuales.html', {
+        "choice": 1,
+        "modelo_predictivo": modelo_predictivo
+        })
 
 
 def clientes_option(request):
     """Renderiza la vista de clientes."""
-    return render(request, 'profesional/clientes.html', {"choice": 2})
+    modelo_predictivo = request.session.get('modelo_predictivo', False)
+    return render(request, 'profesional/clientes.html', {
+        "choice": 2,
+        "modelo_predictivo": modelo_predictivo
+        })
 
 
 def bandeja_entrada_option(request):
     """Renderiza la vista de bandeja de entrada."""
-    return render(request, 'profesional/bandeja_entrada.html', {"choice": 3})
+    modelo_predictivo = request.session.get('modelo_predictivo', False)
+    return render(request, 'profesional/bandeja_entrada.html', {
+        "choice": 3,
+        "modelo_predictivo": modelo_predictivo
+        })
 
 
 def productividad_ingresos_option(request):
     """Renderiza la vista de productividad e ingresos."""
-    return render(request, 'profesional/productividad_ingresos.html', {"choice": 4})
+    modelo_predictivo = request.session.get('modelo_predictivo', False)
+    return render(request, 'profesional/productividad_ingresos.html', {
+        "choice": 4,
+        "modelo_predictivo": modelo_predictivo
+        })
 
 
 def horarios_option(request):
     """Renderiza la vista de horarios."""
-    return render(request, 'profesional/horarios.html', {"choice": 5})
+    modelo_predictivo = request.session.get('modelo_predictivo', False)
+    return render(request, 'profesional/horarios.html', {
+        "choice": 5,
+        "modelo_predictivo": modelo_predictivo
+        })
 
 
 def planes_option(request):
     """Renderiza la vista de planes."""
-    return render(request, 'profesional/planes.html', {"choice": 6})
+    modelo_predictivo = request.session.get('modelo_predictivo', False)
+    return render(request, 'profesional/planes.html', {
+        "choice": 6,
+        "modelo_predictivo": modelo_predictivo
+        })
 
 
 def ajustes_option(request):
     """Renderiza la vista de ajustes."""
-    return render(request, 'profesional/ajustes.html')
+    modelo_predictivo = request.session.get('modelo_predictivo', False)
+    return render(request, 'profesional/ajustes.html', {
+        "modelo_predictivo": modelo_predictivo
+    })
 
 def perfil(request):
     """Renderiza la vista de perfil."""
-    return render(request, 'profesional/perfil.html')
+    modelo_predictivo = request.session.get('modelo_predictivo', False)
+    return render(request, 'profesional/perfil.html', {
+        "modelo_predictivo": modelo_predictivo
+    })
 
 def prediction_acv_option(request):
     """Renderiza la página principal del módulo de predicción de ACV."""
-    return render(request, 'profesional/prediction_acv.html', {"choice": 7})
+    modelo_predictivo = request.session.get('modelo_predictivo', False)
+    return render(request, 'profesional/prediction_acv.html', {
+        "choice": 7,
+        "modelo_predictivo": modelo_predictivo
+        })
 
 
 # -------------------------------------------------------------
