@@ -1,0 +1,570 @@
+/* ===================================
+   CSS ESPECÍFICO PARA AJUSTES
+   =================================== */
+
+/* CONTENT */
+#content {
+	position: relative;
+	width: calc(100% - 220px);
+	left: 220px;
+	transition: .3s ease;
+}
+
+#sidebar.hide ~ #content {
+	width: calc(100% - 60px);
+	left: 60px;
+}
+
+/* ===================================
+   NAVBAR
+   =================================== */
+#content nav {
+	height: 56px;
+	background: var(--light);
+	padding: 0 24px;
+	display: flex;
+	align-items: center;
+	grid-gap: 24px;
+	font-family: var(--lato);
+	position: sticky;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#content nav .bx.bx-menu {
+	cursor: pointer;
+	color: var(--dark);
+}
+
+#content nav .nav-title {
+	font-size: 18px;
+	font-weight: 600;
+	color: var(--dark);
+}
+
+#content nav form {
+	max-width: 400px;
+	width: 100%;
+	margin-right: auto;
+}
+
+#content nav form .form-input {
+	display: flex;
+	align-items: center;
+	height: 36px;
+}
+
+#content nav form .form-input input {
+	flex-grow: 1;
+	padding: 0 16px;
+	height: 100%;
+	border: none;
+	background: var(--grey);
+	border-radius: 36px 0 0 36px;
+	outline: none;
+	width: 100%;
+	color: var(--dark);
+}
+
+#content nav form .form-input button {
+	width: 36px;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: var(--blue);
+	color: var(--light);
+	font-size: 18px;
+	border: none;
+	outline: none;
+	border-radius: 0 36px 36px 0;
+	cursor: pointer;
+}
+
+#content nav .swith-lm {
+	background-color: var(--grey);
+	border-radius: 50px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 3px;
+	position: relative;
+	height: 21px;
+	width: 45px;
+	transform: scale(1.5);
+}
+
+#content nav .swith-lm .ball {
+	background-color: var(--blue);
+	border-radius: 50%;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	height: 17px;
+	width: 17px;
+	transform: translateX(0px);
+	transition: transform 0.2s linear;
+}
+
+#content nav .checkbox:checked + .swith-lm .ball {
+	transform: translateX(24px);
+}
+
+.bxs-moon {
+	color: var(--yellow);
+	font-size: 12px;
+}
+
+.bx-sun {
+	color: var(--orange);
+	font-size: 12px;
+}
+
+#content nav .profile img {
+	width: 36px;
+	height: 36px;
+	object-fit: cover;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+#content nav .profile-menu {
+	display: none;
+	position: absolute;
+	top: 56px;
+	right: 24px;
+	background: var(--light);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	border-radius: 12px;
+	width: 200px;
+	z-index: 9999;
+	font-family: var(--lato);
+}
+
+#content nav .profile-menu ul {
+	list-style: none;
+	padding: 10px;
+	margin: 0;
+}
+
+#content nav .profile-menu li {
+	padding: 12px;
+	border-radius: 8px;
+	transition: background 0.2s;
+}
+
+#content nav .profile-menu li:hover {
+	background-color: var(--grey);
+}
+
+#content nav .profile-menu li a {
+	color: var(--dark);
+	font-size: 14px;
+	text-decoration: none;
+}
+
+#content nav .profile-menu.show {
+	display: block;
+}
+
+/* ===================================
+   MAIN CONTENT
+   =================================== */
+#content main {
+	width: 100%;
+	padding: 36px 24px;
+	font-family: var(--poppins);
+	max-height: calc(100vh - 56px);
+	overflow-y: auto;
+	background: #f8f9fa;
+}
+
+.settings-container {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.page-title {
+	font-size: 32px;
+	font-weight: 700;
+	color: var(--dark);
+	margin-bottom: 32px;
+}
+
+/* ===================================
+   SETTINGS GRID
+   =================================== */
+.settings-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+	gap: 24px;
+	margin-bottom: 32px;
+}
+
+.settings-section {
+	background: var(--light);
+	border-radius: 20px;
+	padding: 28px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	border: 2px solid #e8ecef;
+}
+
+.section-title {
+	font-size: 18px;
+	font-weight: 600;
+	color: var(--dark);
+	margin: 0 0 20px 0;
+}
+
+.settings-cards {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+/* ===================================
+   SETTING CARDS
+   =================================== */
+.setting-card {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 20px;
+	background: white;
+	border-radius: 16px;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	border: 2px solid transparent;
+	cursor: pointer;
+}
+
+.setting-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+	border-color: var(--blue);
+}
+
+.card-icon {
+	width: 56px;
+	height: 56px;
+	border-radius: 14px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	transition: transform 0.3s ease;
+}
+
+.setting-card:hover .card-icon {
+	transform: scale(1.1) rotate(5deg);
+}
+
+.card-icon i {
+	font-size: 28px;
+	color: white;
+}
+
+.icon-blue {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.icon-red {
+	background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.icon-green {
+	background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.icon-orange {
+	background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.card-content {
+	flex: 1;
+}
+
+.card-title {
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--dark);
+	margin: 0 0 6px 0;
+}
+
+.card-description {
+	font-size: 13px;
+	color: var(--dark-grey);
+	margin: 0;
+	line-height: 1.4;
+}
+
+.card-arrow {
+	flex-shrink: 0;
+	color: var(--dark-grey);
+	transition: all 0.3s ease;
+}
+
+.card-arrow i {
+	font-size: 24px;
+}
+
+.setting-card:hover .card-arrow {
+	color: var(--blue);
+	transform: translateX(4px);
+}
+
+/* ===================================
+   ACCOUNT SECTION
+   =================================== */
+.account-section {
+	background: var(--light);
+	border-radius: 20px;
+	padding: 28px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	border: 2px solid #e8ecef;
+}
+
+.account-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 16px;
+}
+
+.account-card {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 18px;
+	background: white;
+	border-radius: 14px;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	border: 2px solid transparent;
+	cursor: pointer;
+}
+
+.account-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+	border-color: var(--blue);
+}
+
+.account-icon {
+	width: 48px;
+	height: 48px;
+	background: var(--grey);
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	color: var(--blue);
+	transition: all 0.3s ease;
+}
+
+.account-card:hover .account-icon {
+	background: var(--blue);
+	color: white;
+	transform: scale(1.05);
+}
+
+.account-icon i {
+	font-size: 24px;
+}
+
+.account-info {
+	flex: 1;
+}
+
+.account-info h4 {
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--dark);
+	margin: 0 0 4px 0;
+}
+
+.account-info p {
+	font-size: 12px;
+	color: var(--dark-grey);
+	margin: 0;
+	line-height: 1.4;
+}
+
+.account-card > i {
+	flex-shrink: 0;
+	color: var(--dark-grey);
+	font-size: 20px;
+	transition: all 0.3s ease;
+}
+
+.account-card:hover > i {
+	color: var(--blue);
+	transform: translateX(4px);
+}
+
+/* ===================================
+   ANIMATIONS
+   =================================== */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.settings-section,
+.account-section {
+	animation: fadeInUp 0.5s ease backwards;
+}
+
+.settings-section:nth-child(2) {
+	animation-delay: 0.1s;
+}
+
+.account-section {
+	animation-delay: 0.2s;
+}
+
+/* ===================================
+   MEDIA QUERIES
+   =================================== */
+@media screen and (max-width: 1024px) {
+	.settings-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	#content {
+		width: calc(100% - 60px);
+		left: 60px;
+	}
+
+	#content nav .nav-title {
+		font-size: 16px;
+	}
+
+	.page-title {
+		font-size: 26px;
+	}
+
+	.settings-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.settings-section,
+	.account-section {
+		padding: 20px;
+	}
+
+	.account-cards {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media screen and (max-width: 576px) {
+	/* Search form toggle for mobile */
+	#content nav form .form-input input {
+		display: none;
+	}
+
+	#content nav form .form-input button {
+		width: auto;
+		height: auto;
+		background: transparent;
+		border-radius: none;
+		color: var(--dark);
+	}
+
+	#content nav form.show .form-input input {
+		display: block;
+		width: 100%;
+	}
+
+	#content nav form.show .form-input button {
+		width: 36px;
+		height: 100%;
+		border-radius: 0 36px 36px 0;
+		color: var(--light);
+		background: var(--blue);
+	}
+
+	#content nav form.show ~ .swith-lm,
+	#content nav form.show ~ .profile {
+		display: none;
+	}
+
+	#content main {
+		padding: 24px 16px;
+	}
+
+	.page-title {
+		font-size: 24px;
+		margin-bottom: 24px;
+	}
+
+	.settings-grid {
+		gap: 16px;
+		margin-bottom: 20px;
+	}
+
+	.settings-section,
+	.account-section {
+		padding: 16px;
+	}
+
+	.section-title {
+		font-size: 16px;
+	}
+
+	.setting-card {
+		padding: 16px;
+		gap: 12px;
+	}
+
+	.card-icon {
+		width: 48px;
+		height: 48px;
+	}
+
+	.card-icon i {
+		font-size: 24px;
+	}
+
+	.card-title {
+		font-size: 15px;
+	}
+
+	.card-description {
+		font-size: 12px;
+	}
+
+	.account-card {
+		padding: 14px;
+		gap: 12px;
+	}
+
+	.account-icon {
+		width: 44px;
+		height: 44px;
+	}
+
+	.account-icon i {
+		font-size: 22px;
+	}
+
+	.account-info h4 {
+		font-size: 14px;
+	}
+
+	.account-info p {
+		font-size: 11px;
+	}
+}
