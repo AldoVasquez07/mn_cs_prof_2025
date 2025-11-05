@@ -46,6 +46,12 @@ urlpatterns = [
     # Configuración general o ajustes de cuenta
     # ---------------------------------------------------------
     path('ajustes-option/', ajustes_option, name='ajustes_option'),
+    
+    
+    # ---------------------------------------------------------
+    # Vista del perfil de usuario
+    # ---------------------------------------------------------
+    path('perfil-option/', perfil, name='perfil_option'),
 
     # ---------------------------------------------------------
     # Módulo de predicción de ACV (vista principal)

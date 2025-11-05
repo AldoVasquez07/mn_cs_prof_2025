@@ -51,7 +51,7 @@ def productividad_ingresos_option(request):
 
 def horarios_option(request):
     """Renderiza la vista de horarios."""
-    return render(request, 'profesional/campanias_puntuales.html', {"choice": 5})
+    return render(request, 'profesional/horarios.html', {"choice": 5})
 
 
 def planes_option(request):
@@ -61,12 +61,15 @@ def planes_option(request):
 
 def ajustes_option(request):
     """Renderiza la vista de ajustes."""
-    return render(request, 'profesional/campanias_puntuales.html', {"choice": 7})
+    return render(request, 'profesional/ajustes.html', {"choice": 7})
 
+def perfil(request):
+    """Renderiza la vista de perfil."""
+    return render(request, 'profesional/perfil.html', {"choice": 8})
 
 def prediction_acv_option(request):
     """Renderiza la página principal del módulo de predicción de ACV."""
-    return render(request, 'profesional/prediction_acv.html', {"choice": 8})
+    return render(request, 'profesional/prediction_acv.html', {"choice": 9})
 
 
 # -------------------------------------------------------------
