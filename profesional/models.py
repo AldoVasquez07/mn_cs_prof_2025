@@ -85,3 +85,81 @@ class Profesional(models.Model):
         combinando su nombre y apellido paterno.
         """
         return f'Profesional: {self.usuario.first_name} {self.usuario.apellido_paterno}'
+
+
+class ProfesionalCliente(models.Model):
+    profesional = models.ForeignKey(
+        'profesional.Profesional',
+        on_delete=models.CASCADE,
+        related_name='relaciones_cliente'
+    )
+    cliente = models.ForeignKey(
+        'cliente.Cliente',
+        on_delete=models.CASCADE,
+        related_name='relaciones_profesional'
+    )
+    fecha_inicio = models.DateField(auto_now_add=True)
+    estado = models.CharField(
+        max_length=50,
+        default='activo',
+        help_text='Estado de la relación (activo, finalizado, suspendido, etc.)'
+    )
+
+    class Meta:
+        unique_together = ('profesional', 'cliente')
+        verbose_name = 'Relación Profesional-Cliente'
+        verbose_name_plural = 'Relaciones Profesionales-Clientes'
+
+    def __str__(self):
+        return f'{self.profesional} ↔ {self.cliente}'
+
+
+class Mensaje(models.Model):
+    relacion = models.ForeignKey(
+        'profesional.ProfesionalCliente',
+        on_delete=models.CASCADE,
+        related_name='mensajes'
+    )
+    emisor = models.CharField(
+        max_length=20,
+        choices=[('profesional', 'Profesional'), ('cliente', 'Cliente')]
+    )
+    contenido = models.TextField()
+    fecha_envio = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-fecha_envio']
+
+    def __str__(self):
+        return f'Mensaje de {self.emisor} ({self.fecha_envio:%Y-%m-%d %H:%M})'
+
+
+
+class Cita(models.Model):
+    relacion = models.ForeignKey(
+        'profesional.ProfesionalCliente',
+        on_delete=models.CASCADE,
+        related_name='citas',
+        help_text="Relación profesional-cliente a la que pertenece esta cita."
+    )
+    fecha = models.DateTimeField(help_text="Fecha y hora programada de la cita.")
+    estado = models.CharField(
+        max_length=20,
+        choices=[
+            ('pendiente', 'Pendiente'),
+            ('confirmada', 'Confirmada'),
+            ('completada', 'Completada'),
+            ('cancelada', 'Cancelada')
+        ],
+        default='pendiente'
+    )
+    motivo = models.TextField(blank=True, null=True, help_text="Motivo o descripción de la cita.")
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-fecha']
+        verbose_name = "Cita"
+        verbose_name_plural = "Citas"
+
+    def __str__(self):
+        return f'Cita {self.fecha:%Y-%m-%d %H:%M} | {self.relacion}'
