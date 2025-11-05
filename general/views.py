@@ -63,13 +63,13 @@ def login_inicio_sesion(request):
             # Verifica el rol y redirige según corresponda
             for m in menu:
                 if usuario.rol and usuario.rol.nombre == m:
+                    print(usuario.profesional.especialidad.nombre)
                     estado = False
                     try:
                         if (
                             usuario.profesional and
                             usuario.profesional.especialidad and
-                            usuario.profesional.especialidad.profesion and
-                            usuario.profesional.especialidad.profesion.nombre == "Neurología"
+                            usuario.profesional.especialidad.nombre == "Neurología"
                         ):
                             estado = True
                     except AttributeError:
