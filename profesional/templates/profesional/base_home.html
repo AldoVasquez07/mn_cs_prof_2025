@@ -22,7 +22,7 @@
 			<span class="text">Consultor</span>
 		</a>
 		<ul class="side-menu top">
-            {% if choice == 1 %}
+            {% if choice and choice == 1 %}
 			<li class="active">
             {% else %}
 			<li>
@@ -32,7 +32,7 @@
 					<span class="text">Campañas puntuales</span>
 				</a>
 			</li>
-			{% if choice == 2 %}
+			{% if choice and choice == 2 %}
 			<li class="active">
             {% else %}
 			<li>
@@ -42,7 +42,7 @@
 					<span class="text">Clientes</span>
 				</a>
 			</li>
-			{% if choice == 3 %}
+			{% if choice and choice == 3 %}
 			<li class="active">
             {% else %}
 			<li>
@@ -52,7 +52,7 @@
 					<span class="text">Bandeja de entrada</span>
 				</a>
 			</li>
-			{% if choice == 4 %}
+			{% if choice and choice == 4 %}
 			<li class="active">
             {% else %}
 			<li>
@@ -62,7 +62,7 @@
 					<span class="text">Productividad e ingresos</span>
 				</a>
 			</li>
-			{% if choice == 5 %}
+			{% if choice and choice == 5 %}
 			<li class="active">
             {% else %}
 			<li>
@@ -72,7 +72,7 @@
 					<span class="text">Horarios</span>
 				</a>
 			</li>
-			{% if choice == 6 %}
+			{% if choice and choice == 6 %}
 			<li class="active">
             {% else %}
 			<li>
@@ -82,7 +82,7 @@
 					<span class="text">Planes</span>
 				</a>
 			</li>
-			{% if choice == 7 %}
+			<!-- {% if choice and choice == 7 %}
 			<li class="active">
             {% else %}
 			<li>
@@ -91,9 +91,9 @@
 					<i class='bx bx-cog bx-sm'></i>
 					<span class="text">Ajustes</span>
 				</a>
-			</li>
+			</li> -->
 
-			<!-- {% if choice == 8 %}
+			<!-- {% if choice and choice == 8 %}
 			<li class="active">
             {% else %}
 			<li>
@@ -104,7 +104,7 @@
 				</a>
 			</li> -->
 
-			{% if choice == 9 %}
+			{% if choice and choice == 7 %}
 			<li class="active">
             {% else %}
 			<li>

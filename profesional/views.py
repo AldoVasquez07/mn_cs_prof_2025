@@ -56,20 +56,20 @@ def horarios_option(request):
 
 def planes_option(request):
     """Renderiza la vista de planes."""
-    return render(request, 'profesional/campanias_puntuales.html', {"choice": 6})
+    return render(request, 'profesional/planes.html', {"choice": 6})
 
 
 def ajustes_option(request):
     """Renderiza la vista de ajustes."""
-    return render(request, 'profesional/ajustes.html', {"choice": 7})
+    return render(request, 'profesional/ajustes.html')
 
 def perfil(request):
     """Renderiza la vista de perfil."""
-    return render(request, 'profesional/perfil.html', {"choice": 8})
+    return render(request, 'profesional/perfil.html')
 
 def prediction_acv_option(request):
     """Renderiza la página principal del módulo de predicción de ACV."""
-    return render(request, 'profesional/prediction_acv.html', {"choice": 9})
+    return render(request, 'profesional/prediction_acv.html', {"choice": 7})
 
 
 # -------------------------------------------------------------
