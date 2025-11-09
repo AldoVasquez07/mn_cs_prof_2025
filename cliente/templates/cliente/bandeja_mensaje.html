@@ -1,0 +1,232 @@
+{% extends 'cliente/base_home.html' %}
+{% load static %}
+
+{% block styles %}
+	<link rel="stylesheet" href="{% static 'cliente/css/bandeja_mensaje.css' %}">
+{% endblock %}
+
+{% block content %}
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu bx-sm'></i>
+			<div class="nav-title">
+				<span>Bandeja de mensajes</span>
+			</div>
+			<form action="#">
+				<div class="form-input">
+					<input type="search" placeholder="Buscar por...">
+					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+				</div>
+			</form>
+			
+			<!-- Dark/Light Mode Toggle -->
+			<input type="checkbox" class="checkbox" id="switch-mode" hidden />
+			<label class="swith-lm" for="switch-mode">
+				<i class="bx bxs-moon"></i>
+				<i class="bx bx-sun"></i>
+				<div class="ball"></div>
+			</label>
+
+			<!-- Profile Menu -->
+			<a href="#" class="profile" id="profileIcon">
+				<img src="https://ui-avatars.com/api/?name=Cliente&background=3C91E6&color=fff" alt="Profile">
+			</a>
+			<div class="profile-menu" id="profileMenu">
+				<ul>
+					<li><a href="#">Mi Perfil</a></li>
+					<li><a href="#">Configuración</a></li>
+					<li><a href="#">Cerrar Sesión</a></li>
+				</ul>
+			</div>
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<div class="bandeja-container">
+				<div class="header-section">
+					<h1 class="page-title">Bandeja de mensajes</h1>
+					<button class="btn-nuevo-mensaje">
+						<i class='bx bx-plus'></i>
+						Nuevo mensaje
+					</button>
+				</div>
+				
+				<!-- Messages List -->
+				<div class="messages-container">
+					<!-- Message Card 1 -->
+					<div class="message-card unread" data-id="1">
+						<div class="message-header">
+							<div class="professional-info">
+								<div class="professional-avatar">
+									<i class='bx bx-user'></i>
+								</div>
+								<div class="professional-details">
+									<h3 class="professional-name">Dr. Juan Pérez</h3>
+									<span class="professional-specialty">Nutricionista</span>
+								</div>
+							</div>
+							<div class="message-meta">
+								<span class="message-date">Hace 2 horas</span>
+								<span class="unread-badge">
+									<i class='bx bx-circle'></i>
+								</span>
+							</div>
+						</div>
+						<div class="message-body">
+							<p class="message-preview">Hola, te recuerdo que tienes tu cita programada para el día de mañana a las 10:00 AM. Por favor confirma tu asistencia.</p>
+						</div>
+						<div class="message-footer">
+							<button class="btn-reply">
+								<i class='bx bx-reply'></i>
+								Responder
+							</button>
+							<button class="btn-view-more">
+								Ver conversación completa
+								<i class='bx bx-chevron-right'></i>
+							</button>
+						</div>
+					</div>
+
+					<!-- Message Card 2 -->
+					<div class="message-card unread" data-id="2">
+						<div class="message-header">
+							<div class="professional-info">
+								<div class="professional-avatar">
+									<i class='bx bx-user'></i>
+								</div>
+								<div class="professional-details">
+									<h3 class="professional-name">Dra. María González</h3>
+									<span class="professional-specialty">Psicóloga</span>
+								</div>
+							</div>
+							<div class="message-meta">
+								<span class="message-date">Hace 5 horas</span>
+								<span class="unread-badge">
+									<i class='bx bx-circle'></i>
+								</span>
+							</div>
+						</div>
+						<div class="message-body">
+							<p class="message-preview">Buenos días, quería recordarte que debes traer los documentos que mencionamos en la última sesión. Si tienes alguna duda, no dudes en escribirme.</p>
+						</div>
+						<div class="message-footer">
+							<button class="btn-reply">
+								<i class='bx bx-reply'></i>
+								Responder
+							</button>
+							<button class="btn-view-more">
+								Ver conversación completa
+								<i class='bx bx-chevron-right'></i>
+							</button>
+						</div>
+					</div>
+
+					<!-- Message Card 3 - Read -->
+					<div class="message-card" data-id="3">
+						<div class="message-header">
+							<div class="professional-info">
+								<div class="professional-avatar">
+									<i class='bx bx-user'></i>
+								</div>
+								<div class="professional-details">
+									<h3 class="professional-name">Dr. Carlos Ruiz</h3>
+									<span class="professional-specialty">Dentista</span>
+								</div>
+							</div>
+							<div class="message-meta">
+								<span class="message-date">Ayer</span>
+							</div>
+						</div>
+						<div class="message-body">
+							<p class="message-preview">Muchas gracias por tu confianza. Te espero en tu próxima cita. Si necesitas algo más, estoy a tu disposición.</p>
+						</div>
+						<div class="message-footer">
+							<button class="btn-reply">
+								<i class='bx bx-reply'></i>
+								Responder
+							</button>
+							<button class="btn-view-more">
+								Ver conversación completa
+								<i class='bx bx-chevron-right'></i>
+							</button>
+						</div>
+					</div>
+
+					<!-- Message Card 4 - Read -->
+					<div class="message-card" data-id="4">
+						<div class="message-header">
+							<div class="professional-info">
+								<div class="professional-avatar">
+									<i class='bx bx-user'></i>
+								</div>
+								<div class="professional-details">
+									<h3 class="professional-name">Dra. Ana Martínez</h3>
+									<span class="professional-specialty">Fisioterapeuta</span>
+								</div>
+							</div>
+							<div class="message-meta">
+								<span class="message-date">Hace 2 días</span>
+							</div>
+						</div>
+						<div class="message-body">
+							<p class="message-preview">Hola, te envío los ejercicios que debes realizar en casa. Recuerda hacerlos diariamente para ver mejores resultados.</p>
+						</div>
+						<div class="message-footer">
+							<button class="btn-reply">
+								<i class='bx bx-reply'></i>
+								Responder
+							</button>
+							<button class="btn-view-more">
+								Ver conversación completa
+								<i class='bx bx-chevron-right'></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<!-- MAIN -->
+	</section>
+	<!-- CONTENT -->
+
+	<!-- Modal para nuevo mensaje -->
+	<div id="nuevoMensajeModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2>Nuevo Mensaje</h2>
+				<button class="close-modal">
+					<i class='bx bx-x'></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="nuevoMensajeForm">
+					<div class="form-group">
+						<label>Profesional</label>
+						<select name="profesional" required>
+							<option value="">Seleccionar profesional...</option>
+							<option value="1">Dr. Juan Pérez - Nutricionista</option>
+							<option value="2">Dra. María González - Psicóloga</option>
+							<option value="3">Dr. Carlos Ruiz - Dentista</option>
+							<option value="4">Dra. Ana Martínez - Fisioterapeuta</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Mensaje</label>
+						<textarea name="mensaje" rows="6" placeholder="Escribe tu mensaje aquí..." required></textarea>
+					</div>
+					<div class="modal-actions">
+						<button type="button" class="btn-cancel">Cancelar</button>
+						<button type="submit" class="btn-submit">Enviar mensaje</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'cliente/js/bandeja_mensaje.js' %}"></script>
+{% endblock %}

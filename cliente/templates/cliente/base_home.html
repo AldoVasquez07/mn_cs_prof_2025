@@ -1,0 +1,78 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="{% static 'cliente/css/base_home.css' %}">
+	{% block styles %}
+	{% endblock %}
+	<title>Consultor - Mis Citas</title>
+</head>
+
+<body>
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<i class='bx bxs-buildings bx-lg'></i>
+			<span class="text">Consultado</span>
+		</a>
+		<ul class="side-menu top">
+			{% if choice and choice == 1 %}
+			<li class="active">
+				{% else %}
+			<li>
+				{% endif %}
+				<a href="{% url 'cliente:mis_citas_option' %}">
+					<i class='bx bx-calendar-check bx-sm'></i>
+					<span class="text">Mis Citas</span>
+				</a>
+			</li>
+
+			{% if choice and choice == 2 %}
+			<li class="active">
+				{% else %}
+			<li>
+				{% endif %}
+				<a href="{% url 'cliente:profesionales_option' %}">
+					<i class='bx bx-briefcase bx-sm'></i>
+					<span class="text">Profesionales</span>
+				</a>
+			</li>
+
+			{% if choice and choice == 3 %}
+			<li class="active">
+				{% else %}
+			<li>
+				{% endif %}
+				<a href="{% url 'cliente:bandeja_entrada_option' %}">
+					<i class='bx bx-envelope bx-sm'></i>
+					<span class="text">Bandeja de entrada</span>
+				</a>
+			</li>
+		</ul>
+
+		<ul class="side-menu bottom">
+			<li>
+				<a href="#" class="logout">
+					<i class='bx bx-log-out bx-sm'></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+
+	{% block content %}
+	{% endblock %}
+
+	<script src="{% static 'profesional/js/base_home.js' %}"></script>
+
+	{% block scripts %}
+	{% endblock %}
+</body>
+
+</html>
