@@ -46,7 +46,7 @@ def login_inicio_sesion(request):
 
     # Diccionario de rutas por rol
     menu = {
-        'cliente': 'general:login_registro_cliente',
+        'cliente': 'cliente:mis_citas_option',
         'profesional': 'profesional:campanias_puntuales_option',
         'organizacion': 'general:login_registro_organizacion'
     }
@@ -63,7 +63,6 @@ def login_inicio_sesion(request):
             # Verifica el rol y redirige según corresponda
             for m in menu:
                 if usuario.rol and usuario.rol.nombre == m:
-                    print(usuario.profesional.especialidad.nombre)
                     estado = False
                     try:
                         if (
@@ -91,62 +90,66 @@ def login_inicio_sesion(request):
 # -------------------------------------------------------------
 # Registro de clientes
 # -------------------------------------------------------------
+# -------------------------------------------------------------
+# Registro de clientes
+# -------------------------------------------------------------
 def login_registro_cliente(request):
-    """Permite registrar un nuevo usuario con rol de cliente."""
+    """
+    Permite registrar un nuevo usuario con rol de cliente.
+    Usa la misma estructura que el registro de profesional,
+    pero adaptada a la lógica más simple de clientes.
+    """
     ciudades = Ciudad.objects.filter(flag=True).order_by('nombre')
     mensaje = None
-    
+
     if request.method == 'POST':
-        contrasena_cliente = request.POST.get('contrasena_cliente')
-        confirmar_contrasena_cliente = request.POST.get('confirmar_contrasena_cliente')
-        
-        # Validar coincidencia de contraseñas
-        if contrasena_cliente != confirmar_contrasena_cliente:
-            return render(
-                request,
-                'general/login/registro/login_registrar_cliente.html',
-                {'ciudades': ciudades, 'mensaje': 'Las contraseñas no coinciden.'}
-            )
-        
-        # Crear objeto Usuario
-        nuevo_usuario = Usuario(
-            first_name=request.POST.get('nombre_cliente'),
-            email=request.POST.get('correo_cliente'),
-            password=contrasena_cliente,
-            apellido_paterno=request.POST.get('apellido_paterno_cliente'),
-            apellido_materno=request.POST.get('apellido_materno_cliente'),
-            fecha_nacimiento=request.POST.get('fecha_nacimiento_cliente'),
-            documento_identidad=request.POST.get('documento_identidad_cliente'),
-            telefono=request.POST.get('telefono_cliente'),
-            ciudad=Ciudad.objects.filter(id=request.POST.get('ciudad_cliente')).first(),
-            rol=Rol.objects.filter(nombre='cliente').first()
-        )
-        
-        try:
-            # Validar y guardar usuario
-            nuevo_usuario.clean()
-            nuevo_usuario.save()
+        # Obtener contraseñas desde el formulario
+        password = request.POST.get('contrasena_cliente')
+        confirm_password = request.POST.get('confirmar_contrasena_cliente')
 
-            # Crear instancia Cliente asociada al usuario
-            nuevo_cliente = Cliente(usuario=nuevo_usuario)
-            nuevo_cliente.save()
+        # Verificar coincidencia
+        if password != confirm_password:
+            mensaje = "Las contraseñas no coinciden."
+        else:
+            try:
+                # Crear instancia del usuario (sin guardar aún)
+                nuevo_usuario = Usuario(
+                    first_name=request.POST.get('nombre_cliente'),
+                    apellido_paterno=request.POST.get('apellido_paterno_cliente'),
+                    apellido_materno=request.POST.get('apellido_materno_cliente'),
+                    email=request.POST.get('correo_cliente'),
+                    fecha_nacimiento=request.POST.get('fecha_nacimiento_cliente'),
+                    documento_identidad=request.POST.get('documento_identidad_cliente'),
+                    telefono=request.POST.get('telefono_cliente'),
+                    ciudad=Ciudad.objects.filter(id=request.POST.get('ciudad_cliente')).first(),
+                    rol=Rol.objects.filter(nombre='cliente').first()
+                )
 
-            # Redirigir al inicio de sesión tras registro exitoso
-            return redirect('general:login_inicio_sesion')
+                # Asignar contraseña correctamente (usa hashing)
+                nuevo_usuario.set_password(password)
 
-        except Exception as e:
-            # Captura errores de validación o base de datos
-            return render(
-                request,
-                'general/login/registro/login_registrar_cliente.html',
-                {'ciudades': ciudades, 'mensaje': str(e)}
-            )
+                # Validar y guardar usuario
+                nuevo_usuario.clean()
+                nuevo_usuario.save()
 
-    # Renderizar formulario vacío por defecto
+                # Crear objeto Cliente asociado
+                nuevo_cliente = Cliente(usuario=nuevo_usuario)
+                nuevo_cliente.save()
+
+                # Redirigir al inicio de sesión
+                return redirect('general:login_inicio_sesion')
+
+            except Exception as ex:
+                mensaje = str(ex)
+
+    # Si GET o error, renderizar nuevamente con contexto
     return render(
         request,
         'general/login/registro/login_registrar_cliente.html',
-        {'ciudades': ciudades, 'mensaje': mensaje}
+        {
+            'ciudades': ciudades,
+            'mensaje': mensaje
+        }
     )
 
 

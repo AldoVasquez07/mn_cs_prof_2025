@@ -25,33 +25,33 @@ urlpatterns = [
     # ---------------------------------------------------------
     # Bandeja de entrada (mensajes o solicitudes)
     # ---------------------------------------------------------
-    path('bandeja-entrada-option/', bandeja_entrada_option, name='bandeja_entrada_option'),
+    path('bandeja-entrada/', bandeja_entrada_option, name='bandeja_entrada_option'),
 
     # ---------------------------------------------------------
     # Reportes de productividad e ingresos
     # ---------------------------------------------------------
-    path('productividad-ingresos-option/', productividad_ingresos_option, name='productividad_ingresos_option'),
+    path('productividad-ingresos/', productividad_ingresos_option, name='productividad_ingresos_option'),
 
     # ---------------------------------------------------------
     # Administración de horarios del profesional
     # ---------------------------------------------------------
-    path('horarios-option/', horarios_option, name='horarios_option'),
+    path('horarios/', horarios_option, name='horarios_option'),
 
     # ---------------------------------------------------------
     # Planes y suscripciones del profesional
     # ---------------------------------------------------------
-    path('planes-option/', planes_option, name='planes_option'),
+    path('planes/', planes_option, name='planes_option'),
 
     # ---------------------------------------------------------
     # Configuración general o ajustes de cuenta
     # ---------------------------------------------------------
-    path('ajustes-option/', ajustes_option, name='ajustes_option'),
+    path('ajustes/', ajustes_option, name='ajustes_option'),
     
     
     # ---------------------------------------------------------
     # Vista del perfil de usuario
     # ---------------------------------------------------------
-    path('perfil-option/', perfil, name='perfil_option'),
+    path('perfil/', perfil, name='perfil_option'),
 
     # ---------------------------------------------------------
     # Módulo de predicción de ACV (vista principal)
