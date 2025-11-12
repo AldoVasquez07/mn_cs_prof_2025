@@ -31,3 +31,46 @@ function adjustSidebar() {
 
 window.addEventListener('load', adjustSidebar);
 window.addEventListener('resize', adjustSidebar);
+
+
+// Profile Menu Toggle - Click en todo el contenedor
+const profileContainer = document.querySelector('.profile-container');
+const profileMenu = document.querySelector('.profile-menu');
+
+if (profileContainer && profileMenu) {
+    profileContainer.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        profileMenu.classList.toggle('show');
+    });
+}
+
+// Cerrar menú de perfil al hacer clic fuera
+window.addEventListener('click', function (e) {
+    if (!e.target.closest('.profile-container')) {
+        if (profileMenu) {
+            profileMenu.classList.remove('show');
+        }
+    }
+});
+
+// Dark Mode Switch (si lo usas)
+const switchMode = document.getElementById('switch-mode');
+
+if (switchMode) {
+    switchMode.addEventListener('change', function () {
+        if (this.checked) {
+            document.body.classList.add('dark');
+            localStorage.setItem('darkMode', 'enabled');
+        } else {
+            document.body.classList.remove('dark');
+            localStorage.setItem('darkMode', 'disabled');
+        }
+    });
+
+    // Cargar preferencia de dark mode
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark');
+        switchMode.checked = true;
+    }
+}

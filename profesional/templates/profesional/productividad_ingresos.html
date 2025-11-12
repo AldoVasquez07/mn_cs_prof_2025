@@ -2,144 +2,105 @@
 {% load static %}
 
 {% block styles %}
-	<link rel="stylesheet" href="{% static 'profesional/css/productividad_ingresos.css' %}">
+<link rel="stylesheet" href="{% static 'profesional/css/productividad_ingresos.css' %}">
 {% endblock %}
 
 {% block content %}
-	<!-- CONTENT -->
-	<section id="content">
-		<!-- NAVBAR -->
-		<nav>
-			<i class='bx bx-menu bx-sm'></i>
-			<div class="nav-title">
-				<span>Productividad e Ingresos</span>
-			</div>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Buscar por...">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+<!-- MAIN -->
+<main>
+	<div class="productividad-container">
+		<h1 class="page-title">Eficiencia e ingresos totales</h1>
+
+		<div class="content-grid">
+			<!-- Gráfica -->
+			<div class="chart-section">
+				<div class="chart-container">
+					<canvas id="eficienciaChart"></canvas>
 				</div>
-			</form>
-			
-			<!-- Dark/Light Mode Toggle -->
-			<!-- <input type="checkbox" class="checkbox" id="switch-mode" hidden />
-			<label class="swith-lm" for="switch-mode">
-				<i class="bx bxs-moon"></i>
-				<i class="bx bx-sun"></i>
-				<div class="ball"></div>
-			</label> -->
-
-			<!-- Profile Menu -->
-			<a href="#" class="profile" id="profileIcon">
-				<img src="https://ui-avatars.com/api/?name=Usuario&background=3C91E6&color=fff" alt="Profile">
-			</a>
-			<div class="profile-menu" id="profileMenu">
-				<ul>
-					<li><a href="{% url 'profesional:perfil_option' %}">Mi Perfil</a></li>
-					<li><a href="{% url 'profesional:ajustes_option' %}">Ajustes</a></li>
-					<li><a href="#">Cerrar Sesión</a></li>
-				</ul>
 			</div>
-		</nav>
-		<!-- NAVBAR -->
 
-		<!-- MAIN -->
-		<main>
-			<div class="productividad-container">
-				<h1 class="page-title">Eficiencia e ingresos totales</h1>
-				
-				<div class="content-grid">
-					<!-- Gráfica -->
-					<div class="chart-section">
-						<div class="chart-container">
-							<canvas id="eficienciaChart"></canvas>
-						</div>
+			<!-- Stats Cards -->
+			<div class="stats-section">
+				<!-- Citas Presenciales/Online -->
+				<div class="stat-card pink-card">
+					<div class="stat-icon">
+						<i class='bx bx-calendar'></i>
 					</div>
-
-					<!-- Stats Cards -->
-					<div class="stats-section">
-						<!-- Citas Presenciales/Online -->
-						<div class="stat-card pink-card">
-							<div class="stat-icon">
-								<i class='bx bx-calendar'></i>
+					<div class="stat-content">
+						<div class="stat-values">
+							<div class="stat-value-item">
+								<span class="stat-number">0</span>
+								<span class="stat-label">Presenciales</span>
 							</div>
-							<div class="stat-content">
-								<div class="stat-values">
-									<div class="stat-value-item">
-										<span class="stat-number">0</span>
-										<span class="stat-label">Presenciales</span>
-									</div>
-									<div class="stat-value-item">
-										<span class="stat-number">0</span>
-										<span class="stat-label">Online</span>
-									</div>
-								</div>
-								<div class="stat-title">Citas</div>
+							<div class="stat-value-item">
+								<span class="stat-number">0</span>
+								<span class="stat-label">Online</span>
 							</div>
 						</div>
+						<div class="stat-title">Citas</div>
+					</div>
+				</div>
 
-						<!-- Contacto con clientes -->
-						<div class="stat-card yellow-card">
-							<div class="stat-icon">
-								<i class='bx bx-group'></i>
+				<!-- Contacto con clientes -->
+				<div class="stat-card yellow-card">
+					<div class="stat-icon">
+						<i class='bx bx-group'></i>
+					</div>
+					<div class="stat-content">
+						<div class="stat-number-large">23</div>
+						<div class="stat-title">Contacto con clientes</div>
+					</div>
+				</div>
+
+				<!-- Citas agendadas -->
+				<div class="stat-card blue-card">
+					<div class="stat-icon">
+						<i class='bx bx-calendar-check'></i>
+					</div>
+					<div class="stat-content">
+						<div class="stat-number-large">0</div>
+						<div class="stat-title">Citas agendadas</div>
+					</div>
+				</div>
+
+				<!-- Citas concretadas -->
+				<div class="stat-card pink-card">
+					<div class="stat-icon">
+						<i class='bx bx-calendar-check'></i>
+					</div>
+					<div class="stat-content">
+						<div class="stat-values">
+							<div class="stat-value-item">
+								<span class="stat-number">0</span>
+								<span class="stat-label">Presenciales</span>
 							</div>
-							<div class="stat-content">
-								<div class="stat-number-large">23</div>
-								<div class="stat-title">Contacto con clientes</div>
+							<div class="stat-value-item">
+								<span class="stat-number">0</span>
+								<span class="stat-label">Online</span>
 							</div>
 						</div>
+						<div class="stat-title">Citas concretadas</div>
+					</div>
+				</div>
 
-						<!-- Citas agendadas -->
-						<div class="stat-card blue-card">
-							<div class="stat-icon">
-								<i class='bx bx-calendar-check'></i>
-							</div>
-							<div class="stat-content">
-								<div class="stat-number-large">0</div>
-								<div class="stat-title">Citas agendadas</div>
-							</div>
-						</div>
-
-						<!-- Citas concretadas -->
-						<div class="stat-card pink-card">
-							<div class="stat-icon">
-								<i class='bx bx-calendar-check'></i>
-							</div>
-							<div class="stat-content">
-								<div class="stat-values">
-									<div class="stat-value-item">
-										<span class="stat-number">0</span>
-										<span class="stat-label">Presenciales</span>
-									</div>
-									<div class="stat-value-item">
-										<span class="stat-number">0</span>
-										<span class="stat-label">Online</span>
-									</div>
-								</div>
-								<div class="stat-title">Citas concretadas</div>
-							</div>
-						</div>
-
-						<!-- Conversión de clientes -->
-						<div class="stat-card yellow-card">
-							<div class="stat-icon">
-								<i class='bx bx-trending-up'></i>
-							</div>
-							<div class="stat-content">
-								<div class="stat-number-large">76%</div>
-								<div class="stat-title">Conversión de clientes</div>
-							</div>
-						</div>
+				<!-- Conversión de clientes -->
+				<div class="stat-card yellow-card">
+					<div class="stat-icon">
+						<i class='bx bx-trending-up'></i>
+					</div>
+					<div class="stat-content">
+						<div class="stat-number-large">76%</div>
+						<div class="stat-title">Conversión de clientes</div>
 					</div>
 				</div>
 			</div>
-		</main>
-		<!-- MAIN -->
-	</section>
-	<!-- CONTENT -->
+		</div>
+	</div>
+</main>
 
-	<!-- Datos para la gráfica (desde Django) -->
-	<script id="chart-data" type="application/json">
+
+<!-- Datos para la gráfica (desde Django) -->
+<script id="chart-data" type="application/json">
 		{
 			"labels": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
 			"eficiencia": [6, 19, 3, 5, 2, 3, 10, 12, 19, 3, 5, 2],
@@ -149,6 +110,6 @@
 {% endblock %}
 
 {% block scripts %}
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-	<script src="{% static 'profesional/js/productividad_ingresos.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<script src="{% static 'profesional/js/productividad_ingresos.js' %}"></script>
 {% endblock %}

@@ -2,318 +2,285 @@
 {% load static %}
 
 {% block styles %}
-	<link rel="stylesheet" href="{% static 'profesional/css/planes.css' %}">
+<link rel="stylesheet" href="{% static 'profesional/css/planes.css' %}">
 {% endblock %}
 
 {% block content %}
-	<!-- CONTENT -->
-	<section id="content">
-		<!-- NAVBAR -->
-		<nav>
-			<i class='bx bx-menu bx-sm'></i>
-			<div class="nav-title">
-				<span>Planes de la Plataforma</span>
-			</div>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Buscar por...">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-				</div>
-			</form>
-			
-			<!-- Dark/Light Mode Toggle -->
-			<input type="checkbox" class="checkbox" id="switch-mode" hidden />
-			<label class="swith-lm" for="switch-mode">
-				<i class="bx bxs-moon"></i>
-				<i class="bx bx-sun"></i>
-				<div class="ball"></div>
-			</label>
+<!-- MAIN -->
+<main>
+	<div class="plans-container">
+		<h1 class="page-title">Planes de la Plataforma</h1>
 
-			<!-- Profile Menu -->
-			<a href="#" class="profile" id="profileIcon">
-				<img src="https://ui-avatars.com/api/?name=Usuario&background=3C91E6&color=fff" alt="Profile">
-			</a>
-			<div class="profile-menu" id="profileMenu">
-				<ul>
-					<li><a href="{% url 'profesional:perfil_option' %}">Mi Perfil</a></li>
-					<li><a href="{% url 'profesional:ajustes_option' %}">Ajustes</a></li>
-					<li><a href="#">Cerrar Sesión</a></li>
-				</ul>
-			</div>
-		</nav>
-		<!-- NAVBAR -->
-
-		<!-- MAIN -->
-		<main>
-			<div class="plans-container">
-				<h1 class="page-title">Planes de la Plataforma</h1>
-				
-				<!-- Plans Grid -->
-				<div class="plans-grid">
-					<!-- Plan Básico -->
-					<div class="plan-card plan-basic">
-						<div class="plan-header">
-							<h2 class="plan-name">Plan Básico</h2>
-							<div class="plan-price">
-								<span class="currency">S/.</span>
-								<span class="amount">xxx.xx</span>
-							</div>
-						</div>
-						
-						<div class="plan-description">
-							<p>Crea tu perfil y hazte visible para las empresas de distintas industrias que están dispuestas a contratar consultores en tu especialidad</p>
-						</div>
-						
-						<div class="plan-features">
-							<div class="feature-item">
-								<i class='bx bx-check'></i>
-								<span>Perfil profesional completo</span>
-							</div>
-							<div class="feature-item">
-								<i class='bx bx-check'></i>
-								<span>Visibilidad en búsquedas</span>
-							</div>
-							<div class="feature-item">
-								<i class='bx bx-check'></i>
-								<span>Hasta 5 servicios publicados</span>
-							</div>
-							<div class="feature-item">
-								<i class='bx bx-check'></i>
-								<span>Gestión de agenda básica</span>
-							</div>
-						</div>
-						
-						<button class="btn-plan btn-basic" data-plan="basico">
-							Seleccionar Plan
-						</button>
-					</div>
-
-					<!-- Plan Premium -->
-					<div class="plan-card plan-premium featured">
-						<div class="featured-badge">
-							<i class='bx bxs-star'></i>
-							<span>Recomendado</span>
-						</div>
-						
-						<div class="plan-header">
-							<h2 class="plan-name">Plan Premium</h2>
-							<div class="plan-price">
-								<span class="currency">S/.</span>
-								<span class="amount">xxx.xx</span>
-							</div>
-						</div>
-						
-						<div class="plan-description">
-							<p>Crea tus consultas de manera profesional con mejores resultantes y establece comunicación con tus clientes</p>
-						</div>
-						
-						<div class="plan-features">
-							<div class="feature-item">
-								<i class='bx bx-check'></i>
-								<span>Todo lo del Plan Básico</span>
-							</div>
-							<div class="feature-item">
-								<i class='bx bx-check'></i>
-								<span>Servicios ilimitados</span>
-							</div>
-							<div class="feature-item">
-								<i class='bx bx-check'></i>
-								<span>Gestión avanzada de agenda</span>
-							</div>
-							<div class="feature-item">
-								<i class='bx bx-check'></i>
-								<span>Mensajería con clientes</span>
-							</div>
-							<div class="feature-item">
-								<i class='bx bx-check'></i>
-								<span>Videoconsultas integradas</span>
-							</div>
-							<div class="feature-item">
-								<i class='bx bx-check'></i>
-								<span>Reportes y estadísticas</span>
-							</div>
-							<div class="feature-item">
-								<i class='bx bx-check'></i>
-								<span>Soporte prioritario</span>
-							</div>
-						</div>
-						
-						<button class="btn-plan btn-premium" data-plan="premium">
-							¡Empezar Ahora!
-						</button>
+		<!-- Plans Grid -->
+		<div class="plans-grid">
+			<!-- Plan Básico -->
+			<div class="plan-card plan-basic">
+				<div class="plan-header">
+					<h2 class="plan-name">Plan Básico</h2>
+					<div class="plan-price">
+						<span class="currency">S/.</span>
+						<span class="amount">xxx.xx</span>
 					</div>
 				</div>
 
-				<!-- Comparación de Planes -->
-				<div class="comparison-section">
-					<h2 class="section-title">Comparación de Planes</h2>
-					
-					<div class="comparison-table">
-						<div class="comparison-row comparison-header">
-							<div class="comparison-cell feature-name">Características</div>
-							<div class="comparison-cell">Plan Básico</div>
-							<div class="comparison-cell premium-col">Plan Premium</div>
-						</div>
-						
-						<div class="comparison-row">
-							<div class="comparison-cell feature-name">Refistro de Consultor</div>
-							<div class="comparison-cell"><i class='bx bx-check'></i></div>
-							<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
-						</div>
-						
-						<div class="comparison-row">
-							<div class="comparison-cell feature-name">Perfil visible públicamente</div>
-							<div class="comparison-cell"><i class='bx bx-check'></i></div>
-							<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
-						</div>
-						
-						<div class="comparison-row">
-							<div class="comparison-cell feature-name">Visualización del CV</div>
-							<div class="comparison-cell"><i class='bx bx-check'></i></div>
-							<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
-						</div>
-						
-						<div class="comparison-row">
-							<div class="comparison-cell feature-name">Visibilidad del número de contacto</div>
-							<div class="comparison-cell"><i class='bx bx-x'></i></div>
-							<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
-						</div>
-						
-						<div class="comparison-row">
-							<div class="comparison-cell feature-name">Visibilidad del correo electrónico</div>
-							<div class="comparison-cell"><i class='bx bx-x'></i></div>
-							<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
-						</div>
-						
-						<div class="comparison-row">
-							<div class="comparison-cell feature-name">Acceso a todas las funcionalidades de la plataforma</div>
-							<div class="comparison-cell"><i class='bx bx-x'></i></div>
-							<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
-						</div>
-						
-						<div class="comparison-row">
-							<div class="comparison-cell feature-name">Acceso a herramientas adicionales</div>
-							<div class="comparison-cell"><i class='bx bx-x'></i></div>
-							<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
-						</div>
+				<div class="plan-description">
+					<p>Crea tu perfil y hazte visible para las empresas de distintas industrias que están dispuestas a
+						contratar consultores en tu especialidad</p>
+				</div>
+
+				<div class="plan-features">
+					<div class="feature-item">
+						<i class='bx bx-check'></i>
+						<span>Perfil profesional completo</span>
+					</div>
+					<div class="feature-item">
+						<i class='bx bx-check'></i>
+						<span>Visibilidad en búsquedas</span>
+					</div>
+					<div class="feature-item">
+						<i class='bx bx-check'></i>
+						<span>Hasta 5 servicios publicados</span>
+					</div>
+					<div class="feature-item">
+						<i class='bx bx-check'></i>
+						<span>Gestión de agenda básica</span>
 					</div>
 				</div>
 
-				<!-- FAQ Section -->
-				<div class="faq-section">
-					<h2 class="section-title">Preguntas Frecuentes</h2>
-					
-					<div class="faq-list">
-						<div class="faq-item">
-							<button class="faq-question">
-								<span>¿Puedo cambiar de plan en cualquier momento?</span>
-								<i class='bx bx-chevron-down'></i>
-							</button>
-							<div class="faq-answer">
-								<p>Sí, puedes actualizar o cambiar tu plan en cualquier momento. Los cambios se aplicarán inmediatamente y se ajustará la facturación de manera proporcional.</p>
-							</div>
-						</div>
-						
-						<div class="faq-item">
-							<button class="faq-question">
-								<span>¿Qué métodos de pago aceptan?</span>
-								<i class='bx bx-chevron-down'></i>
-							</button>
-							<div class="faq-answer">
-								<p>Aceptamos tarjetas de crédito, débito, transferencias bancarias y pagos mediante plataformas digitales como Yape y Plin.</p>
-							</div>
-						</div>
-						
-						<div class="faq-item">
-							<button class="faq-question">
-								<span>¿Hay periodo de prueba?</span>
-								<i class='bx bx-chevron-down'></i>
-							</button>
-							<div class="faq-answer">
-								<p>Sí, ofrecemos 7 días de prueba gratuita del Plan Premium para que puedas explorar todas las funcionalidades antes de comprometerte.</p>
-							</div>
-						</div>
-						
-						<div class="faq-item">
-							<button class="faq-question">
-								<span>¿Puedo cancelar mi suscripción?</span>
-								<i class='bx bx-chevron-down'></i>
-							</button>
-							<div class="faq-answer">
-								<p>Por supuesto. Puedes cancelar tu suscripción en cualquier momento desde tu panel de control. Tendrás acceso hasta el final del periodo pagado.</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</main>
-		<!-- MAIN -->
-	</section>
-	<!-- CONTENT -->
-
-	<!-- Modal de Confirmación -->
-	<div class="modal" id="planModal">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h3>Confirmar Plan</h3>
-				<button class="modal-close" id="closeModal">
-					<i class='bx bx-x'></i>
+				<button class="btn-plan btn-basic" data-plan="basico">
+					Seleccionar Plan
 				</button>
 			</div>
-			<div class="modal-body">
-				<div class="selected-plan-info">
-					<h4 id="selectedPlanName">Plan Premium</h4>
-					<p class="selected-plan-price">
-						<span>S/. </span>
-						<span id="selectedPlanPrice">xxx.xx</span>
-						<span> / mes</span>
-					</p>
+
+			<!-- Plan Premium -->
+			<div class="plan-card plan-premium featured">
+				<div class="featured-badge">
+					<i class='bx bxs-star'></i>
+					<span>Recomendado</span>
 				</div>
-				
-				<div class="payment-form">
-					<div class="form-group">
-						<label>Método de pago</label>
-						<select class="form-control" id="paymentMethod">
-							<option value="">Selecciona un método</option>
-							<option value="tarjeta">Tarjeta de crédito/débito</option>
-							<option value="transferencia">Transferencia bancaria</option>
-							<option value="yape">Yape</option>
-							<option value="plin">Plin</option>
-						</select>
+
+				<div class="plan-header">
+					<h2 class="plan-name">Plan Premium</h2>
+					<div class="plan-price">
+						<span class="currency">S/.</span>
+						<span class="amount">xxx.xx</span>
 					</div>
-					
-					<div class="form-group" id="cardFields" style="display: none;">
-						<label>Número de tarjeta</label>
-						<input type="text" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
-						
-						<div class="card-details">
-							<div class="form-group">
-								<label>Vencimiento</label>
-								<input type="text" class="form-control" placeholder="MM/AA" maxlength="5">
-							</div>
-							<div class="form-group">
-								<label>CVV</label>
-								<input type="text" class="form-control" placeholder="123" maxlength="3">
-							</div>
-						</div>
+				</div>
+
+				<div class="plan-description">
+					<p>Crea tus consultas de manera profesional con mejores resultantes y establece comunicación con tus
+						clientes</p>
+				</div>
+
+				<div class="plan-features">
+					<div class="feature-item">
+						<i class='bx bx-check'></i>
+						<span>Todo lo del Plan Básico</span>
 					</div>
-					
-					<div class="terms-checkbox">
-						<input type="checkbox" id="acceptTerms">
-						<label for="acceptTerms">
-							Acepto los <a href="#">términos y condiciones</a> y la <a href="#">política de privacidad</a>
-						</label>
+					<div class="feature-item">
+						<i class='bx bx-check'></i>
+						<span>Servicios ilimitados</span>
 					</div>
+					<div class="feature-item">
+						<i class='bx bx-check'></i>
+						<span>Gestión avanzada de agenda</span>
+					</div>
+					<div class="feature-item">
+						<i class='bx bx-check'></i>
+						<span>Mensajería con clientes</span>
+					</div>
+					<div class="feature-item">
+						<i class='bx bx-check'></i>
+						<span>Videoconsultas integradas</span>
+					</div>
+					<div class="feature-item">
+						<i class='bx bx-check'></i>
+						<span>Reportes y estadísticas</span>
+					</div>
+					<div class="feature-item">
+						<i class='bx bx-check'></i>
+						<span>Soporte prioritario</span>
+					</div>
+				</div>
+
+				<button class="btn-plan btn-premium" data-plan="premium">
+					¡Empezar Ahora!
+				</button>
+			</div>
+		</div>
+
+		<!-- Comparación de Planes -->
+		<div class="comparison-section">
+			<h2 class="section-title">Comparación de Planes</h2>
+
+			<div class="comparison-table">
+				<div class="comparison-row comparison-header">
+					<div class="comparison-cell feature-name">Características</div>
+					<div class="comparison-cell">Plan Básico</div>
+					<div class="comparison-cell premium-col">Plan Premium</div>
+				</div>
+
+				<div class="comparison-row">
+					<div class="comparison-cell feature-name">Refistro de Consultor</div>
+					<div class="comparison-cell"><i class='bx bx-check'></i></div>
+					<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
+				</div>
+
+				<div class="comparison-row">
+					<div class="comparison-cell feature-name">Perfil visible públicamente</div>
+					<div class="comparison-cell"><i class='bx bx-check'></i></div>
+					<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
+				</div>
+
+				<div class="comparison-row">
+					<div class="comparison-cell feature-name">Visualización del CV</div>
+					<div class="comparison-cell"><i class='bx bx-check'></i></div>
+					<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
+				</div>
+
+				<div class="comparison-row">
+					<div class="comparison-cell feature-name">Visibilidad del número de contacto</div>
+					<div class="comparison-cell"><i class='bx bx-x'></i></div>
+					<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
+				</div>
+
+				<div class="comparison-row">
+					<div class="comparison-cell feature-name">Visibilidad del correo electrónico</div>
+					<div class="comparison-cell"><i class='bx bx-x'></i></div>
+					<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
+				</div>
+
+				<div class="comparison-row">
+					<div class="comparison-cell feature-name">Acceso a todas las funcionalidades de la plataforma</div>
+					<div class="comparison-cell"><i class='bx bx-x'></i></div>
+					<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
+				</div>
+
+				<div class="comparison-row">
+					<div class="comparison-cell feature-name">Acceso a herramientas adicionales</div>
+					<div class="comparison-cell"><i class='bx bx-x'></i></div>
+					<div class="comparison-cell premium-col"><i class='bx bx-check'></i></div>
 				</div>
 			</div>
-			<div class="modal-footer">
-				<button class="btn btn-secondary" id="cancelPlan">Cancelar</button>
-				<button class="btn btn-primary" id="confirmPlan">Confirmar Suscripción</button>
+		</div>
+
+		<!-- FAQ Section -->
+		<div class="faq-section">
+			<h2 class="section-title">Preguntas Frecuentes</h2>
+
+			<div class="faq-list">
+				<div class="faq-item">
+					<button class="faq-question">
+						<span>¿Puedo cambiar de plan en cualquier momento?</span>
+						<i class='bx bx-chevron-down'></i>
+					</button>
+					<div class="faq-answer">
+						<p>Sí, puedes actualizar o cambiar tu plan en cualquier momento. Los cambios se aplicarán
+							inmediatamente y se ajustará la facturación de manera proporcional.</p>
+					</div>
+				</div>
+
+				<div class="faq-item">
+					<button class="faq-question">
+						<span>¿Qué métodos de pago aceptan?</span>
+						<i class='bx bx-chevron-down'></i>
+					</button>
+					<div class="faq-answer">
+						<p>Aceptamos tarjetas de crédito, débito, transferencias bancarias y pagos mediante plataformas
+							digitales como Yape y Plin.</p>
+					</div>
+				</div>
+
+				<div class="faq-item">
+					<button class="faq-question">
+						<span>¿Hay periodo de prueba?</span>
+						<i class='bx bx-chevron-down'></i>
+					</button>
+					<div class="faq-answer">
+						<p>Sí, ofrecemos 7 días de prueba gratuita del Plan Premium para que puedas explorar todas las
+							funcionalidades antes de comprometerte.</p>
+					</div>
+				</div>
+
+				<div class="faq-item">
+					<button class="faq-question">
+						<span>¿Puedo cancelar mi suscripción?</span>
+						<i class='bx bx-chevron-down'></i>
+					</button>
+					<div class="faq-answer">
+						<p>Por supuesto. Puedes cancelar tu suscripción en cualquier momento desde tu panel de control.
+							Tendrás acceso hasta el final del periodo pagado.</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
+</main>
+<!-- MAIN -->
+
+<!-- Modal de Confirmación -->
+<div class="modal" id="planModal">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h3>Confirmar Plan</h3>
+			<button class="modal-close" id="closeModal">
+				<i class='bx bx-x'></i>
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="selected-plan-info">
+				<h4 id="selectedPlanName">Plan Premium</h4>
+				<p class="selected-plan-price">
+					<span>S/. </span>
+					<span id="selectedPlanPrice">xxx.xx</span>
+					<span> / mes</span>
+				</p>
+			</div>
+
+			<div class="payment-form">
+				<div class="form-group">
+					<label>Método de pago</label>
+					<select class="form-control" id="paymentMethod">
+						<option value="">Selecciona un método</option>
+						<option value="tarjeta">Tarjeta de crédito/débito</option>
+						<option value="transferencia">Transferencia bancaria</option>
+						<option value="yape">Yape</option>
+						<option value="plin">Plin</option>
+					</select>
+				</div>
+
+				<div class="form-group" id="cardFields" style="display: none;">
+					<label>Número de tarjeta</label>
+					<input type="text" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+
+					<div class="card-details">
+						<div class="form-group">
+							<label>Vencimiento</label>
+							<input type="text" class="form-control" placeholder="MM/AA" maxlength="5">
+						</div>
+						<div class="form-group">
+							<label>CVV</label>
+							<input type="text" class="form-control" placeholder="123" maxlength="3">
+						</div>
+					</div>
+				</div>
+
+				<div class="terms-checkbox">
+					<input type="checkbox" id="acceptTerms">
+					<label for="acceptTerms">
+						Acepto los <a href="#">términos y condiciones</a> y la <a href="#">política de privacidad</a>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-secondary" id="cancelPlan">Cancelar</button>
+			<button class="btn btn-primary" id="confirmPlan">Confirmar Suscripción</button>
+		</div>
+	</div>
+</div>
 {% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'profesional/js/planes.js' %}"></script>
+<script src="{% static 'profesional/js/planes.js' %}"></script>
 {% endblock %}

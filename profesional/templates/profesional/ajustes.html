@@ -2,186 +2,147 @@
 {% load static %}
 
 {% block styles %}
-	<link rel="stylesheet" href="{% static 'profesional/css/ajustes.css' %}">
+<link rel="stylesheet" href="{% static 'profesional/css/ajustes.css' %}">
 {% endblock %}
 
 {% block content %}
-	<!-- CONTENT -->
-	<section id="content">
-		<!-- NAVBAR -->
-		<nav>
-			<i class='bx bx-menu bx-sm'></i>
-			<div class="nav-title">
-				<span>Ajustes</span>
-			</div>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Buscar por...">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-				</div>
-			</form>
-			
-			<!-- Dark/Light Mode Toggle -->
-			<!-- <input type="checkbox" class="checkbox" id="switch-mode" hidden />
-			<label class="swith-lm" for="switch-mode">
-				<i class="bx bxs-moon"></i>
-				<i class="bx bx-sun"></i>
-				<div class="ball"></div>
-			</label> -->
+<!-- MAIN -->
+<main>
+	<div class="settings-container">
+		<h1 class="page-title">Ajustes</h1>
 
-			<!-- Profile Menu -->
-			<a href="#" class="profile" id="profileIcon">
-				<img src="https://ui-avatars.com/api/?name=Usuario&background=3C91E6&color=fff" alt="Profile">
-			</a>
-			<div class="profile-menu" id="profileMenu">
-				<ul>
-					<li><a href="{% url 'profesional:perfil_option' %}">Mi Perfil</a></li>
-					<li><a href="{% url 'profesional:ajustes_option' %}">Ajustes</a></li>
+		<div class="settings-grid">
+			<!-- Ajustes Generales -->
+			<div class="settings-section">
+				<h2 class="section-title">Ajustes generales</h2>
 
-					<li><a href="#">Cerrar Sesión</a></li>
-				</ul>
-			</div>
-		</nav>
-		<!-- NAVBAR -->
-
-		<!-- MAIN -->
-		<main>
-			<div class="settings-container">
-				<h1 class="page-title">Ajustes</h1>
-				
-				<div class="settings-grid">
-					<!-- Ajustes Generales -->
-					<div class="settings-section">
-						<h2 class="section-title">Ajustes generales</h2>
-						
-						<div class="settings-cards">
-							<!-- Agendas Card -->
-							<a href="#" class="setting-card" data-setting="agendas">
-								<div class="card-icon icon-blue">
-									<i class='bx bx-calendar-alt'></i>
-								</div>
-								<div class="card-content">
-									<h3 class="card-title">Agendas</h3>
-									<p class="card-description">Gestiona la configuración de tus agendas.</p>
-								</div>
-								<div class="card-arrow">
-									<i class='bx bx-chevron-right'></i>
-								</div>
-							</a>
-
-							<!-- Servicios Card -->
-							<a href="#" class="setting-card" data-setting="servicios">
-								<div class="card-icon icon-red">
-									<i class='bx bx-briefcase'></i>
-								</div>
-								<div class="card-content">
-									<h3 class="card-title">Servicios</h3>
-									<p class="card-description">Gestiona los servicios que ofreces.</p>
-								</div>
-								<div class="card-arrow">
-									<i class='bx bx-chevron-right'></i>
-								</div>
-							</a>
+				<div class="settings-cards">
+					<!-- Agendas Card -->
+					<a href="#" class="setting-card" data-setting="agendas">
+						<div class="card-icon icon-blue">
+							<i class='bx bx-calendar-alt'></i>
 						</div>
-					</div>
-
-					<!-- Comunicación con Clientes -->
-					<div class="settings-section">
-						<h2 class="section-title">Comunicación con clientes</h2>
-						
-						<div class="settings-cards">
-							<!-- Mensajes Card -->
-							<a href="#" class="setting-card" data-setting="mensajes">
-								<div class="card-icon icon-green">
-									<i class='bx bx-message-square-dots'></i>
-								</div>
-								<div class="card-content">
-									<h3 class="card-title">Mensajes</h3>
-									<p class="card-description">Recibe mensajes de tus clientes.</p>
-								</div>
-								<div class="card-arrow">
-									<i class='bx bx-chevron-right'></i>
-								</div>
-							</a>
-
-							<!-- Notas para Clientes Card -->
-							<a href="#" class="setting-card" data-setting="notas">
-								<div class="card-icon icon-orange">
-									<i class='bx bx-note'></i>
-								</div>
-								<div class="card-content">
-									<h3 class="card-title">Notas para clientes</h3>
-									<p class="card-description">Envía notas a tus clientes antes de sus citas.</p>
-								</div>
-								<div class="card-arrow">
-									<i class='bx bx-chevron-right'></i>
-								</div>
-							</a>
+						<div class="card-content">
+							<h3 class="card-title">Agendas</h3>
+							<p class="card-description">Gestiona la configuración de tus agendas.</p>
 						</div>
-					</div>
-				</div>
-
-				<!-- Sección adicional: Configuración de Cuenta -->
-				<div class="account-section">
-					<h2 class="section-title">Configuración de cuenta</h2>
-					
-					<div class="account-cards">
-						<!-- Perfil -->
-						<a href="#" class="account-card">
-							<div class="account-icon">
-								<i class='bx bx-user'></i>
-							</div>
-							<div class="account-info">
-								<h4>Perfil profesional</h4>
-								<p>Edita tu información personal y profesional</p>
-							</div>
+						<div class="card-arrow">
 							<i class='bx bx-chevron-right'></i>
-						</a>
+						</div>
+					</a>
 
-						<!-- Notificaciones -->
-						<a href="#" class="account-card">
-							<div class="account-icon">
-								<i class='bx bx-bell'></i>
-							</div>
-							<div class="account-info">
-								<h4>Notificaciones</h4>
-								<p>Configura cómo quieres recibir alertas</p>
-							</div>
+					<!-- Servicios Card -->
+					<a href="#" class="setting-card" data-setting="servicios">
+						<div class="card-icon icon-red">
+							<i class='bx bx-briefcase'></i>
+						</div>
+						<div class="card-content">
+							<h3 class="card-title">Servicios</h3>
+							<p class="card-description">Gestiona los servicios que ofreces.</p>
+						</div>
+						<div class="card-arrow">
 							<i class='bx bx-chevron-right'></i>
-						</a>
-
-						<!-- Seguridad -->
-						<a href="#" class="account-card">
-							<div class="account-icon">
-								<i class='bx bx-lock-alt'></i>
-							</div>
-							<div class="account-info">
-								<h4>Seguridad</h4>
-								<p>Contraseña y opciones de seguridad</p>
-							</div>
-							<i class='bx bx-chevron-right'></i>
-						</a>
-
-						<!-- Facturación -->
-						<a href="#" class="account-card">
-							<div class="account-icon">
-								<i class='bx bx-credit-card'></i>
-							</div>
-							<div class="account-info">
-								<h4>Facturación</h4>
-								<p>Gestiona tu plan y métodos de pago</p>
-							</div>
-							<i class='bx bx-chevron-right'></i>
-						</a>
-					</div>
+						</div>
+					</a>
 				</div>
 			</div>
-		</main>
-		<!-- MAIN -->
-	</section>
-	<!-- CONTENT -->
+
+			<!-- Comunicación con Clientes -->
+			<div class="settings-section">
+				<h2 class="section-title">Comunicación con clientes</h2>
+
+				<div class="settings-cards">
+					<!-- Mensajes Card -->
+					<a href="#" class="setting-card" data-setting="mensajes">
+						<div class="card-icon icon-green">
+							<i class='bx bx-message-square-dots'></i>
+						</div>
+						<div class="card-content">
+							<h3 class="card-title">Mensajes</h3>
+							<p class="card-description">Recibe mensajes de tus clientes.</p>
+						</div>
+						<div class="card-arrow">
+							<i class='bx bx-chevron-right'></i>
+						</div>
+					</a>
+
+					<!-- Notas para Clientes Card -->
+					<a href="#" class="setting-card" data-setting="notas">
+						<div class="card-icon icon-orange">
+							<i class='bx bx-note'></i>
+						</div>
+						<div class="card-content">
+							<h3 class="card-title">Notas para clientes</h3>
+							<p class="card-description">Envía notas a tus clientes antes de sus citas.</p>
+						</div>
+						<div class="card-arrow">
+							<i class='bx bx-chevron-right'></i>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Sección adicional: Configuración de Cuenta -->
+		<div class="account-section">
+			<h2 class="section-title">Configuración de cuenta</h2>
+
+			<div class="account-cards">
+				<!-- Perfil -->
+				<a href="#" class="account-card">
+					<div class="account-icon">
+						<i class='bx bx-user'></i>
+					</div>
+					<div class="account-info">
+						<h4>Perfil profesional</h4>
+						<p>Edita tu información personal y profesional</p>
+					</div>
+					<i class='bx bx-chevron-right'></i>
+				</a>
+
+				<!-- Notificaciones -->
+				<a href="#" class="account-card">
+					<div class="account-icon">
+						<i class='bx bx-bell'></i>
+					</div>
+					<div class="account-info">
+						<h4>Notificaciones</h4>
+						<p>Configura cómo quieres recibir alertas</p>
+					</div>
+					<i class='bx bx-chevron-right'></i>
+				</a>
+
+				<!-- Seguridad -->
+				<a href="#" class="account-card">
+					<div class="account-icon">
+						<i class='bx bx-lock-alt'></i>
+					</div>
+					<div class="account-info">
+						<h4>Seguridad</h4>
+						<p>Contraseña y opciones de seguridad</p>
+					</div>
+					<i class='bx bx-chevron-right'></i>
+				</a>
+
+				<!-- Facturación -->
+				<a href="#" class="account-card">
+					<div class="account-icon">
+						<i class='bx bx-credit-card'></i>
+					</div>
+					<div class="account-info">
+						<h4>Facturación</h4>
+						<p>Gestiona tu plan y métodos de pago</p>
+					</div>
+					<i class='bx bx-chevron-right'></i>
+				</a>
+			</div>
+		</div>
+	</div>
+</main>
+<!-- MAIN -->
+<!-- CONTENT -->
 {% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'profesional/js/ajustes.js' %}"></script>
+<script src="{% static 'profesional/js/ajustes.js' %}"></script>
 {% endblock %}

@@ -2,353 +2,269 @@
 {% load static %}
 
 {% block styles %}
-	<link rel="stylesheet" href="{% static 'profesional/css/perfil.css' %}">
+<link rel="stylesheet" href="{% static 'profesional/css/perfil.css' %}">
 {% endblock %}
 
 {% block content %}
-	<!-- CONTENT -->
-	<section id="content">
-		<!-- NAVBAR -->
-		<nav>
-			<i class='bx bx-menu bx-sm'></i>
-			<div class="nav-title">
-				<span>Perfil Profesional</span>
-			</div>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Buscar por...">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-				</div>
-			</form>
-			
-			<!-- Dark/Light Mode Toggle -->
-			<!-- <input type="checkbox" class="checkbox" id="switch-mode" hidden />
-			<label class="swith-lm" for="switch-mode">
-				<i class="bx bxs-moon"></i>
-				<i class="bx bx-sun"></i>
-				<div class="ball"></div>
-			</label> -->
+<!-- MAIN -->
+<main>
+	<div class="profile-container">
+		<h1 class="page-title">Perfil profesional</h1>
 
-			<!-- Profile Menu -->
-			<a href="#" class="profile" id="profileIcon">
-				<img src="https://ui-avatars.com/api/?name=Usuario&background=3C91E6&color=fff" alt="Profile">
-			</a>
-			<div class="profile-menu" id="profileMenu">
-				<ul>
-					<li><a href="{% url 'profesional:perfil_option' %}">Mi Perfil</a></li>
-					<li><a href="{% url 'profesional:ajustes_option' %}">Ajustes</a></li>
+		<form class="profile-form" id="profileForm">
+			<div class="form-grid">
+				<!-- Columna Izquierda -->
+				<div class="form-column">
+					<!-- Nombre -->
+					<div class="form-group">
+						<label for="nombre" class="form-label">Nombre</label>
+						<input type="text" id="nombre" name="nombre" class="form-control" placeholder="Mi Nombre"
+							value="">
+					</div>
 
-					<li><a href="#">Cerrar Sesión</a></li>
-				</ul>
-			</div>
-		</nav>
-		<!-- NAVBAR -->
+					<!-- Apellido Paterno -->
+					<div class="form-group">
+						<label for="apellido_paterno" class="form-label">Apellido Paterno</label>
+						<input type="text" id="apellido_paterno" name="apellido_paterno" class="form-control"
+							placeholder="Mi Apellido Paterno" value="">
+					</div>
 
-		<!-- MAIN -->
-		<main>
-			<div class="profile-container">
-				<h1 class="page-title">Perfil profesional</h1>
-				
-				<form class="profile-form" id="profileForm">
-					<div class="form-grid">
-						<!-- Columna Izquierda -->
-						<div class="form-column">
-							<!-- Nombre -->
-							<div class="form-group">
-								<label for="nombre" class="form-label">Nombre</label>
-								<input 
-									type="text" 
-									id="nombre" 
-									name="nombre" 
-									class="form-control" 
-									placeholder="Mi Nombre"
-									value="">
-							</div>
+					<!-- Apellido Materno -->
+					<div class="form-group">
+						<label for="apellido_materno" class="form-label">Apellido Materno</label>
+						<input type="text" id="apellido_materno" name="apellido_materno" class="form-control"
+							placeholder="Mi Apellido Materno" value="">
+					</div>
 
-							<!-- Apellido Paterno -->
-							<div class="form-group">
-								<label for="apellido_paterno" class="form-label">Apellido Paterno</label>
-								<input 
-									type="text" 
-									id="apellido_paterno" 
-									name="apellido_paterno" 
-									class="form-control" 
-									placeholder="Mi Apellido Paterno"
-									value="">
-							</div>
-
-							<!-- Apellido Materno -->
-							<div class="form-group">
-								<label for="apellido_materno" class="form-label">Apellido Materno</label>
-								<input 
-									type="text" 
-									id="apellido_materno" 
-									name="apellido_materno" 
-									class="form-control" 
-									placeholder="Mi Apellido Materno"
-									value="">
-							</div>
-
-							<!-- Foto de Perfil -->
-							<div class="form-group">
-								<label for="foto_perfil" class="form-label">
-									<i class='bx bx-lock-alt'></i>
-									Foto de perfil
-								</label>
-								<div class="file-upload-wrapper">
-									<input 
-										type="file" 
-										id="foto_perfil" 
-										name="foto_perfil" 
-										class="file-input" 
-										accept="image/*"
-										hidden>
-									<div class="file-display">
-										<span class="file-name" id="fotoFileName">mi_foto.png</span>
-										<button type="button" class="btn-upload" id="btnUploadFoto">
-											Cargar
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Columna Central -->
-						<div class="form-column">
-							<!-- Documento de Identidad -->
-							<div class="form-group">
-								<label for="documento_identidad" class="form-label">Documento de Identidad</label>
-								<input 
-									type="text" 
-									id="documento_identidad" 
-									name="documento_identidad" 
-									class="form-control" 
-									placeholder="Mi de Identidad"
-									value="">
-							</div>
-
-							<!-- Dirección -->
-							<div class="form-group">
-								<label for="direccion" class="form-label">Dirección</label>
-								<input 
-									type="text" 
-									id="direccion" 
-									name="direccion" 
-									class="form-control" 
-									placeholder="Mi Dirección"
-									value="">
-							</div>
-
-							<!-- Contraseña -->
-							<div class="form-group">
-								<label for="contrasena" class="form-label">Contraseña</label>
-								<div class="password-wrapper">
-									<input 
-										type="password" 
-										id="contrasena" 
-										name="contrasena" 
-										class="form-control" 
-										placeholder="••••••••••••••••••••••"
-										value="password123">
-									<button type="button" class="btn-toggle-password" id="togglePassword">
-										<i class='bx bx-hide'></i>
-									</button>
-								</div>
-							</div>
-
-							<!-- Comentarios de Clientes -->
-							<div class="form-group">
-								<label class="form-label">Comentarios de clientes</label>
-								<button type="button" class="btn-secondary btn-block" id="btnComentarios">
-									Ver comentarios
+					<!-- Foto de Perfil -->
+					<div class="form-group">
+						<label for="foto_perfil" class="form-label">
+							<i class='bx bx-lock-alt'></i>
+							Foto de perfil
+						</label>
+						<div class="file-upload-wrapper">
+							<input type="file" id="foto_perfil" name="foto_perfil" class="file-input" accept="image/*"
+								hidden>
+							<div class="file-display">
+								<span class="file-name" id="fotoFileName">mi_foto.png</span>
+								<button type="button" class="btn-upload" id="btnUploadFoto">
+									Cargar
 								</button>
 							</div>
 						</div>
+					</div>
+				</div>
 
-						<!-- Columna Derecha -->
-						<div class="form-column">
-							<!-- Experiencia -->
-							<div class="form-group">
-								<label for="experiencia" class="form-label">
-									<i class='bx bx-lock-alt'></i>
-									Experiencia
-								</label>
-								<div class="file-upload-wrapper">
-									<input 
-										type="file" 
-										id="experiencia" 
-										name="experiencia" 
-										class="file-input" 
-										accept=".pdf"
-										hidden>
-									<div class="file-display">
-										<span class="file-name" id="experienciaFileName">Mi_Experiencia.pdf</span>
-										<button type="button" class="btn-upload btn-file-archive" id="btnUploadExperiencia">
-											Elegir archivo
-										</button>
-									</div>
-								</div>
-							</div>
+				<!-- Columna Central -->
+				<div class="form-column">
+					<!-- Documento de Identidad -->
+					<div class="form-group">
+						<label for="documento_identidad" class="form-label">Documento de Identidad</label>
+						<input type="text" id="documento_identidad" name="documento_identidad" class="form-control"
+							placeholder="Mi de Identidad" value="">
+					</div>
 
-							<!-- Mi Curriculum Vitae -->
-							<div class="form-group">
-								<label for="curriculum" class="form-label">
-									<i class='bx bx-lock-alt'></i>
-									Mi Curriculum Vitae
-								</label>
-								<div class="file-upload-wrapper">
-									<input 
-										type="file" 
-										id="curriculum" 
-										name="curriculum" 
-										class="file-input" 
-										accept=".pdf"
-										hidden>
-									<div class="file-display">
-										<span class="file-name" id="curriculumFileName">Mi_CV.pdf</span>
-										<button type="button" class="btn-upload btn-file-archive" id="btnUploadCurriculum">
-											Elegir archivo
-										</button>
-									</div>
-								</div>
-							</div>
+					<!-- Dirección -->
+					<div class="form-group">
+						<label for="direccion" class="form-label">Dirección</label>
+						<input type="text" id="direccion" name="direccion" class="form-control"
+							placeholder="Mi Dirección" value="">
+					</div>
 
-							<!-- LinkedIn -->
-							<div class="form-group">
-								<label for="linkedin" class="form-label">
-									<i class='bx bx-lock-alt'></i>
-									Linked in
-								</label>
-								<input 
-									type="url" 
-									id="linkedin" 
-									name="linkedin" 
-									class="form-control" 
-									placeholder="https://mi-linkedin-profesional.com"
-									value="">
+					<!-- Contraseña -->
+					<div class="form-group">
+						<label for="contrasena" class="form-label">Contraseña</label>
+						<div class="password-wrapper">
+							<input type="password" id="contrasena" name="contrasena" class="form-control"
+								placeholder="••••••••••••••••••••••" value="password123">
+							<button type="button" class="btn-toggle-password" id="togglePassword">
+								<i class='bx bx-hide'></i>
+							</button>
+						</div>
+					</div>
+
+					<!-- Comentarios de Clientes -->
+					<div class="form-group">
+						<label class="form-label">Comentarios de clientes</label>
+						<button type="button" class="btn-secondary btn-block" id="btnComentarios">
+							Ver comentarios
+						</button>
+					</div>
+				</div>
+
+				<!-- Columna Derecha -->
+				<div class="form-column">
+					<!-- Experiencia -->
+					<div class="form-group">
+						<label for="experiencia" class="form-label">
+							<i class='bx bx-lock-alt'></i>
+							Experiencia
+						</label>
+						<div class="file-upload-wrapper">
+							<input type="file" id="experiencia" name="experiencia" class="file-input" accept=".pdf"
+								hidden>
+							<div class="file-display">
+								<span class="file-name" id="experienciaFileName">Mi_Experiencia.pdf</span>
+								<button type="button" class="btn-upload btn-file-archive" id="btnUploadExperiencia">
+									Elegir archivo
+								</button>
 							</div>
 						</div>
 					</div>
 
-					<!-- Botones de Acción -->
-					<div class="form-actions">
-						<button type="button" class="btn btn-cancel" id="btnCancel">
-							Cancelar
-						</button>
-						<button type="submit" class="btn btn-save" id="btnSave">
-							Guardar cambios
-						</button>
-					</div>
-				</form>
-
-				<!-- Sección de Vista Previa -->
-				<div class="profile-preview" id="profilePreview">
-					<h2 class="preview-title">Vista Previa del Perfil</h2>
-					<div class="preview-card">
-						<div class="preview-avatar">
-							<img src="https://ui-avatars.com/api/?name=Usuario&background=3C91E6&color=fff&size=120" alt="Avatar" id="previewAvatar">
-						</div>
-						<div class="preview-info">
-							<h3 id="previewName">Nombre Completo</h3>
-							<p id="previewAddress">Dirección</p>
-							<div class="preview-links">
-								<a href="#" id="previewLinkedin" target="_blank">
-									<i class='bx bxl-linkedin-square'></i>
-									LinkedIn
-								</a>
-								<a href="#" id="previewCV" target="_blank">
-									<i class='bx bx-file'></i>
-									Ver CV
-								</a>
+					<!-- Mi Curriculum Vitae -->
+					<div class="form-group">
+						<label for="curriculum" class="form-label">
+							<i class='bx bx-lock-alt'></i>
+							Mi Curriculum Vitae
+						</label>
+						<div class="file-upload-wrapper">
+							<input type="file" id="curriculum" name="curriculum" class="file-input" accept=".pdf"
+								hidden>
+							<div class="file-display">
+								<span class="file-name" id="curriculumFileName">Mi_CV.pdf</span>
+								<button type="button" class="btn-upload btn-file-archive" id="btnUploadCurriculum">
+									Elegir archivo
+								</button>
 							</div>
 						</div>
+					</div>
+
+					<!-- LinkedIn -->
+					<div class="form-group">
+						<label for="linkedin" class="form-label">
+							<i class='bx bx-lock-alt'></i>
+							Linked in
+						</label>
+						<input type="url" id="linkedin" name="linkedin" class="form-control"
+							placeholder="https://mi-linkedin-profesional.com" value="">
 					</div>
 				</div>
 			</div>
-		</main>
-		<!-- MAIN -->
-	</section>
-	<!-- CONTENT -->
 
-	<!-- Modal de Comentarios -->
-	<div class="modal" id="comentariosModal">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h3>Comentarios de Clientes</h3>
-				<button class="modal-close" id="closeComentarios">
-					<i class='bx bx-x'></i>
+			<!-- Botones de Acción -->
+			<div class="form-actions">
+				<button type="button" class="btn btn-cancel" id="btnCancel">
+					Cancelar
+				</button>
+				<button type="submit" class="btn btn-save" id="btnSave">
+					Guardar cambios
 				</button>
 			</div>
-			<div class="modal-body">
-				<div class="comments-list">
-					<!-- Comentario 1 -->
-					<div class="comment-item">
-						<div class="comment-avatar">
-							<img src="https://ui-avatars.com/api/?name=Juan+Perez&background=667eea&color=fff" alt="Juan Perez">
-						</div>
-						<div class="comment-content">
-							<div class="comment-header">
-								<h4>Juan Pérez</h4>
-								<span class="comment-date">Hace 2 días</span>
-							</div>
-							<div class="comment-rating">
-								<i class='bx bxs-star'></i>
-								<i class='bx bxs-star'></i>
-								<i class='bx bxs-star'></i>
-								<i class='bx bxs-star'></i>
-								<i class='bx bxs-star'></i>
-							</div>
-							<p class="comment-text">Excelente profesional, muy atento y puntual. Recomendado 100%.</p>
-						</div>
-					</div>
+		</form>
 
-					<!-- Comentario 2 -->
-					<div class="comment-item">
-						<div class="comment-avatar">
-							<img src="https://ui-avatars.com/api/?name=Maria+Lopez&background=f5576c&color=fff" alt="Maria Lopez">
-						</div>
-						<div class="comment-content">
-							<div class="comment-header">
-								<h4>María López</h4>
-								<span class="comment-date">Hace 1 semana</span>
-							</div>
-							<div class="comment-rating">
-								<i class='bx bxs-star'></i>
-								<i class='bx bxs-star'></i>
-								<i class='bx bxs-star'></i>
-								<i class='bx bxs-star'></i>
-								<i class='bx bx-star'></i>
-							</div>
-							<p class="comment-text">Muy buena atención, resolvió todas mis dudas. Lo recomiendo.</p>
-						</div>
-					</div>
-
-					<!-- Comentario 3 -->
-					<div class="comment-item">
-						<div class="comment-avatar">
-							<img src="https://ui-avatars.com/api/?name=Carlos+Garcia&background=00f2fe&color=fff" alt="Carlos Garcia">
-						</div>
-						<div class="comment-content">
-							<div class="comment-header">
-								<h4>Carlos García</h4>
-								<span class="comment-date">Hace 2 semanas</span>
-							</div>
-							<div class="comment-rating">
-								<i class='bx bxs-star'></i>
-								<i class='bx bxs-star'></i>
-								<i class='bx bxs-star'></i>
-								<i class='bx bxs-star'></i>
-								<i class='bx bxs-star'></i>
-							</div>
-							<p class="comment-text">Increíble servicio, superó mis expectativas. Definitivamente volveré.</p>
-						</div>
+		<!-- Sección de Vista Previa -->
+		<div class="profile-preview" id="profilePreview">
+			<h2 class="preview-title">Vista Previa del Perfil</h2>
+			<div class="preview-card">
+				<div class="preview-avatar">
+					<img src="https://ui-avatars.com/api/?name=Usuario&background=3C91E6&color=fff&size=120"
+						alt="Avatar" id="previewAvatar">
+				</div>
+				<div class="preview-info">
+					<h3 id="previewName">Nombre Completo</h3>
+					<p id="previewAddress">Dirección</p>
+					<div class="preview-links">
+						<a href="#" id="previewLinkedin" target="_blank">
+							<i class='bx bxl-linkedin-square'></i>
+							LinkedIn
+						</a>
+						<a href="#" id="previewCV" target="_blank">
+							<i class='bx bx-file'></i>
+							Ver CV
+						</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</main>
+<!-- MAIN -->
+<!-- CONTENT -->
+
+<!-- Modal de Comentarios -->
+<div class="modal" id="comentariosModal">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h3>Comentarios de Clientes</h3>
+			<button class="modal-close" id="closeComentarios">
+				<i class='bx bx-x'></i>
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="comments-list">
+				<!-- Comentario 1 -->
+				<div class="comment-item">
+					<div class="comment-avatar">
+						<img src="https://ui-avatars.com/api/?name=Juan+Perez&background=667eea&color=fff"
+							alt="Juan Perez">
+					</div>
+					<div class="comment-content">
+						<div class="comment-header">
+							<h4>Juan Pérez</h4>
+							<span class="comment-date">Hace 2 días</span>
+						</div>
+						<div class="comment-rating">
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+						</div>
+						<p class="comment-text">Excelente profesional, muy atento y puntual. Recomendado 100%.</p>
+					</div>
+				</div>
+
+				<!-- Comentario 2 -->
+				<div class="comment-item">
+					<div class="comment-avatar">
+						<img src="https://ui-avatars.com/api/?name=Maria+Lopez&background=f5576c&color=fff"
+							alt="Maria Lopez">
+					</div>
+					<div class="comment-content">
+						<div class="comment-header">
+							<h4>María López</h4>
+							<span class="comment-date">Hace 1 semana</span>
+						</div>
+						<div class="comment-rating">
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bx-star'></i>
+						</div>
+						<p class="comment-text">Muy buena atención, resolvió todas mis dudas. Lo recomiendo.</p>
+					</div>
+				</div>
+
+				<!-- Comentario 3 -->
+				<div class="comment-item">
+					<div class="comment-avatar">
+						<img src="https://ui-avatars.com/api/?name=Carlos+Garcia&background=00f2fe&color=fff"
+							alt="Carlos Garcia">
+					</div>
+					<div class="comment-content">
+						<div class="comment-header">
+							<h4>Carlos García</h4>
+							<span class="comment-date">Hace 2 semanas</span>
+						</div>
+						<div class="comment-rating">
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+						</div>
+						<p class="comment-text">Increíble servicio, superó mis expectativas. Definitivamente volveré.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'profesional/js/perfil.js' %}"></script>
+<script src="{% static 'profesional/js/perfil.js' %}"></script>
 {% endblock %}

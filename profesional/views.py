@@ -31,6 +31,7 @@ API_BASE_URL = "http://localhost:5000"
 # -------------------------------------------------------------
 # VISTAS DEL PANEL PROFESIONAL (simples renders con "choice")
 # -------------------------------------------------------------
+@login_required(login_url='general:login_inicio_sesion')
 def campanias_puntuales_option(request):
     """Renderiza la vista de campañas puntuales."""
     modelo_predictivo = request.session.get('modelo_predictivo', False)
@@ -40,6 +41,7 @@ def campanias_puntuales_option(request):
         })
 
 
+@login_required(login_url='general:login_inicio_sesion')
 def clientes_option(request):
     """Renderiza la vista de clientes."""
     modelo_predictivo = request.session.get('modelo_predictivo', False)
@@ -49,15 +51,17 @@ def clientes_option(request):
         })
 
 
-def bandeja_entrada_option(request):
-    """Renderiza la vista de bandeja de entrada."""
+@login_required(login_url='general:login_inicio_sesion')
+def bandeja_mensaje_option(request):
+    """Renderiza la vista de bandeja de mensajes."""
     modelo_predictivo = request.session.get('modelo_predictivo', False)
-    return render(request, 'profesional/bandeja_entrada.html', {
+    return render(request, 'profesional/bandeja_mensaje.html', {
         "choice": 3,
         "modelo_predictivo": modelo_predictivo
         })
 
 
+@login_required(login_url='general:login_inicio_sesion')
 def productividad_ingresos_option(request):
     """Renderiza la vista de productividad e ingresos."""
     modelo_predictivo = request.session.get('modelo_predictivo', False)
@@ -67,6 +71,7 @@ def productividad_ingresos_option(request):
         })
 
 
+@login_required(login_url='general:login_inicio_sesion')
 def horarios_option(request):
     """Renderiza la vista de horarios."""
     modelo_predictivo = request.session.get('modelo_predictivo', False)
@@ -76,6 +81,7 @@ def horarios_option(request):
         })
 
 
+@login_required(login_url='general:login_inicio_sesion')
 def planes_option(request):
     """Renderiza la vista de planes."""
     modelo_predictivo = request.session.get('modelo_predictivo', False)
@@ -85,6 +91,7 @@ def planes_option(request):
         })
 
 
+@login_required(login_url='general:login_inicio_sesion')
 def ajustes_option(request):
     """Renderiza la vista de ajustes."""
     modelo_predictivo = request.session.get('modelo_predictivo', False)
@@ -92,6 +99,8 @@ def ajustes_option(request):
         "modelo_predictivo": modelo_predictivo
     })
 
+
+@login_required(login_url='general:login_inicio_sesion')
 def perfil(request):
     """Renderiza la vista de perfil."""
     modelo_predictivo = request.session.get('modelo_predictivo', False)
@@ -99,6 +108,8 @@ def perfil(request):
         "modelo_predictivo": modelo_predictivo
     })
 
+
+@login_required(login_url='general:login_inicio_sesion')
 def prediction_acv_option(request):
     """Renderiza la página principal del módulo de predicción de ACV."""
     modelo_predictivo = request.session.get('modelo_predictivo', False)
@@ -112,6 +123,7 @@ def prediction_acv_option(request):
 # VISTA PRINCIPAL DE PREDICCIÓN DE ACV
 # -------------------------------------------------------------
 @csrf_exempt
+@login_required(login_url='general:login_inicio_sesion')
 def realizar_prediccion_acv(request):
     """
     Procesa la información del formulario de predicción de ACV.

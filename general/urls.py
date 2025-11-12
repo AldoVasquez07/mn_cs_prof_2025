@@ -21,6 +21,12 @@ urlpatterns = [
     # Autenticación y acceso
     # ---------------------------------------------------------
     path('login/', login_inicio_sesion, name="login_inicio_sesion"),
+    
+    
+    # ---------------------------------------------------------
+    # Cerrar Sesión
+    # ---------------------------------------------------------
+    path('logout_view/', logout_view, name="logout_view"),
 
     # ---------------------------------------------------------
     # Selección del tipo de registro (Cliente / Profesional / Organización)

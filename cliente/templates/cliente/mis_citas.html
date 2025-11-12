@@ -2,371 +2,337 @@
 {% load static %}
 
 {% block styles %}
-	<link rel="stylesheet" href="{% static 'cliente/css/mis_citas.css' %}">
+<link rel="stylesheet" href="{% static 'cliente/css/mis_citas.css' %}">
 {% endblock %}
 
 {% block content %}
-	<!-- CONTENT -->
-	<section id="content">
-		<!-- NAVBAR -->
-		<nav>
-			<i class='bx bx-menu bx-sm'></i>
-			<div class="nav-title">
-				<span>Mis Citas</span>
-			</div>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Buscar cita...">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-				</div>
-			</form>
-			
-			<!-- Dark/Light Mode Toggle -->
-			<input type="checkbox" class="checkbox" id="switch-mode" hidden />
-			<label class="swith-lm" for="switch-mode">
-				<i class="bx bxs-moon"></i>
-				<i class="bx bx-sun"></i>
-				<div class="ball"></div>
-			</label>
+<!-- MAIN -->
+<main>
+	<div class="appointments-container">
+		<div class="header-section">
+			<h1 class="page-title">Mis citas</h1>
 
-			<!-- Profile Menu -->
-			<a href="#" class="profile" id="profileIcon">
-				<img src="https://ui-avatars.com/api/?name=Cliente&background=3C91E6&color=fff" alt="Profile">
-			</a>
-			<div class="profile-menu" id="profileMenu">
-				<ul>
-					<li><a href="#">Mi Perfil</a></li>
-					<li><a href="#">Configuración</a></li>
-					<li><a href="#">Cerrar Sesión</a></li>
-				</ul>
-			</div>
-		</nav>
-		<!-- NAVBAR -->
-
-		<!-- MAIN -->
-		<main>
-			<div class="appointments-container">
-				<div class="header-section">
-					<h1 class="page-title">Mis Citas</h1>
-					
-					<!-- Filters -->
-					<div class="filters-bar">
-						<button class="filter-btn active" data-filter="todas">
-							<i class='bx bx-calendar'></i>
-							Todas
-						</button>
-						<button class="filter-btn" data-filter="proximas">
-							<i class='bx bx-time-five'></i>
-							Próximas
-						</button>
-						<button class="filter-btn" data-filter="completadas">
-							<i class='bx bx-check-circle'></i>
-							Completadas
-						</button>
-						<button class="filter-btn" data-filter="canceladas">
-							<i class='bx bx-x-circle'></i>
-							Canceladas
-						</button>
-					</div>
-				</div>
-
-				<!-- Appointments Table -->
-				<div class="table-container">
-					<div class="table-wrapper">
-						<table class="appointments-table" id="appointmentsTable">
-							<thead>
-								<tr>
-									<th>No.</th>
-									<th>Nombre</th>
-									<th>Especialidad</th>
-									<th>Tipo de cita</th>
-									<th>Dirección</th>
-									<th>Fecha/Hora</th>
-									<th>Acciones</th>
-								</tr>
-							</thead>
-							<tbody>
-								<!-- Cita 1 -->
-								<tr class="appointment-row" data-status="proxima">
-									<td>1</td>
-									<td>
-										<div class="professional-info">
-											<div class="professional-avatar">
-												<img src="https://ui-avatars.com/api/?name=Ernesto+Torre&background=667eea&color=fff" alt="Dr. Ernesto">
-											</div>
-											<span>Dr. Ernesto de la Torre</span>
-										</div>
-									</td>
-									<td>
-										<span class="specialty-badge medico">Médico</span>
-									</td>
-									<td>
-										<span class="appointment-type online">
-											<i class='bx bx-video'></i>
-											ONLINE
-										</span>
-									</td>
-									<td>
-										<span class="address-text">-</span>
-									</td>
-									<td>
-										<div class="datetime-info">
-											<span class="date">23/05/25</span>
-											<span class="time">11:30</span>
-										</div>
-									</td>
-									<td>
-										<div class="actions-group">
-											<button class="action-btn btn-view" title="Ver detalles">
-												<i class='bx bx-show'></i>
-											</button>
-											<button class="action-btn btn-edit" title="Editar">
-												<i class='bx bx-edit'></i>
-											</button>
-											<button class="action-btn btn-cancel" title="Cancelar">
-												<i class='bx bx-x'></i>
-											</button>
-										</div>
-									</td>
-								</tr>
-
-								<!-- Cita 2 -->
-								<tr class="appointment-row" data-status="proxima">
-									<td>2</td>
-									<td>
-										<div class="professional-info">
-											<div class="professional-avatar">
-												<img src="https://ui-avatars.com/api/?name=Pedro+Perez&background=f5576c&color=fff" alt="Ing. Pedro">
-											</div>
-											<span>Ing. Pedro Pérez</span>
-										</div>
-									</td>
-									<td>
-										<span class="specialty-badge ingeniero">Ingeniero</span>
-									</td>
-									<td>
-										<span class="appointment-type presencial">
-											<i class='bx bx-building'></i>
-											PRESENCIAL
-										</span>
-									</td>
-									<td>
-										<span class="address-text">Av villa nueva</span>
-									</td>
-									<td>
-										<div class="datetime-info">
-											<span class="date">23/05/25</span>
-											<span class="time">11:30</span>
-										</div>
-									</td>
-									<td>
-										<div class="actions-group">
-											<button class="action-btn btn-view" title="Ver detalles">
-												<i class='bx bx-show'></i>
-											</button>
-											<button class="action-btn btn-edit" title="Editar">
-												<i class='bx bx-edit'></i>
-											</button>
-											<button class="action-btn btn-cancel" title="Cancelar">
-												<i class='bx bx-x'></i>
-											</button>
-										</div>
-									</td>
-								</tr>
-
-								<!-- Cita 3 -->
-								<tr class="appointment-row" data-status="proxima">
-									<td>3</td>
-									<td>
-										<div class="professional-info">
-											<div class="professional-avatar">
-												<img src="https://ui-avatars.com/api/?name=Jose+Valdivia&background=00f2fe&color=fff" alt="Arq. José">
-											</div>
-											<span>Arq. José Valdivia</span>
-										</div>
-									</td>
-									<td>
-										<span class="specialty-badge arquitecto">Arquitecto</span>
-									</td>
-									<td>
-										<span class="appointment-type online">
-											<i class='bx bx-video'></i>
-											ONLINE
-										</span>
-									</td>
-									<td>
-										<span class="address-text">-</span>
-									</td>
-									<td>
-										<div class="datetime-info">
-											<span class="date">23/05/25</span>
-											<span class="time">11:30</span>
-										</div>
-									</td>
-									<td>
-										<div class="actions-group">
-											<button class="action-btn btn-view" title="Ver detalles">
-												<i class='bx bx-show'></i>
-											</button>
-											<button class="action-btn btn-edit" title="Editar">
-												<i class='bx bx-edit'></i>
-											</button>
-											<button class="action-btn btn-cancel" title="Cancelar">
-												<i class='bx bx-x'></i>
-											</button>
-										</div>
-									</td>
-								</tr>
-
-								<!-- Cita 4 -->
-								<tr class="appointment-row" data-status="proxima">
-									<td>4</td>
-									<td>
-										<div class="professional-info">
-											<div class="professional-avatar">
-												<img src="https://ui-avatars.com/api/?name=Andres+Rojas&background=fee140&color=333" alt="Mg. Andrés">
-											</div>
-											<span>Mg. Andrés Rojas</span>
-										</div>
-									</td>
-									<td>
-										<span class="specialty-badge consultor">Consultor</span>
-									</td>
-									<td>
-										<span class="appointment-type presencial">
-											<i class='bx bx-building'></i>
-											PRESENCIAL
-										</span>
-									</td>
-									<td>
-										<span class="address-text">Av villa nueva</span>
-									</td>
-									<td>
-										<div class="datetime-info">
-											<span class="date">23/05/25</span>
-											<span class="time">11:30</span>
-										</div>
-									</td>
-									<td>
-										<div class="actions-group">
-											<button class="action-btn btn-view" title="Ver detalles">
-												<i class='bx bx-show'></i>
-											</button>
-											<button class="action-btn btn-edit" title="Editar">
-												<i class='bx bx-edit'></i>
-											</button>
-											<button class="action-btn btn-cancel" title="Cancelar">
-												<i class='bx bx-x'></i>
-											</button>
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-
-					<!-- Empty State -->
-					<div class="empty-state" id="emptyState" style="display: none;">
-						<i class='bx bx-calendar-x'></i>
-						<h3>No hay citas</h3>
-						<p>No se encontraron citas con los filtros seleccionados</p>
-					</div>
-				</div>
-
-				<!-- Pagination -->
-				<div class="pagination-container">
-					<button class="pagination-btn" id="prevPage">
-						<i class='bx bx-chevron-left'></i>
-						Anterior
-					</button>
-					<div class="pagination-info">
-						Página <span id="currentPage">1</span> de <span id="totalPages">1</span>
-					</div>
-					<button class="pagination-btn" id="nextPage">
-						Siguiente
-						<i class='bx bx-chevron-right'></i>
-					</button>
-				</div>
-			</div>
-		</main>
-		<!-- MAIN -->
-	</section>
-	<!-- CONTENT -->
-
-	<!-- Modal de Detalles -->
-	<div class="modal" id="detailsModal">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h3>Detalles de la Cita</h3>
-				<button class="modal-close" id="closeDetails">
-					<i class='bx bx-x'></i>
+			<!-- Filters -->
+			<div class="filters-bar">
+				<button class="filter-btn active" data-filter="todas">
+					<i class='bx bx-calendar'></i>
+					Todas
+				</button>
+				<button class="filter-btn" data-filter="proximas">
+					<i class='bx bx-time-five'></i>
+					Próximas
+				</button>
+				<button class="filter-btn" data-filter="completadas">
+					<i class='bx bx-check-circle'></i>
+					Completadas
+				</button>
+				<button class="filter-btn" data-filter="canceladas">
+					<i class='bx bx-x-circle'></i>
+					Canceladas
 				</button>
 			</div>
-			<div class="modal-body">
-				<div class="detail-section">
-					<div class="detail-item">
-						<label>Profesional:</label>
-						<p id="detailProfessional">Dr. Ernesto de la Torre</p>
-					</div>
-					<div class="detail-item">
-						<label>Especialidad:</label>
-						<p id="detailSpecialty">Médico</p>
-					</div>
-					<div class="detail-item">
-						<label>Tipo de cita:</label>
-						<p id="detailType">Online</p>
-					</div>
-					<div class="detail-item">
-						<label>Dirección:</label>
-						<p id="detailAddress">-</p>
-					</div>
-					<div class="detail-item">
-						<label>Fecha y hora:</label>
-						<p id="detailDateTime">23/05/25 - 11:30</p>
-					</div>
-					<div class="detail-item">
-						<label>Estado:</label>
-						<p id="detailStatus"><span class="status-badge proxima">Próxima</span></p>
-					</div>
+		</div>
+
+		<!-- Appointments Table -->
+		<div class="table-container">
+			<div class="table-wrapper">
+				<table class="appointments-table" id="appointmentsTable">
+					<thead>
+						<tr>
+							<th>No.</th>
+							<th>Nombre</th>
+							<th>Especialidad</th>
+							<th>Tipo de cita</th>
+							<th>Dirección</th>
+							<th>Fecha/Hora</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- Cita 1 -->
+						<tr class="appointment-row" data-status="proxima">
+							<td>1</td>
+							<td>
+								<div class="professional-info">
+									<div class="professional-avatar">
+										<img src="https://ui-avatars.com/api/?name=Ernesto+Torre&background=667eea&color=fff"
+											alt="Dr. Ernesto">
+									</div>
+									<span>Dr. Ernesto de la Torre</span>
+								</div>
+							</td>
+							<td>
+								<span class="specialty-badge medico">Médico</span>
+							</td>
+							<td>
+								<span class="appointment-type online">
+									<i class='bx bx-video'></i>
+									ONLINE
+								</span>
+							</td>
+							<td>
+								<span class="address-text">-</span>
+							</td>
+							<td>
+								<div class="datetime-info">
+									<span class="date">23/05/25</span>
+									<span class="time">11:30</span>
+								</div>
+							</td>
+							<td>
+								<div class="actions-group">
+									<button class="action-btn btn-view" title="Ver detalles">
+										<i class='bx bx-show'></i>
+									</button>
+									<button class="action-btn btn-edit" title="Editar">
+										<i class='bx bx-edit'></i>
+									</button>
+									<button class="action-btn btn-cancel" title="Cancelar">
+										<i class='bx bx-x'></i>
+									</button>
+								</div>
+							</td>
+						</tr>
+
+						<!-- Cita 2 -->
+						<tr class="appointment-row" data-status="proxima">
+							<td>2</td>
+							<td>
+								<div class="professional-info">
+									<div class="professional-avatar">
+										<img src="https://ui-avatars.com/api/?name=Pedro+Perez&background=f5576c&color=fff"
+											alt="Ing. Pedro">
+									</div>
+									<span>Ing. Pedro Pérez</span>
+								</div>
+							</td>
+							<td>
+								<span class="specialty-badge ingeniero">Ingeniero</span>
+							</td>
+							<td>
+								<span class="appointment-type presencial">
+									<i class='bx bx-building'></i>
+									PRESENCIAL
+								</span>
+							</td>
+							<td>
+								<span class="address-text">Av villa nueva</span>
+							</td>
+							<td>
+								<div class="datetime-info">
+									<span class="date">23/05/25</span>
+									<span class="time">11:30</span>
+								</div>
+							</td>
+							<td>
+								<div class="actions-group">
+									<button class="action-btn btn-view" title="Ver detalles">
+										<i class='bx bx-show'></i>
+									</button>
+									<button class="action-btn btn-edit" title="Editar">
+										<i class='bx bx-edit'></i>
+									</button>
+									<button class="action-btn btn-cancel" title="Cancelar">
+										<i class='bx bx-x'></i>
+									</button>
+								</div>
+							</td>
+						</tr>
+
+						<!-- Cita 3 -->
+						<tr class="appointment-row" data-status="proxima">
+							<td>3</td>
+							<td>
+								<div class="professional-info">
+									<div class="professional-avatar">
+										<img src="https://ui-avatars.com/api/?name=Jose+Valdivia&background=00f2fe&color=fff"
+											alt="Arq. José">
+									</div>
+									<span>Arq. José Valdivia</span>
+								</div>
+							</td>
+							<td>
+								<span class="specialty-badge arquitecto">Arquitecto</span>
+							</td>
+							<td>
+								<span class="appointment-type online">
+									<i class='bx bx-video'></i>
+									ONLINE
+								</span>
+							</td>
+							<td>
+								<span class="address-text">-</span>
+							</td>
+							<td>
+								<div class="datetime-info">
+									<span class="date">23/05/25</span>
+									<span class="time">11:30</span>
+								</div>
+							</td>
+							<td>
+								<div class="actions-group">
+									<button class="action-btn btn-view" title="Ver detalles">
+										<i class='bx bx-show'></i>
+									</button>
+									<button class="action-btn btn-edit" title="Editar">
+										<i class='bx bx-edit'></i>
+									</button>
+									<button class="action-btn btn-cancel" title="Cancelar">
+										<i class='bx bx-x'></i>
+									</button>
+								</div>
+							</td>
+						</tr>
+
+						<!-- Cita 4 -->
+						<tr class="appointment-row" data-status="proxima">
+							<td>4</td>
+							<td>
+								<div class="professional-info">
+									<div class="professional-avatar">
+										<img src="https://ui-avatars.com/api/?name=Andres+Rojas&background=fee140&color=333"
+											alt="Mg. Andrés">
+									</div>
+									<span>Mg. Andrés Rojas</span>
+								</div>
+							</td>
+							<td>
+								<span class="specialty-badge consultor">Consultor</span>
+							</td>
+							<td>
+								<span class="appointment-type presencial">
+									<i class='bx bx-building'></i>
+									PRESENCIAL
+								</span>
+							</td>
+							<td>
+								<span class="address-text">Av villa nueva</span>
+							</td>
+							<td>
+								<div class="datetime-info">
+									<span class="date">23/05/25</span>
+									<span class="time">11:30</span>
+								</div>
+							</td>
+							<td>
+								<div class="actions-group">
+									<button class="action-btn btn-view" title="Ver detalles">
+										<i class='bx bx-show'></i>
+									</button>
+									<button class="action-btn btn-edit" title="Editar">
+										<i class='bx bx-edit'></i>
+									</button>
+									<button class="action-btn btn-cancel" title="Cancelar">
+										<i class='bx bx-x'></i>
+									</button>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Empty State -->
+			<div class="empty-state" id="emptyState" style="display: none;">
+				<i class='bx bx-calendar-x'></i>
+				<h3>No hay citas</h3>
+				<p>No se encontraron citas con los filtros seleccionados</p>
+			</div>
+		</div>
+
+		<!-- Pagination -->
+		<div class="pagination-container">
+			<button class="pagination-btn" id="prevPage">
+				<i class='bx bx-chevron-left'></i>
+				Anterior
+			</button>
+			<div class="pagination-info">
+				Página <span id="currentPage">1</span> de <span id="totalPages">1</span>
+			</div>
+			<button class="pagination-btn" id="nextPage">
+				Siguiente
+				<i class='bx bx-chevron-right'></i>
+			</button>
+		</div>
+	</div>
+</main>
+
+<!-- CONTENT -->
+
+<!-- Modal de Detalles -->
+<div class="modal" id="detailsModal">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h3>Detalles de la Cita</h3>
+			<button class="modal-close" id="closeDetails">
+				<i class='bx bx-x'></i>
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="detail-section">
+				<div class="detail-item">
+					<label>Profesional:</label>
+					<p id="detailProfessional">Dr. Ernesto de la Torre</p>
 				</div>
-				
-				<div class="detail-actions">
-					<button class="btn btn-primary" id="joinMeeting" style="display: none;">
-						<i class='bx bx-video'></i>
-						Unirse a la reunión
-					</button>
+				<div class="detail-item">
+					<label>Especialidad:</label>
+					<p id="detailSpecialty">Médico</p>
 				</div>
+				<div class="detail-item">
+					<label>Tipo de cita:</label>
+					<p id="detailType">Online</p>
+				</div>
+				<div class="detail-item">
+					<label>Dirección:</label>
+					<p id="detailAddress">-</p>
+				</div>
+				<div class="detail-item">
+					<label>Fecha y hora:</label>
+					<p id="detailDateTime">23/05/25 - 11:30</p>
+				</div>
+				<div class="detail-item">
+					<label>Estado:</label>
+					<p id="detailStatus"><span class="status-badge proxima">Próxima</span></p>
+				</div>
+			</div>
+
+			<div class="detail-actions">
+				<button class="btn btn-primary" id="joinMeeting" style="display: none;">
+					<i class='bx bx-video'></i>
+					Unirse a la reunión
+				</button>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<!-- Modal de Cancelación -->
-	<div class="modal" id="cancelModal">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h3>Cancelar Cita</h3>
-				<button class="modal-close" id="closeCancel">
-					<i class='bx bx-x'></i>
-				</button>
-			</div>
-			<div class="modal-body">
-				<p class="cancel-warning">
-					<i class='bx bx-error-circle'></i>
-					¿Estás seguro de que deseas cancelar esta cita?
-				</p>
-				<div class="form-group">
-					<label>Motivo de cancelación (opcional):</label>
-					<textarea class="form-control" id="cancelReason" rows="4" placeholder="Escribe el motivo..."></textarea>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-secondary" id="cancelCancelBtn">No, mantener cita</button>
-				<button class="btn btn-danger" id="confirmCancelBtn">Sí, cancelar cita</button>
+<!-- Modal de Cancelación -->
+<div class="modal" id="cancelModal">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h3>Cancelar Cita</h3>
+			<button class="modal-close" id="closeCancel">
+				<i class='bx bx-x'></i>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p class="cancel-warning">
+				<i class='bx bx-error-circle'></i>
+				¿Estás seguro de que deseas cancelar esta cita?
+			</p>
+			<div class="form-group">
+				<label>Motivo de cancelación (opcional):</label>
+				<textarea class="form-control" id="cancelReason" rows="4" placeholder="Escribe el motivo..."></textarea>
 			</div>
 		</div>
+		<div class="modal-footer">
+			<button class="btn btn-secondary" id="cancelCancelBtn">No, mantener cita</button>
+			<button class="btn btn-danger" id="confirmCancelBtn">Sí, cancelar cita</button>
+		</div>
 	</div>
+</div>
 {% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'cliente/js/mis_citas.js' %}"></script>
+<script src="{% static 'cliente/js/mis_citas.js' %}"></script>
 {% endblock %}

@@ -2,417 +2,386 @@
 {% load static %}
 
 {% block styles %}
-	<link rel="stylesheet" href="{% static 'cliente/css/profesionales.css' %}">
+<link rel="stylesheet" href="{% static 'cliente/css/profesionales.css' %}">
 {% endblock %}
 
 {% block content %}
-	<!-- CONTENT -->
-	<section id="content">
-		<!-- NAVBAR -->
-		<nav>
-			<i class='bx bx-menu bx-sm'></i>
-			<div class="nav-title">
-				<span>Profesionales</span>
-			</div>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Buscar profesional..." id="searchProfessional">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-				</div>
-			</form>
-			
-			<!-- Dark/Light Mode Toggle -->
-			<input type="checkbox" class="checkbox" id="switch-mode" hidden />
-			<label class="swith-lm" for="switch-mode">
-				<i class="bx bxs-moon"></i>
-				<i class="bx bx-sun"></i>
-				<div class="ball"></div>
-			</label>
+<!-- NAVBAR -->
 
-			<!-- Profile Menu -->
-			<a href="#" class="profile" id="profileIcon">
-				<img src="https://ui-avatars.com/api/?name=Cliente&background=3C91E6&color=fff" alt="Profile">
-			</a>
-			<div class="profile-menu" id="profileMenu">
-				<ul>
-					<li><a href="#">Mi Perfil</a></li>
-					<li><a href="#">Ajustes</a></li>
-					<li><a href="#">Cerrar Sesión</a></li>
-				</ul>
-			</div>
-		</nav>
-		<!-- NAVBAR -->
+<!-- MAIN -->
+<main>
+	<div class="professionals-container">
+		<div class="header-section">
+			<h1 class="page-title">Profesionales</h1>
 
-		<!-- MAIN -->
-		<main>
-			<div class="professionals-container">
-				<div class="header-section">
-					<h1 class="page-title">Profesionales</h1>
-					
-					<!-- Search and Filters -->
-					<div class="search-filter-bar">
-						<div class="search-box">
-							<i class='bx bx-search'></i>
-							<input type="text" placeholder="Buscar por nombre, especialidad..." id="mainSearch">
-						</div>
-						
-						<div class="filters-group">
-							<select class="filter-select" id="specialtyFilter">
-								<option value="">Todas las especialidades</option>
-								<option value="medico">Médico</option>
-								<option value="pediatra">Pediatra</option>
-								<option value="ingeniero">Ingeniero</option>
-								<option value="arquitecto">Arquitecto</option>
-								<option value="consultor">Consultor</option>
-								<option value="abogado">Abogado</option>
-							</select>
-							
-							<select class="filter-select" id="typeFilter">
-								<option value="">Tipo de consulta</option>
-								<option value="presencial">Presencial</option>
-								<option value="online">Online</option>
-							</select>
-							
-							<select class="filter-select" id="ratingFilter">
-								<option value="">Calificación</option>
-								<option value="5">5 estrellas</option>
-								<option value="4">4+ estrellas</option>
-								<option value="3">3+ estrellas</option>
-							</select>
-							
-							<button class="btn-clear-filters" id="clearFilters">
-								<i class='bx bx-x'></i>
-								Limpiar
-							</button>
-						</div>
-					</div>
+			<!-- Search and Filters -->
+			<div class="search-filter-bar">
+				<div class="search-box">
+					<i class='bx bx-search'></i>
+					<input type="text" placeholder="Buscar por nombre, especialidad..." id="mainSearch">
 				</div>
 
-				<!-- Professionals Grid -->
-				<div class="professionals-grid" id="professionalsGrid">
-					<!-- Professional Card 1 -->
-					<div class="professional-card" data-specialty="pediatra" data-rating="4" data-types="presencial,online">
-						<div class="card-header">
-							<div class="professional-avatar-large">
-								<img src="https://ui-avatars.com/api/?name=Ramiro+Torres&background=667eea&color=fff&size=100" alt="Ramiro Torres">
-							</div>
-							<div class="professional-info-header">
-								<h3 class="professional-name">Ramiro Torres</h3>
-								<span class="professional-specialty">Pediatra</span>
-								<div class="rating-stars">
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<i class='bx bx-star'></i>
-									<span class="rating-count">3 opiniones</span>
-								</div>
-							</div>
-						</div>
-						
-						<div class="card-body">
-							<div class="consultation-types">
-								<span class="type-badge presencial">
-									<i class='bx bx-building'></i>
-									Presencial
-								</span>
-								<span class="type-badge online">
-									<i class='bx bx-video'></i>
-									Online
-								</span>
-							</div>
-							
-							<div class="professional-address">
-								<i class='bx bx-map'></i>
-								<span>Calle Las Morsa 323, Miraflores</span>
-							</div>
-							
-							<div class="service-info">
-								<span class="service-label">Consulta Presencial</span>
-								<span class="service-price">S/ 200</span>
-							</div>
-							
-							<div class="service-info">
-								<span class="service-label">Consulta online</span>
-								<span class="service-price">S/ 200</span>
-							</div>
-						</div>
-						
-						<div class="card-footer">
-							<div class="availability-info">
-								<h4>Disponibilidad:</h4>
-								<div class="availability-days">
-									<span class="day-badge available">Martes<br>10 Jun<br><small>07:00</small></span>
-									<span class="day-badge available">Miércoles<br>11 Jun<br><small>11:00</small></span>
-									<span class="day-badge available">Jueves<br>12 Jun<br><small>08:00</small></span>
-								</div>
-							</div>
-							<button class="btn-book-appointment" data-professional="Ramiro Torres">
-								<i class='bx bx-calendar-plus'></i>
-								Agendar Cita
-							</button>
-						</div>
-					</div>
+				<div class="filters-group">
+					<select class="filter-select" id="specialtyFilter">
+						<option value="">Todas las especialidades</option>
+						<option value="medico">Médico</option>
+						<option value="pediatra">Pediatra</option>
+						<option value="ingeniero">Ingeniero</option>
+						<option value="arquitecto">Arquitecto</option>
+						<option value="consultor">Consultor</option>
+						<option value="abogado">Abogado</option>
+					</select>
 
-					<!-- Professional Card 2 -->
-					<div class="professional-card" data-specialty="ingeniero" data-rating="5" data-types="presencial,online">
-						<div class="card-header">
-							<div class="professional-avatar-large">
-								<img src="https://ui-avatars.com/api/?name=Pedro+Perez&background=f5576c&color=fff&size=100" alt="Pedro Pérez">
-							</div>
-							<div class="professional-info-header">
-								<h3 class="professional-name">Ing. Pedro Pérez</h3>
-								<span class="professional-specialty">Ingeniero</span>
-								<div class="rating-stars">
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<span class="rating-count">12 opiniones</span>
-								</div>
-							</div>
-						</div>
-						
-						<div class="card-body">
-							<div class="consultation-types">
-								<span class="type-badge presencial">
-									<i class='bx bx-building'></i>
-									Presencial
-								</span>
-								<span class="type-badge online">
-									<i class='bx bx-video'></i>
-									Online
-								</span>
-							</div>
-							
-							<div class="professional-address">
-								<i class='bx bx-map'></i>
-								<span>Av. Principal 456, San Isidro</span>
-							</div>
-							
-							<div class="service-info">
-								<span class="service-label">Consulta Presencial</span>
-								<span class="service-price">S/ 300</span>
-							</div>
-							
-							<div class="service-info">
-								<span class="service-label">Consulta online</span>
-								<span class="service-price">S/ 250</span>
-							</div>
-						</div>
-						
-						<div class="card-footer">
-							<div class="availability-info">
-								<h4>Disponibilidad:</h4>
-								<div class="availability-days">
-									<span class="day-badge available">Lunes<br>09 Jun<br><small>09:00</small></span>
-									<span class="day-badge available">Miércoles<br>11 Jun<br><small>14:00</small></span>
-									<span class="day-badge available">Viernes<br>13 Jun<br><small>10:00</small></span>
-								</div>
-							</div>
-							<button class="btn-book-appointment" data-professional="Ing. Pedro Pérez">
-								<i class='bx bx-calendar-plus'></i>
-								Agendar Cita
-							</button>
-						</div>
-					</div>
+					<select class="filter-select" id="typeFilter">
+						<option value="">Tipo de consulta</option>
+						<option value="presencial">Presencial</option>
+						<option value="online">Online</option>
+					</select>
 
-					<!-- Professional Card 3 -->
-					<div class="professional-card" data-specialty="arquitecto" data-rating="4" data-types="online">
-						<div class="card-header">
-							<div class="professional-avatar-large">
-								<img src="https://ui-avatars.com/api/?name=Jose+Valdivia&background=00f2fe&color=fff&size=100" alt="José Valdivia">
-							</div>
-							<div class="professional-info-header">
-								<h3 class="professional-name">Arq. José Valdivia</h3>
-								<span class="professional-specialty">Arquitecto</span>
-								<div class="rating-stars">
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<i class='bx bx-star'></i>
-									<span class="rating-count">8 opiniones</span>
-								</div>
-							</div>
-						</div>
-						
-						<div class="card-body">
-							<div class="consultation-types">
-								<span class="type-badge online">
-									<i class='bx bx-video'></i>
-									Online
-								</span>
-							</div>
-							
-							<div class="professional-address">
-								<i class='bx bx-globe'></i>
-								<span>Consultas virtuales</span>
-							</div>
-							
-							<div class="service-info">
-								<span class="service-label">Consulta online</span>
-								<span class="service-price">S/ 180</span>
-							</div>
-						</div>
-						
-						<div class="card-footer">
-							<div class="availability-info">
-								<h4>Disponibilidad:</h4>
-								<div class="availability-days">
-									<span class="day-badge available">Martes<br>10 Jun<br><small>15:00</small></span>
-									<span class="day-badge available">Jueves<br>12 Jun<br><small>16:00</small></span>
-								</div>
-							</div>
-							<button class="btn-book-appointment" data-professional="Arq. José Valdivia">
-								<i class='bx bx-calendar-plus'></i>
-								Agendar Cita
-							</button>
-						</div>
-					</div>
+					<select class="filter-select" id="ratingFilter">
+						<option value="">Calificación</option>
+						<option value="5">5 estrellas</option>
+						<option value="4">4+ estrellas</option>
+						<option value="3">3+ estrellas</option>
+					</select>
 
-					<!-- Professional Card 4 -->
-					<div class="professional-card" data-specialty="consultor" data-rating="5" data-types="presencial">
-						<div class="card-header">
-							<div class="professional-avatar-large">
-								<img src="https://ui-avatars.com/api/?name=Andres+Rojas&background=fee140&color=333&size=100" alt="Andrés Rojas">
-							</div>
-							<div class="professional-info-header">
-								<h3 class="professional-name">Mg. Andrés Rojas</h3>
-								<span class="professional-specialty">Consultor</span>
-								<div class="rating-stars">
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<i class='bx bxs-star'></i>
-									<span class="rating-count">15 opiniones</span>
-								</div>
-							</div>
-						</div>
-						
-						<div class="card-body">
-							<div class="consultation-types">
-								<span class="type-badge presencial">
-									<i class='bx bx-building'></i>
-									Presencial
-								</span>
-							</div>
-							
-							<div class="professional-address">
-								<i class='bx bx-map'></i>
-								<span>Av Villa Nueva 789, Surco</span>
-							</div>
-							
-							<div class="service-info">
-								<span class="service-label">Consulta Presencial</span>
-								<span class="service-price">S/ 350</span>
-							</div>
-						</div>
-						
-						<div class="card-footer">
-							<div class="availability-info">
-								<h4>Disponibilidad:</h4>
-								<div class="availability-days">
-									<span class="day-badge available">Lunes<br>09 Jun<br><small>10:00</small></span>
-									<span class="day-badge available">Miércoles<br>11 Jun<br><small>11:00</small></span>
-									<span class="day-badge available">Viernes<br>13 Jun<br><small>09:00</small></span>
-								</div>
-							</div>
-							<button class="btn-book-appointment" data-professional="Mg. Andrés Rojas">
-								<i class='bx bx-calendar-plus'></i>
-								Agendar Cita
-							</button>
-						</div>
-					</div>
+					<button class="btn-clear-filters" id="clearFilters">
+						<i class='bx bx-x'></i>
+						Limpiar
+					</button>
 				</div>
-
-				<!-- Empty State -->
-				<div class="empty-state" id="emptyState" style="display: none;">
-					<i class='bx bx-search-alt-2'></i>
-					<h3>No se encontraron profesionales</h3>
-					<p>Intenta ajustar los filtros de búsqueda</p>
-				</div>
-
-				<!-- Loading State -->
-				<div class="loading-state" id="loadingState" style="display: none;">
-					<div class="spinner"></div>
-					<p>Cargando profesionales...</p>
-				</div>
-			</div>
-		</main>
-		<!-- MAIN -->
-	</section>
-	<!-- CONTENT -->
-
-	<!-- Modal de Agendar Cita -->
-	<div class="modal" id="appointmentModal">
-		<div class="modal-content modal-large">
-			<div class="modal-header">
-				<h3>Agendar Cita</h3>
-				<button class="modal-close" id="closeAppointment">
-					<i class='bx bx-x'></i>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="appointment-professional-info">
-					<div class="professional-avatar-modal">
-						<img src="" alt="" id="modalProfessionalAvatar">
-					</div>
-					<div>
-						<h4 id="modalProfessionalName"></h4>
-						<p id="modalProfessionalSpecialty"></p>
-					</div>
-				</div>
-				
-				<form class="appointment-form" id="appointmentForm">
-					<div class="form-group">
-						<label>Tipo de consulta</label>
-						<select class="form-control" id="consultationType" required>
-							<option value="">Selecciona el tipo</option>
-							<option value="presencial">Presencial</option>
-							<option value="online">Online</option>
-						</select>
-					</div>
-					
-					<div class="form-group">
-						<label>Fecha</label>
-						<input type="date" class="form-control" id="appointmentDate" required>
-					</div>
-					
-					<div class="form-group">
-						<label>Hora</label>
-						<select class="form-control" id="appointmentTime" required>
-							<option value="">Selecciona la hora</option>
-							<option value="09:00">09:00 AM</option>
-							<option value="10:00">10:00 AM</option>
-							<option value="11:00">11:00 AM</option>
-							<option value="14:00">02:00 PM</option>
-							<option value="15:00">03:00 PM</option>
-							<option value="16:00">04:00 PM</option>
-						</select>
-					</div>
-					
-					<div class="form-group">
-						<label>Motivo de consulta (opcional)</label>
-						<textarea class="form-control" id="appointmentReason" rows="4" placeholder="Describe brevemente el motivo de tu consulta..."></textarea>
-					</div>
-					
-					<div class="price-summary">
-						<span>Precio de consulta:</span>
-						<span class="price-amount" id="consultationPrice">S/ 0.00</span>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-secondary" id="cancelAppointment">Cancelar</button>
-				<button class="btn btn-primary" id="confirmAppointment">Confirmar Cita</button>
 			</div>
 		</div>
+
+		<!-- Professionals Grid -->
+		<div class="professionals-grid" id="professionalsGrid">
+			<!-- Professional Card 1 -->
+			<div class="professional-card" data-specialty="pediatra" data-rating="4" data-types="presencial,online">
+				<div class="card-header">
+					<div class="professional-avatar-large">
+						<img src="https://ui-avatars.com/api/?name=Ramiro+Torres&background=667eea&color=fff&size=100"
+							alt="Ramiro Torres">
+					</div>
+					<div class="professional-info-header">
+						<h3 class="professional-name">Ramiro Torres</h3>
+						<span class="professional-specialty">Pediatra</span>
+						<div class="rating-stars">
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bx-star'></i>
+							<span class="rating-count">3 opiniones</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="card-body">
+					<div class="consultation-types">
+						<span class="type-badge presencial">
+							<i class='bx bx-building'></i>
+							Presencial
+						</span>
+						<span class="type-badge online">
+							<i class='bx bx-video'></i>
+							Online
+						</span>
+					</div>
+
+					<div class="professional-address">
+						<i class='bx bx-map'></i>
+						<span>Calle Las Morsa 323, Miraflores</span>
+					</div>
+
+					<div class="service-info">
+						<span class="service-label">Consulta Presencial</span>
+						<span class="service-price">S/ 200</span>
+					</div>
+
+					<div class="service-info">
+						<span class="service-label">Consulta online</span>
+						<span class="service-price">S/ 200</span>
+					</div>
+				</div>
+
+				<div class="card-footer">
+					<div class="availability-info">
+						<h4>Disponibilidad:</h4>
+						<div class="availability-days">
+							<span class="day-badge available">Martes<br>10 Jun<br><small>07:00</small></span>
+							<span class="day-badge available">Miércoles<br>11 Jun<br><small>11:00</small></span>
+							<span class="day-badge available">Jueves<br>12 Jun<br><small>08:00</small></span>
+						</div>
+					</div>
+					<button class="btn-book-appointment" data-professional="Ramiro Torres">
+						<i class='bx bx-calendar-plus'></i>
+						Agendar Cita
+					</button>
+				</div>
+			</div>
+
+			<!-- Professional Card 2 -->
+			<div class="professional-card" data-specialty="ingeniero" data-rating="5" data-types="presencial,online">
+				<div class="card-header">
+					<div class="professional-avatar-large">
+						<img src="https://ui-avatars.com/api/?name=Pedro+Perez&background=f5576c&color=fff&size=100"
+							alt="Pedro Pérez">
+					</div>
+					<div class="professional-info-header">
+						<h3 class="professional-name">Ing. Pedro Pérez</h3>
+						<span class="professional-specialty">Ingeniero</span>
+						<div class="rating-stars">
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<span class="rating-count">12 opiniones</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="card-body">
+					<div class="consultation-types">
+						<span class="type-badge presencial">
+							<i class='bx bx-building'></i>
+							Presencial
+						</span>
+						<span class="type-badge online">
+							<i class='bx bx-video'></i>
+							Online
+						</span>
+					</div>
+
+					<div class="professional-address">
+						<i class='bx bx-map'></i>
+						<span>Av. Principal 456, San Isidro</span>
+					</div>
+
+					<div class="service-info">
+						<span class="service-label">Consulta Presencial</span>
+						<span class="service-price">S/ 300</span>
+					</div>
+
+					<div class="service-info">
+						<span class="service-label">Consulta online</span>
+						<span class="service-price">S/ 250</span>
+					</div>
+				</div>
+
+				<div class="card-footer">
+					<div class="availability-info">
+						<h4>Disponibilidad:</h4>
+						<div class="availability-days">
+							<span class="day-badge available">Lunes<br>09 Jun<br><small>09:00</small></span>
+							<span class="day-badge available">Miércoles<br>11 Jun<br><small>14:00</small></span>
+							<span class="day-badge available">Viernes<br>13 Jun<br><small>10:00</small></span>
+						</div>
+					</div>
+					<button class="btn-book-appointment" data-professional="Ing. Pedro Pérez">
+						<i class='bx bx-calendar-plus'></i>
+						Agendar Cita
+					</button>
+				</div>
+			</div>
+
+			<!-- Professional Card 3 -->
+			<div class="professional-card" data-specialty="arquitecto" data-rating="4" data-types="online">
+				<div class="card-header">
+					<div class="professional-avatar-large">
+						<img src="https://ui-avatars.com/api/?name=Jose+Valdivia&background=00f2fe&color=fff&size=100"
+							alt="José Valdivia">
+					</div>
+					<div class="professional-info-header">
+						<h3 class="professional-name">Arq. José Valdivia</h3>
+						<span class="professional-specialty">Arquitecto</span>
+						<div class="rating-stars">
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bx-star'></i>
+							<span class="rating-count">8 opiniones</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="card-body">
+					<div class="consultation-types">
+						<span class="type-badge online">
+							<i class='bx bx-video'></i>
+							Online
+						</span>
+					</div>
+
+					<div class="professional-address">
+						<i class='bx bx-globe'></i>
+						<span>Consultas virtuales</span>
+					</div>
+
+					<div class="service-info">
+						<span class="service-label">Consulta online</span>
+						<span class="service-price">S/ 180</span>
+					</div>
+				</div>
+
+				<div class="card-footer">
+					<div class="availability-info">
+						<h4>Disponibilidad:</h4>
+						<div class="availability-days">
+							<span class="day-badge available">Martes<br>10 Jun<br><small>15:00</small></span>
+							<span class="day-badge available">Jueves<br>12 Jun<br><small>16:00</small></span>
+						</div>
+					</div>
+					<button class="btn-book-appointment" data-professional="Arq. José Valdivia">
+						<i class='bx bx-calendar-plus'></i>
+						Agendar Cita
+					</button>
+				</div>
+			</div>
+
+			<!-- Professional Card 4 -->
+			<div class="professional-card" data-specialty="consultor" data-rating="5" data-types="presencial">
+				<div class="card-header">
+					<div class="professional-avatar-large">
+						<img src="https://ui-avatars.com/api/?name=Andres+Rojas&background=fee140&color=333&size=100"
+							alt="Andrés Rojas">
+					</div>
+					<div class="professional-info-header">
+						<h3 class="professional-name">Mg. Andrés Rojas</h3>
+						<span class="professional-specialty">Consultor</span>
+						<div class="rating-stars">
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<i class='bx bxs-star'></i>
+							<span class="rating-count">15 opiniones</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="card-body">
+					<div class="consultation-types">
+						<span class="type-badge presencial">
+							<i class='bx bx-building'></i>
+							Presencial
+						</span>
+					</div>
+
+					<div class="professional-address">
+						<i class='bx bx-map'></i>
+						<span>Av Villa Nueva 789, Surco</span>
+					</div>
+
+					<div class="service-info">
+						<span class="service-label">Consulta Presencial</span>
+						<span class="service-price">S/ 350</span>
+					</div>
+				</div>
+
+				<div class="card-footer">
+					<div class="availability-info">
+						<h4>Disponibilidad:</h4>
+						<div class="availability-days">
+							<span class="day-badge available">Lunes<br>09 Jun<br><small>10:00</small></span>
+							<span class="day-badge available">Miércoles<br>11 Jun<br><small>11:00</small></span>
+							<span class="day-badge available">Viernes<br>13 Jun<br><small>09:00</small></span>
+						</div>
+					</div>
+					<button class="btn-book-appointment" data-professional="Mg. Andrés Rojas">
+						<i class='bx bx-calendar-plus'></i>
+						Agendar Cita
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Empty State -->
+		<div class="empty-state" id="emptyState" style="display: none;">
+			<i class='bx bx-search-alt-2'></i>
+			<h3>No se encontraron profesionales</h3>
+			<p>Intenta ajustar los filtros de búsqueda</p>
+		</div>
+
+		<!-- Loading State -->
+		<div class="loading-state" id="loadingState" style="display: none;">
+			<div class="spinner"></div>
+			<p>Cargando profesionales...</p>
+		</div>
 	</div>
+</main>
+
+<!-- CONTENT -->
+
+<!-- Modal de Agendar Cita -->
+<div class="modal" id="appointmentModal">
+	<div class="modal-content modal-large">
+		<div class="modal-header">
+			<h3>Agendar Cita</h3>
+			<button class="modal-close" id="closeAppointment">
+				<i class='bx bx-x'></i>
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="appointment-professional-info">
+				<div class="professional-avatar-modal">
+					<img src="" alt="" id="modalProfessionalAvatar">
+				</div>
+				<div>
+					<h4 id="modalProfessionalName"></h4>
+					<p id="modalProfessionalSpecialty"></p>
+				</div>
+			</div>
+
+			<form class="appointment-form" id="appointmentForm">
+				<div class="form-group">
+					<label>Tipo de consulta</label>
+					<select class="form-control" id="consultationType" required>
+						<option value="">Selecciona el tipo</option>
+						<option value="presencial">Presencial</option>
+						<option value="online">Online</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Fecha</label>
+					<input type="date" class="form-control" id="appointmentDate" required>
+				</div>
+
+				<div class="form-group">
+					<label>Hora</label>
+					<select class="form-control" id="appointmentTime" required>
+						<option value="">Selecciona la hora</option>
+						<option value="09:00">09:00 AM</option>
+						<option value="10:00">10:00 AM</option>
+						<option value="11:00">11:00 AM</option>
+						<option value="14:00">02:00 PM</option>
+						<option value="15:00">03:00 PM</option>
+						<option value="16:00">04:00 PM</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Motivo de consulta (opcional)</label>
+					<textarea class="form-control" id="appointmentReason" rows="4"
+						placeholder="Describe brevemente el motivo de tu consulta..."></textarea>
+				</div>
+
+				<div class="price-summary">
+					<span>Precio de consulta:</span>
+					<span class="price-amount" id="consultationPrice">S/ 0.00</span>
+				</div>
+			</form>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-secondary" id="cancelAppointment">Cancelar</button>
+			<button class="btn btn-primary" id="confirmAppointment">Confirmar Cita</button>
+		</div>
+	</div>
+</div>
 {% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'cliente/js/profesionales.js' %}"></script>
+<script src="{% static 'cliente/js/profesionales.js' %}"></script>
 {% endblock %}

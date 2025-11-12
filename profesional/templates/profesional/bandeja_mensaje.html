@@ -1,0 +1,107 @@
+{% extends 'profesional/base_home.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'profesional/css/bandeja_mensaje.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- MAIN -->
+<main>
+	<div class="bandeja-container">
+		<h1 class="page-title">Bandeja de mensajes</h1>
+
+		<!-- No Gestionados Section -->
+		<div class="messages-section">
+			<h2 class="section-title">No Gestionados</h2>
+			<div class="table-container">
+				<table class="messages-table">
+					<thead>
+						<tr>
+							<th>Consultor</th>
+							<th>Mensaje</th>
+							<th>Mi cliente</th>
+							<th>Fecha y Hora</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="message-row" data-managed="false">
+							<td>Hernán Alvarado Torres</td>
+							<td>Buen día, tengo una consulta...</td>
+							<td>
+								<span class="badge-cliente">Mi cliente</span>
+							</td>
+							<td>16 Abril, 10:02</td>
+						</tr>
+						<tr class="message-row" data-managed="false">
+							<td>Hernán Alvarado Torres</td>
+							<td>Buen día, tengo una consulta...</td>
+							<td>
+								<span class="badge-cliente">Mi cliente</span>
+							</td>
+							<td>16 Abril, 10:02</td>
+						</tr>
+						<tr class="message-row" data-managed="false">
+							<td>Hernán Alvarado Torres</td>
+							<td>Buen día, tengo una consulta...</td>
+							<td>
+								<span class="badge-cliente">Mi cliente</span>
+							</td>
+							<td>16 Abril, 10:02</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Gestionados Section -->
+		<div class="messages-section">
+			<h2 class="section-title">Gestionados</h2>
+			<div class="table-container">
+				<table class="messages-table">
+					<thead>
+						<tr>
+							<th>Consultor</th>
+							<th>Mensaje</th>
+							<th>Mi cliente</th>
+							<th>Fecha y Hora</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="message-row" data-managed="true">
+							<td>Hernán Alvarado Torres</td>
+							<td>Buen día, tengo una consulta...</td>
+							<td>
+								<span class="badge-cliente">Mi cliente</span>
+							</td>
+							<td>16 Abril, 10:02</td>
+						</tr>
+						<tr class="message-row" data-managed="true">
+							<td>Hernán Alvarado Torres</td>
+							<td>Buen día, tengo una consulta...</td>
+							<td>
+								<span class="badge-cliente">Mi cliente</span>
+							</td>
+							<td>16 Abril, 10:02</td>
+						</tr>
+						<tr class="message-row" data-managed="true">
+							<td>Hernán Alvarado Torres</td>
+							<td>Buen día, tengo una consulta...</td>
+							<td>
+								<span class="badge-cliente">Mi cliente</span>
+							</td>
+							<td>16 Abril, 10:02</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</main>
+<!-- MAIN -->
+<!-- CONTENT -->
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'profesional/js/bandeja_mensaje.js' %}"></script>
+{% endblock %}

@@ -6,209 +6,170 @@
 {% endblock %}
 
 {% block content %}
-<!-- CONTENT -->
-<section id="content">
-    <!-- NAVBAR -->
-    <nav>
-        <i class='bx bx-menu bx-sm'></i>
-        <div class="nav-title">
-            <span>Predicción de ACV</span>
-        </div>
-        <form action="#">
-            <div class="form-input">
-                <input type="search" placeholder="Buscar por...">
-                <button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-            </div>
-        </form>
+<!-- MAIN -->
+<main>
+    <div class="prediction-container">
+        <h1 class="page-title">Predicción de ACV</h1>
 
-        <!-- Dark/Light Mode Toggle -->
-        <!-- <input type="checkbox" class="checkbox" id="switch-mode" hidden />
-        <label class="swith-lm" for="switch-mode">
-            <i class="bx bxs-moon"></i>
-            <i class="bx bx-sun"></i>
-            <div class="ball"></div>
-        </label> -->
+        <!-- FORMULARIO COMPLETO (con upload dentro) -->
+        <form class="patient-form" id="patientForm" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
 
-        <!-- Profile Menu -->
-        <a href="#" class="profile" id="profileIcon">
-            <img src="https://ui-avatars.com/api/?name=Usuario&background=3C91E6&color=fff" alt="Profile">
-        </a>
-        <div class="profile-menu" id="profileMenu">
-            <ul>
-                <li><a href="{% url 'profesional:perfil_option' %}">Mi Perfil</a></li>
-                <li><a href="{% url 'profesional:ajustes_option' %}">Ajustes</a></li>
+            <div class="upload-section">
+                <h3 class="section-subtitle">Subir ecografía de cerebro</h3>
 
-                <li><a href="#">Cerrar Sesión</a></li>
-            </ul>
-        </div>
-    </nav>
-    <!-- NAVBAR -->
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="fileInput" name="image" accept="image/*,.dcm">
 
-    <!-- MAIN -->
-    <main>
-        <div class="prediction-container">
-            <h1 class="page-title">Predicción de ACV</h1>
-
-            <!-- FORMULARIO COMPLETO (con upload dentro) -->
-            <form class="patient-form" id="patientForm" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <div class="upload-section">
-                    <h3 class="section-subtitle">Subir ecografía de cerebro</h3>
-
-                    <div class="upload-area" id="uploadArea">
-                        <input type="file" id="fileInput" name="image" accept="image/*,.dcm">
-
-                        <div class="upload-content">
-                            <i class='bx bx-cloud-upload'></i>
-                            <p>Arrastra y suelta tu archivo aquí</p>
-                            <span>o</span>
-                            <button type="button" class="btn-select-file" id="btnSelectFile">Seleccionar
-                                Archivo</button>
-                        </div>
-
-                        <div class="file-preview" id="filePreview" style="display: none;">
-                            <i class='bx bx-file'></i>
-                            <span class="file-name" id="fileName"></span>
-
-                            <!-- Aquí se mostrará la miniatura -->
-                            <img id="imgPreview" class="image-preview" alt="Preview"
-                                style="display:none; max-width:200px; margin-top:10px; border-radius:8px;">
-
-                            <button type="button" class="btn-remove-file" id="btnRemoveFile">
-                                <i class='bx bx-x'></i>
-                            </button>
-                        </div>
+                    <div class="upload-content">
+                        <i class='bx bx-cloud-upload'></i>
+                        <p>Arrastra y suelta tu archivo aquí</p>
+                        <span>o</span>
+                        <button type="button" class="btn-select-file" id="btnSelectFile">Seleccionar
+                            Archivo</button>
                     </div>
 
-                </div>
+                    <div class="file-preview" id="filePreview" style="display: none;">
+                        <i class='bx bx-file'></i>
+                        <span class="file-name" id="fileName"></span>
 
+                        <!-- Aquí se mostrará la miniatura -->
+                        <img id="imgPreview" class="image-preview" alt="Preview"
+                            style="display:none; max-width:200px; margin-top:10px; border-radius:8px;">
 
-
-                <!-- Patient Data Section -->
-                <div class="patient-data-section">
-                    <h3 class="section-subtitle">Datos del paciente</h3>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="genero">Género</label>
-                            <select id="genero" name="genero" required>
-                                <option value="">Seleccionar</option>
-                                <option value="male">Masculino</option>
-                                <option value="female">Femenino</option>
-                                <option value="other">Otro</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="hipertension">Hipertensión</label>
-                            <select id="hipertension" name="hipertension" required>
-                                <option value="">Seleccionar</option>
-                                <option value="1">Sí</option>
-                                <option value="0">No</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="casado">Estado Civil</label>
-                            <select id="casado" name="casado" required>
-                                <option value="">Seleccionar</option>
-                                <option value="yes">Casado</option>
-                                <option value="no">Soltero</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="residencia">Tipo de Residencia</label>
-                            <select id="residencia" name="residencia" required>
-                                <option value="">Seleccionar</option>
-                                <option value="urban">Urbana</option>
-                                <option value="rural">Rural</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="edad">Edad</label>
-                            <input type="number" id="edad" name="edad" min="0" max="120" step="0.01"
-                                placeholder="Ej: 45" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="problemas_cardiacos">Problemas cardíacos</label>
-                            <select id="problemas_cardiacos" name="problemas_cardiacos" required>
-                                <option value="">Seleccionar</option>
-                                <option value="1">Sí</option>
-                                <option value="0">No</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="trabajo">Tipo de Trabajo</label>
-                            <select id="trabajo" name="trabajo" required>
-                                <option value="">Seleccionar</option>
-                                <option value="private">Privado</option>
-                                <option value="govt_job">Público</option>
-                                <option value="self-employed">Autónomo</option>
-                                <option value="children">Niños</option>
-                                <option value="never_worked">Nunca trabajó</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="glucosa">Nivel prom. de glucosa</label>
-                            <input type="number" id="glucosa" name="glucosa" min="50" max="300" step="0.01"
-                                placeholder="Ej: 106.15" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="imc">IMC</label>
-                            <input type="number" id="imc" name="imc" min="10" max="100" step="0.1"
-                                placeholder="Ej: 28.9" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="fumador">Estado de fumador</label>
-                            <select id="fumador" name="fumador" required>
-                                <option value="">Seleccionar</option>
-                                <option value="never smoked">Nunca fumó</option>
-                                <option value="formerly smoked">Ex fumador</option>
-                                <option value="smokes">Fuma actualmente</option>
-                                <option value="unknown">Desconocido</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="btn-predict">
-                            <i class='bx bx-brain'></i>
-                            Realizar Predicción
+                        <button type="button" class="btn-remove-file" id="btnRemoveFile">
+                            <i class='bx bx-x'></i>
                         </button>
                     </div>
                 </div>
-            </form>
 
-            <!-- Results Section (Hidden by default) -->
-            <div class="results-section" id="resultsSection" style="display: none;">
-                <h3 class="section-subtitle">Resultados de la Predicción</h3>
-                <div class="result-card">
-                    <div class="result-icon">
-                        <i class='bx bx-check-circle'></i>
+            </div>
+
+
+
+            <!-- Patient Data Section -->
+            <div class="patient-data-section">
+                <h3 class="section-subtitle">Datos del paciente</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="genero">Género</label>
+                        <select id="genero" name="genero" required>
+                            <option value="">Seleccionar</option>
+                            <option value="male">Masculino</option>
+                            <option value="female">Femenino</option>
+                            <option value="other">Otro</option>
+                        </select>
                     </div>
-                    <div class="result-content">
-                        <h4 class="result-title">Probabilidad de ACV</h4>
-                        <p class="result-percentage" id="resultPercentage">0%</p>
-                        <p class="result-description" id="resultDescription"></p>
+
+                    <div class="form-group">
+                        <label for="hipertension">Hipertensión</label>
+                        <select id="hipertension" name="hipertension" required>
+                            <option value="">Seleccionar</option>
+                            <option value="1">Sí</option>
+                            <option value="0">No</option>
+                        </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="casado">Estado Civil</label>
+                        <select id="casado" name="casado" required>
+                            <option value="">Seleccionar</option>
+                            <option value="yes">Casado</option>
+                            <option value="no">Soltero</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="residencia">Tipo de Residencia</label>
+                        <select id="residencia" name="residencia" required>
+                            <option value="">Seleccionar</option>
+                            <option value="urban">Urbana</option>
+                            <option value="rural">Rural</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edad">Edad</label>
+                        <input type="number" id="edad" name="edad" min="0" max="120" step="0.01" placeholder="Ej: 45"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="problemas_cardiacos">Problemas cardíacos</label>
+                        <select id="problemas_cardiacos" name="problemas_cardiacos" required>
+                            <option value="">Seleccionar</option>
+                            <option value="1">Sí</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="trabajo">Tipo de Trabajo</label>
+                        <select id="trabajo" name="trabajo" required>
+                            <option value="">Seleccionar</option>
+                            <option value="private">Privado</option>
+                            <option value="govt_job">Público</option>
+                            <option value="self-employed">Autónomo</option>
+                            <option value="children">Niños</option>
+                            <option value="never_worked">Nunca trabajó</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="glucosa">Nivel prom. de glucosa</label>
+                        <input type="number" id="glucosa" name="glucosa" min="50" max="300" step="0.01"
+                            placeholder="Ej: 106.15" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="imc">IMC</label>
+                        <input type="number" id="imc" name="imc" min="10" max="100" step="0.1" placeholder="Ej: 28.9"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fumador">Estado de fumador</label>
+                        <select id="fumador" name="fumador" required>
+                            <option value="">Seleccionar</option>
+                            <option value="never smoked">Nunca fumó</option>
+                            <option value="formerly smoked">Ex fumador</option>
+                            <option value="smokes">Fuma actualmente</option>
+                            <option value="unknown">Desconocido</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-predict">
+                        <i class='bx bx-brain'></i>
+                        Realizar Predicción
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Results Section (Hidden by default) -->
+        <div class="results-section" id="resultsSection" style="display: none;">
+            <h3 class="section-subtitle">Resultados de la Predicción</h3>
+            <div class="result-card">
+                <div class="result-icon">
+                    <i class='bx bx-check-circle'></i>
+                </div>
+                <div class="result-content">
+                    <h4 class="result-title">Probabilidad de ACV</h4>
+                    <p class="result-percentage" id="resultPercentage">0%</p>
+                    <p class="result-description" id="resultDescription"></p>
                 </div>
             </div>
         </div>
-    </main>
-    <!-- MAIN -->
-</section>
+    </div>
+</main>
+
 <!-- CONTENT -->
 {% endblock %}
 

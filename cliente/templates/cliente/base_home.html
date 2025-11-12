@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="{% static 'cliente/css/base_home.css' %}">
 	{% block styles %}
 	{% endblock %}
-	<title>Consultor - Mis Citas</title>
+	<title>Consultor - Mis citas</title>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
 				{% endif %}
 				<a href="{% url 'cliente:mis_citas_option' %}">
 					<i class='bx bx-calendar-check bx-sm'></i>
-					<span class="text">Mis Citas</span>
+					<span class="text">Mis citas</span>
 				</a>
 			</li>
 
@@ -49,16 +49,16 @@
 				{% else %}
 			<li>
 				{% endif %}
-				<a href="{% url 'cliente:bandeja_entrada_option' %}">
+				<a href="{% url 'cliente:bandeja_mensaje_option' %}">
 					<i class='bx bx-envelope bx-sm'></i>
-					<span class="text">Bandeja de entrada</span>
+					<span class="text">Bandeja de mensajes</span>
 				</a>
 			</li>
 		</ul>
 
 		<ul class="side-menu bottom">
 			<li>
-				<a href="#" class="logout">
+				<a href="{% url 'general:logout_view' %}" class="logout">
 					<i class='bx bx-log-out bx-sm'></i>
 					<span class="text">Logout</span>
 				</a>
@@ -66,8 +66,46 @@
 		</ul>
 	</section>
 
-	{% block content %}
-	{% endblock %}
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu bx-sm'></i>
+			<div class="nav-title">
+				{% if option_name %}
+				<span>{{ option_name }}</span>
+				{% endif %}
+			</div>
+
+			<!-- <input type="checkbox" class="checkbox" id="switch-mode" hidden />
+			<label class="swith-lm" for="switch-mode">
+				<i class="bx bxs-moon"></i>
+				<i class="bx bx-sun"></i>
+				<div class="ball"></div>
+			</label> -->
+
+			<!-- Profile Menu -->
+			<div class="profile-container">
+				<div class="profile-info">
+					<span class="profile-name">{{ user.get_full_name|default:user.username }}</span>
+					<span class="profile-email">{{ user.email }}</span>
+				</div>
+				<a href="#" class="profile" id="profileIcon">
+					<img src="https://ui-avatars.com/api/?name={{ user.get_full_name|default:user.username }}&background=3C91E6&color=fff"
+						alt="Profile">
+				</a>
+				<div class="profile-menu" id="profileMenu">
+					<ul>
+						<li><a href="#">Mi Perfil</a></li>
+						<li><a href="#">Configuración</a></li>
+						<li><a href="{% url 'general:logout_view' %}">Cerrar Sesión</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		{% block content %}
+		{% endblock %}
+	</section>
+
 
 	<script src="{% static 'profesional/js/base_home.js' %}"></script>
 

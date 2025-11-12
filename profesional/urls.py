@@ -25,7 +25,7 @@ urlpatterns = [
     # ---------------------------------------------------------
     # Bandeja de entrada (mensajes o solicitudes)
     # ---------------------------------------------------------
-    path('bandeja-entrada/', bandeja_entrada_option, name='bandeja_entrada_option'),
+    path('bandeja-entrada/', bandeja_mensaje_option, name='bandeja_mensaje_option'),
 
     # ---------------------------------------------------------
     # Reportes de productividad e ingresos
