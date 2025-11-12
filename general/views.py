@@ -80,6 +80,9 @@ def login_inicio_sesion(request):
                     return redirect(menu[m])
         else:
             mensaje = "El usuario no existe o la contraseña es incorrecta."
+    
+    print("MENSAJE LOGIN:", mensaje)
+
 
     return render(
         request,

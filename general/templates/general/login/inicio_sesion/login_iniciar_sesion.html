@@ -41,5 +41,30 @@
     </div>
 </div>
 
+{% if mensaje %}
+<div id="popupError" class="popup">
+    <div class="popup-content">
+        <h3>Error de inicio de sesión</h3>
+        <p>{{ mensaje }}</p>
+        <button id="popupClose">Cerrar</button>
+    </div>
+</div>
+{% endif %}
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const popup = document.getElementById("popupError");
+    const closeBtn = document.getElementById("popupClose");
+
+    if (popup) {
+        popup.classList.add("show");
+        closeBtn.addEventListener("click", () => {
+            popup.classList.remove("show");
+        });
+    }
+});
+</script>
+
 <script src="{% static 'general/js/login/inicio_sesion/login_iniciar_sesion.js' %}"></script>
+
 {% endblock %}
