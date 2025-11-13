@@ -492,3 +492,70 @@ body::before {
         transform: rotate(360deg);
     }
 }
+
+/* Popup de error */
+.popup-error {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.popup-error.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.popup-error .popup-content {
+    background: rgba(52, 140, 172, 0.15);
+    border: 1px solid rgba(52, 140, 172, 0.4);
+    border-radius: 16px;
+    padding: 30px 40px;
+    text-align: center;
+    color: #fff;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 0 25px rgba(52, 140, 172, 0.3);
+    animation: fadeInPopup 0.4s ease forwards;
+}
+
+.popup-error .popup-content p {
+    font-size: 17px;
+    margin-bottom: 20px;
+    color: #ffbaba;
+}
+
+.popup-error button {
+    background: linear-gradient(135deg, #348cac 0%, #4da6d9 100%);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.popup-error button:hover {
+    background: linear-gradient(135deg, #4da6d9 0%, #66c2ff 100%);
+    transform: scale(1.05);
+}
+
+@keyframes fadeInPopup {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

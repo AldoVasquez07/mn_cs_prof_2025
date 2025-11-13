@@ -14,6 +14,14 @@
 
 <div class="container">
     <div class="card">
+        {% if mensaje %}
+        <div id="popupError" class="popup-error show">
+            <div class="popup-content">
+                <p>{{ mensaje }}</p>
+                <button id="closePopup">Cerrar</button>
+            </div>
+        </div>
+        {% endif %}
 
         <!-- Register Form -->
         <div id="registerForm" class="form-container">
@@ -154,4 +162,23 @@
 
 <script src="{% static 'general/js/login/registro/login_registro.js' %}"></script>
 <script src="{% static 'general/js/login/registro/login_registro_cliente.js' %}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const popup = document.getElementById("popupError");
+    const closeBtn = document.getElementById("closePopup");
+
+    if (popup) {
+        popup.classList.add("show");
+        closeBtn.addEventListener("click", function () {
+            popup.classList.remove("show");
+        });
+
+        // También se puede cerrar haciendo clic fuera del cuadro
+        popup.addEventListener("click", function (e) {
+            if (e.target === popup) popup.classList.remove("show");
+        });
+    }
+});
+</script>
+
 {% endblock %}
