@@ -55,7 +55,7 @@ def clientes_option(request):
 def bandeja_mensaje_option(request):
     """Renderiza la vista de bandeja de mensajes."""
     modelo_predictivo = request.session.get('modelo_predictivo', False)
-    return render(request, 'profesional/bandeja_mensaje.html', {
+    return render(request, 'profesional/bandeja_entrada.html', {
         "choice": 3,
         "modelo_predictivo": modelo_predictivo
         })
