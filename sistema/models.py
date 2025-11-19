@@ -67,6 +67,14 @@ class Usuario(AbstractUser):
         if not self.username:
             self.username = self.email
         super().save(*args, **kwargs)
+        
+    def get_full_name(self):
+        nombre = self.first_name or ""
+        ap_paterno = self.apellido_paterno or ""
+        ap_materno = self.apellido_materno or ""
+
+        return f"{nombre} {ap_paterno} {ap_materno}".strip()
+
 
 
 class LogProcesos(models.Model):
