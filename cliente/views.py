@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from profesional.models import Profesional
 
 
 @login_required(login_url='general:login_inicio_sesion')
@@ -20,7 +21,7 @@ def profesionales_option(request):
         })
 
 
-@login_required(login_url='general:login_inicio_sesion')    
+@login_required(login_url='general:login_inicio_sesion')
 def bandeja_mensaje_option(request):
     """Renderiza la vista de bandeja de mensaje."""
     return render(request, 'cliente/bandeja_mensaje.html', {
