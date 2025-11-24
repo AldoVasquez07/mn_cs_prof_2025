@@ -420,23 +420,34 @@
 }
 
 /* ===================================
-   MODAL
+   MODAL - VERSIÓN FINAL
    =================================== */
+
 .modal {
 	display: none;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
+	width: 100vw !important;
+	height: 100vh !important;
 	background: rgba(0, 0, 0, 0.5);
-	z-index: 10000;
+	z-index: 99999 !important;
 	align-items: center;
 	justify-content: center;
+	opacity: 0;
+	transition: opacity 0.3s ease;
 }
 
 .modal.show {
-	display: flex;
+	display: flex !important;
+	opacity: 1;
+}
+
+body.modal-open {
+	overflow: hidden !important;
+	height: 100vh !important;
 }
 
 .modal-content {
@@ -447,6 +458,14 @@
 	max-height: 90vh;
 	overflow-y: auto;
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+	transform: scale(0.9) translateY(-20px);
+	transition: transform 0.3s ease, opacity 0.3s ease;
+	opacity: 0;
+}
+
+.modal.show .modal-content {
+	transform: scale(1) translateY(0);
+	opacity: 1;
 }
 
 .modal-large {
@@ -463,14 +482,14 @@
 
 .modal-header h3 {
 	margin: 0;
-	font-size: 20px;
-	font-weight: 600;
+	font-size: 22px;
+	font-weight: 700;
 	color: var(--dark);
 }
 
 .modal-close {
-	width: 32px;
-	height: 32px;
+	width: 36px;
+	height: 36px;
 	border: none;
 	background: var(--grey);
 	border-radius: 8px;
@@ -479,20 +498,21 @@
 	justify-content: center;
 	cursor: pointer;
 	color: var(--dark);
-	font-size: 20px;
+	font-size: 24px;
 	transition: all 0.2s;
+	flex-shrink: 0;
 }
 
 .modal-close:hover {
 	background: var(--dark-grey);
 	color: white;
+	transform: rotate(90deg);
 }
 
 .modal-body {
 	padding: 24px;
 }
 
-/* Appointment Professional Info */
 .appointment-professional-info {
 	display: flex;
 	align-items: center;
@@ -504,11 +524,13 @@
 }
 
 .professional-avatar-modal {
-	width: 60px;
-	height: 60px;
+	width: 64px;
+	height: 64px;
 	border-radius: 50%;
 	overflow: hidden;
 	border: 3px solid white;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	flex-shrink: 0;
 }
 
 .professional-avatar-modal img {
@@ -528,9 +550,9 @@
 	margin: 0;
 	font-size: 14px;
 	color: var(--dark-grey);
+	font-weight: 500;
 }
 
-/* Appointment Form */
 .appointment-form {
 	display: flex;
 	flex-direction: column;
@@ -560,6 +582,7 @@
 	outline: none;
 	transition: all 0.3s;
 	background: white;
+	box-sizing: border-box;
 }
 
 .form-control:focus {
@@ -569,23 +592,31 @@
 
 textarea.form-control {
 	resize: vertical;
+	min-height: 100px;
+	font-family: var(--poppins);
 }
 
 .price-summary {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 16px;
-	background: var(--grey);
+	padding: 16px 20px;
+	background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
 	border-radius: 12px;
-	font-size: 16px;
+	border: 2px solid #bae6fd;
+	margin-top: 8px;
+}
+
+.price-summary span:first-child {
+	font-size: 15px;
 	font-weight: 600;
 	color: var(--dark);
 }
 
 .price-amount {
-	font-size: 24px;
-	color: var(--blue);
+	font-size: 24px !important;
+	font-weight: 700 !important;
+	color: var(--blue) !important;
 }
 
 .modal-footer {
@@ -614,6 +645,7 @@ textarea.form-control {
 
 .btn-secondary:hover {
 	background: #d1d5db;
+	transform: translateY(-1px);
 }
 
 .btn-primary {
@@ -625,6 +657,14 @@ textarea.form-control {
 .btn-primary:hover {
 	background: #2d7bc7;
 	box-shadow: 0 4px 16px rgba(60, 145, 230, 0.4);
+	transform: translateY(-2px);
+}
+
+.btn-primary:disabled {
+	background: #93c5fd;
+	cursor: not-allowed;
+	transform: none;
+	opacity: 0.7;
 }
 
 /* ===================================
@@ -695,6 +735,34 @@ textarea.form-control {
 		justify-content: center;
 	}
 
+	.modal-content {
+		width: 95%;
+		max-height: 95vh;
+	}
+
+	.modal-header,
+	.modal-body,
+	.modal-footer {
+		padding: 16px;
+	}
+
+	.modal-header h3 {
+		font-size: 18px;
+	}
+
+	.appointment-professional-info {
+		padding: 12px;
+	}
+
+	.professional-avatar-modal {
+		width: 56px;
+		height: 56px;
+	}
+
+	.appointment-professional-info h4 {
+		font-size: 16px;
+	}
+
 	.modal-footer {
 		flex-direction: column;
 	}
@@ -751,5 +819,11 @@ textarea.form-control {
 	.day-badge {
 		min-width: 70px;
 		font-size: 10px;
+	}
+
+	.price-summary {
+		flex-direction: column;
+		gap: 8px;
+		text-align: center;
 	}
 }

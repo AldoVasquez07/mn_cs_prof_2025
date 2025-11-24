@@ -71,11 +71,39 @@ def profesionales_option(request):
         calificaciones = [c for c in citas if c is not None]
         rating = round(sum(calificaciones) / len(calificaciones), 1) if calificaciones else 0
 
+        nombre = f"{p.usuario.first_name} {p.usuario.apellido_paterno}"
+        
+        # Generar avatar: usar foto si existe, sino usar iniciales
+        foto_url = None
+        if hasattr(p.usuario, 'foto') and p.usuario.foto:
+            try:
+                foto_url = p.usuario.foto.url
+            except (ValueError, AttributeError):
+                foto_url = None
+        
+        # Si no hay foto, generar avatar con iniciales
+        if not foto_url:
+            # Extraer iniciales (primera letra de nombre y apellido)
+            iniciales = ""
+            if p.usuario.first_name:
+                iniciales += p.usuario.first_name[0].upper()
+            if p.usuario.apellido_paterno:
+                iniciales += p.usuario.apellido_paterno[0].upper()
+            
+            # Si no hay iniciales, usar '?'
+            if not iniciales:
+                iniciales = "?"
+            
+            # Generar URL de avatar con iniciales
+            # Reemplazar espacios con + para la URL
+            nombre_url = nombre.replace(" ", "+")
+            foto_url = f"https://ui-avatars.com/api/?name={nombre_url}&background=3b82f6&color=fff&size=200&bold=true"
+
         prof_dict = {
             "id": p.id,
-            "nombre": f"{p.usuario.first_name} {p.usuario.apellido_paterno}",
+            "nombre": nombre,
             "especialidad": p.especialidad.nombre if p.especialidad else "",
-            "foto": p.usuario.foto.url if getattr(p.usuario, "foto", None) else None,
+            "foto": foto_url,
             "direccion": p.organizacion.direccion if p.organizacion else "",
             "rating": rating,
             "rating_int": int(rating),
@@ -107,7 +135,6 @@ def profesionales_option(request):
         "tipo": tipo,
         "rating_filter": rating_filter,
     })
-
 
 
 @login_required(login_url='general:login_inicio_sesion')

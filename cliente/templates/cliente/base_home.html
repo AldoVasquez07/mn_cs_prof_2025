@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="{% static 'cliente/css/base_home.css' %}">
 	{% block styles %}
 	{% endblock %}
-	<title>Consultor - Mis citas</title>
+	<title>Consultor - {% block title %}Mis citas{% endblock %}</title>
 </head>
 
 <body>
@@ -66,6 +66,7 @@
 		</ul>
 	</section>
 
+	<!-- CONTENT SECTION -->
 	<section id="content">
 		<!-- NAVBAR -->
 		<nav>
@@ -102,12 +103,21 @@
 				</div>
 			</div>
 		</nav>
+
+		<!-- MAIN CONTENT -->
 		{% block content %}
 		{% endblock %}
 	</section>
 
+	<!-- ================================================ -->
+	<!-- MODALES - FUERA DE #content -->
+	<!-- Los modales deben ir aquí para que position: fixed funcione correctamente -->
+	<!-- ================================================ -->
+	{% block modals %}
+	{% endblock %}
 
-	<script src="{% static 'profesional/js/base_home.js' %}"></script>
+	<!-- SCRIPTS -->
+	<script src="{% static 'cliente/js/base_home.js' %}"></script>
 
 	{% block scripts %}
 	{% endblock %}

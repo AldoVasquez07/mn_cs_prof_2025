@@ -6,8 +6,6 @@
 {% endblock %}
 
 {% block content %}
-<!-- NAVBAR -->
-
 <!-- MAIN -->
 <main>
 	<div class="professionals-container">
@@ -73,13 +71,14 @@
 		<!-- Professionals Grid -->
 		<div class="professionals-grid" id="professionalsGrid">
 			{% for p in profesionales %}
-			<div class="professional-card" data-specialty="{{ p.especialidad|lower }}" data-rating="{{ p.rating_int }}"
-				data-types="{% if p.opciones.presencial %}presencial{% endif %}{% if p.opciones.online %},online{% endif %}">
+			<div class="professional-card" 
+				 data-specialty="{{ p.especialidad|lower }}" 
+				 data-rating="{{ p.rating_int }}"
+				 data-types="{% if p.opciones.presencial %}presencial{% endif %}{% if p.opciones.presencial and p.opciones.online %},{% endif %}{% if p.opciones.online %}online{% endif %}">
 
 				<div class="card-header">
 					<div class="professional-avatar-large">
-						<img src="{{ p.foto|default:'https://ui-avatars.com/api/?name='|add:p.nombre|urlencode }}"
-							alt="{{ p.nombre }}">
+						<img src="{{ p.foto }}" alt="{{ p.nombre }}">
 					</div>
 
 					<div class="professional-info-header">
@@ -88,12 +87,13 @@
 
 						<div class="rating-stars">
 							{% for i in "12345" %}
-							{% if forloop.counter <= p.rating_int %} <i class='bx bxs-star'></i>
+								{% if forloop.counter <= p.rating_int %}
+									<i class='bx bxs-star'></i>
 								{% else %}
-								<i class='bx bx-star'></i>
+									<i class='bx bx-star'></i>
 								{% endif %}
-								{% endfor %}
-								<span class="rating-count">{{ p.rating }} promedio</span>
+							{% endfor %}
+							<span class="rating-count">{{ p.rating }} promedio</span>
 						</div>
 					</div>
 				</div>
@@ -115,7 +115,7 @@
 
 					<div class="professional-address">
 						<i class='bx bx-map'></i>
-						<span>{{ p.direccion }}</span>
+						<span>{{ p.direccion|default:"Sin dirección registrada" }}</span>
 					</div>
 
 					{% if p.opciones.precio_presencial %}
@@ -136,20 +136,35 @@
 				<div class="card-footer">
 					<h4>Disponibilidad:</h4>
 					<div class="availability-days">
-						{% for d in p.disponibilidad %}
-						<span class="day-badge available">
-							{{ d.get_dia_display }}<br>
-							{{ d.fecha|date:"d M" }}<br>
-							<small>{{ d.hora }}</small>
-						</span>
-						{% endfor %}
+						{% if p.disponibilidad %}
+							{% for d in p.disponibilidad %}
+							<span class="day-badge available">
+								{{ d.get_dia_display }}<br>
+								{{ d.fecha|date:"d M" }}<br>
+								<small>{{ d.hora }}</small>
+							</span>
+							{% endfor %}
+						{% else %}
+							<span class="day-badge">
+								Consultar<br>
+								disponibilidad
+							</span>
+						{% endif %}
 					</div>
 
-					<button class="btn-book-appointment" data-professional="{{ p.nombre }}">
+					<button class="btn-book-appointment" 
+							data-professional="{{ p.nombre }}"
+							data-professional-id="{{ p.id }}">
 						<i class='bx bx-calendar-plus'></i>
 						Agendar Cita
 					</button>
 				</div>
+			</div>
+			{% empty %}
+			<div class="empty-state">
+				<i class='bx bx-search-alt-2'></i>
+				<h3>No hay profesionales disponibles</h3>
+				<p>Intenta ajustar los filtros de búsqueda</p>
 			</div>
 			{% endfor %}
 
@@ -170,35 +185,36 @@
 	</div>
 </main>
 
-<!-- CONTENT -->
+{% endblock %}
 
-<!-- Modal de Agendar Cita -->
+{% block modals %}
+<!-- ============================================ -->
+<!-- MODAL - Ahora está fuera de #content -->
+<!-- ============================================ -->
 <div class="modal" id="appointmentModal">
 	<div class="modal-content modal-large">
 		<div class="modal-header">
 			<h3>Agendar Cita</h3>
-			<button class="modal-close" id="closeAppointment">
+			<button class="modal-close" id="closeAppointment" type="button">
 				<i class='bx bx-x'></i>
 			</button>
 		</div>
 		<div class="modal-body">
 			<div class="appointment-professional-info">
 				<div class="professional-avatar-modal">
-					<img src="" alt="" id="modalProfessionalAvatar">
+					<img src="https://via.placeholder.com/64" alt="Professional" id="modalProfessionalAvatar">
 				</div>
 				<div>
-					<h4 id="modalProfessionalName"></h4>
-					<p id="modalProfessionalSpecialty"></p>
+					<h4 id="modalProfessionalName">Nombre del Profesional</h4>
+					<p id="modalProfessionalSpecialty">Especialidad</p>
 				</div>
 			</div>
 
-			<form class="appointment-form" id="appointmentForm">
+			<form class="appointment-form" id="appointmentForm" onsubmit="return false;">
 				<div class="form-group">
 					<label>Tipo de consulta</label>
 					<select class="form-control" id="consultationType" required>
 						<option value="">Selecciona el tipo</option>
-						<option value="presencial">Presencial</option>
-						<option value="online">Online</option>
 					</select>
 				</div>
 
@@ -233,8 +249,8 @@
 			</form>
 		</div>
 		<div class="modal-footer">
-			<button class="btn btn-secondary" id="cancelAppointment">Cancelar</button>
-			<button class="btn btn-primary" id="confirmAppointment">Confirmar Cita</button>
+			<button class="btn btn-secondary" id="cancelAppointment" type="button">Cancelar</button>
+			<button class="btn btn-primary" id="confirmAppointment" type="button">Confirmar Cita</button>
 		</div>
 	</div>
 </div>
