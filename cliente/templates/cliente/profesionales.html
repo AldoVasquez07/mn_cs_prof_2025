@@ -16,41 +16,58 @@
 
 			<!-- Search and Filters -->
 			<div class="search-filter-bar">
-				<div class="search-box">
-					<i class='bx bx-search'></i>
-					<input type="text" placeholder="Buscar por nombre, especialidad..." id="mainSearch">
-				</div>
 
-				<div class="filters-group">
-					<select class="filter-select" id="specialtyFilter">
-						<option value="">Todas las especialidades</option>
-						<option value="medico">Médico</option>
-						<option value="pediatra">Pediatra</option>
-						<option value="ingeniero">Ingeniero</option>
-						<option value="arquitecto">Arquitecto</option>
-						<option value="consultor">Consultor</option>
-						<option value="abogado">Abogado</option>
-					</select>
+				<form method="GET" action="" class="filters-form">
 
-					<select class="filter-select" id="typeFilter">
-						<option value="">Tipo de consulta</option>
-						<option value="presencial">Presencial</option>
-						<option value="online">Online</option>
-					</select>
+					<div class="search-box">
+						<i class='bx bx-search'></i>
+						<input type="text" name="search" placeholder="Buscar por nombre, especialidad..."
+							id="mainSearch" value="{{ search_value }}">
+					</div>
 
-					<select class="filter-select" id="ratingFilter">
-						<option value="">Calificación</option>
-						<option value="5">5 estrellas</option>
-						<option value="4">4+ estrellas</option>
-						<option value="3">3+ estrellas</option>
-					</select>
+					<div class="filters-group">
 
-					<button class="btn-clear-filters" id="clearFilters">
-						<i class='bx bx-x'></i>
-						Limpiar
-					</button>
-				</div>
+						<!-- Especialidades desde BD -->
+						<select class="filter-select" name="especialidad" id="specialtyFilter">
+							<option value="">Todas las especialidades</option>
+							{% for esp in especialidades %}
+							<option value="{{ esp.id }}"
+								{% if esp.id|stringformat:"s" == especialidad_id %}selected{% endif %}>
+								{{ esp.nombre }}
+							</option>
+							{% endfor %}
+						</select>
+
+						<!-- Tipo de consulta -->
+						<select class="filter-select" name="tipo" id="typeFilter">
+							<option value="">Tipo de consulta</option>
+							<option value="presencial" {% if tipo == "presencial" %}selected{% endif %}>Presencial</option>
+							<option value="online" {% if tipo == "online" %}selected{% endif %}>Online</option>
+						</select>
+
+						<!-- Rating mínimo -->
+						<select class="filter-select" name="rating" id="ratingFilter">
+							<option value="">Calificación</option>
+							<option value="5" {% if rating_filter == "5" %}selected{% endif %}>5 estrellas</option>
+							<option value="4" {% if rating_filter == "4" %}selected{% endif %}>4+ estrellas</option>
+							<option value="3" {% if rating_filter == "3" %}selected{% endif %}>3+ estrellas</option>
+						</select>
+
+						<button type="submit" class="btn-clear-filters">
+							<i class='bx bx-search'></i>
+							Buscar
+						</button>
+
+						<a href="{% url 'cliente:profesionales_option' %}" class="btn-clear-filters">
+							<i class='bx bx-x'></i>
+							Limpiar
+						</a>
+
+					</div>
+				</form>
+
 			</div>
+
 		</div>
 
 		<!-- Professionals Grid -->
