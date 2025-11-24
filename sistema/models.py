@@ -94,15 +94,41 @@ class AspectosNegocio(models.Model):
     fecha_registro = models.DateTimeField(auto_now_add=True)
     hora_apertura = models.TimeField(null=True, blank=True)
     hora_cierre = models.TimeField(null=True, blank=True)
+
+    permite_presencial = models.BooleanField(default=False)
+    permite_virtual = models.BooleanField(default=False)
+
+    # CAMPOS FALTANTES (AGREGAR)
+    precio_presencial = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    precio_online = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+
     flag = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.nombre
+        return self.direccion or "Aspectos Negocio"
     
-    def clean(self):
-        if isinstance(self.hora_apertura, str):
-            self.hora_apertura = datetime.strptime(self.hora_apertura, '%H:%M').time()
-            
-        if isinstance(self.hora_cierre, str):
-            self.hora_cierre = datetime.strptime(self.hora_cierre, '%H:%M').time()
+    
+class Disponibilidad(models.Model):
+    aspectos_negocio = models.ForeignKey(
+        AspectosNegocio,
+        on_delete=models.CASCADE,
+        related_name='disponibilidades'
+    )
+    dia = models.CharField(
+        max_length=15,
+        choices=[
+            ("lunes", "Lunes"),
+            ("martes", "Martes"),
+            ("miércoles", "Miércoles"),
+            ("jueves", "Jueves"),
+            ("viernes", "Viernes"),
+            ("sábado", "Sábado"),
+            ("domingo", "Domingo"),
+        ]
+    )
+    hora_inicio = models.TimeField()
+    hora_fin = models.TimeField()
+
+    def __str__(self):
+        return f"{self.dia}: {self.hora_inicio.strftime('%H:%M')} - {self.hora_fin.strftime('%H:%M')}"
 
