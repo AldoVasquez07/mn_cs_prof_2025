@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from profesional.models import Cita, Profesional, Especialidad, ProfesionalCliente
+from profesional.models import Cita, Profesional, Especialidad, ProfesionalCliente, Mensaje
 
 
 @login_required(login_url='general:login_inicio_sesion')
@@ -112,8 +112,36 @@ def profesionales_option(request):
 
 @login_required(login_url='general:login_inicio_sesion')
 def bandeja_mensaje_option(request):
-    """Renderiza la vista de bandeja de mensaje."""
+
+    cliente = request.user.cliente
+
+    # Obtener todas las relaciones que tienen mensajes
+    relaciones = (
+        ProfesionalCliente.objects
+        .filter(cliente=cliente)
+        .prefetch_related("mensajes", "profesional__usuario", "profesional__especialidad")
+    )
+
+    conversaciones = []
+
+    for r in relaciones:
+
+        ultimo_mensaje = r.mensajes.order_by('-fecha_envio').first()
+
+        if ultimo_mensaje:
+            conversaciones.append({
+                "id": r.id,
+                "profesional": r.profesional,
+                "nombre": f"{r.profesional.usuario.first_name} {r.profesional.usuario.apellido_paterno}",
+                "especialidad": r.profesional.especialidad.nombre if r.profesional.especialidad else "Sin especialidad",
+                "ultimo_mensaje": ultimo_mensaje.contenido[:120] + ("..." if len(ultimo_mensaje.contenido) > 120 else ""),
+                "fecha": ultimo_mensaje.fecha_envio,
+                "unread": ultimo_mensaje.emisor == "profesional",   # Ejemplo simple: si lo envió el profesional y no es cliente
+            })
+
     return render(request, 'cliente/bandeja_mensaje.html', {
         "choice": 3,
-        "option_name": "Bandeja de mensajes"
-        })
+        "option_name": "Bandeja de mensajes",
+        "conversaciones": conversaciones,
+        "profesionales": [r.profesional for r in relaciones]  # para el select del modal
+    })
