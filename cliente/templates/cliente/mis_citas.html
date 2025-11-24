@@ -14,23 +14,20 @@
 
 			<!-- Filters -->
 			<div class="filters-bar">
-				<button class="filter-btn active" data-filter="todas">
-					<i class='bx bx-calendar'></i>
-					Todas
-				</button>
-				<button class="filter-btn" data-filter="proximas">
-					<i class='bx bx-time-five'></i>
-					Próximas
-				</button>
-				<button class="filter-btn" data-filter="completadas">
-					<i class='bx bx-check-circle'></i>
-					Completadas
-				</button>
-				<button class="filter-btn" data-filter="canceladas">
-					<i class='bx bx-x-circle'></i>
-					Canceladas
-				</button>
+				<a href="?filtro=todas" class="filter-btn {% if filtro == 'todas' %}active{% endif %}">
+					<i class='bx bx-calendar'></i> Todas
+				</a>
+				<a href="?filtro=proximas" class="filter-btn {% if filtro == 'proximas' %}active{% endif %}">
+					<i class='bx bx-time-five'></i> Próximas
+				</a>
+				<a href="?filtro=completadas" class="filter-btn {% if filtro == 'completadas' %}active{% endif %}">
+					<i class='bx bx-check-circle'></i> Completadas
+				</a>
+				<a href="?filtro=canceladas" class="filter-btn {% if filtro == 'canceladas' %}active{% endif %}">
+					<i class='bx bx-x-circle'></i> Canceladas
+				</a>
 			</div>
+
 		</div>
 
 		<!-- Appointments Table -->
@@ -49,185 +46,80 @@
 						</tr>
 					</thead>
 					<tbody>
-						<!-- Cita 1 -->
-						<tr class="appointment-row" data-status="proxima">
-							<td>1</td>
+						{% if citas %}
+						{% for c in citas %}
+						<tr class="appointment-row" data-status="{{ c.estado }}">
+
+							<td>{{ forloop.counter }}</td>
+
+							<!-- Profesional -->
 							<td>
 								<div class="professional-info">
 									<div class="professional-avatar">
-										<img src="https://ui-avatars.com/api/?name=Ernesto+Torre&background=667eea&color=fff"
-											alt="Dr. Ernesto">
+										<img
+											src="https://ui-avatars.com/api/?name={{ c.relacion.profesional.usuario.first_name|urlencode }}+{{ c.relacion.profesional.usuario.apellido_paterno|urlencode }}&background=667eea&color=fff">
 									</div>
-									<span>Dr. Ernesto de la Torre</span>
+									<span>{{ c.relacion.profesional.usuario.first_name }} {{
+										c.relacion.profesional.usuario.apellido_paterno }}</span>
 								</div>
 							</td>
+
+							<!-- Especialidad -->
 							<td>
-								<span class="specialty-badge medico">Médico</span>
+								<span class="specialty-badge {{ c.relacion.profesional.especialidad.nombre|lower }}">
+									{{ c.relacion.profesional.especialidad.nombre }}
+								</span>
 							</td>
+
+							<!-- Tipo de cita -->
 							<td>
+								{% if c.relacion.profesional.aspectos_negocio.tipo_consulta == "online" %}
 								<span class="appointment-type online">
-									<i class='bx bx-video'></i>
-									ONLINE
+									<i class='bx bx-video'></i> ONLINE
 								</span>
-							</td>
-							<td>
-								<span class="address-text">-</span>
-							</td>
-							<td>
-								<div class="datetime-info">
-									<span class="date">23/05/25</span>
-									<span class="time">11:30</span>
-								</div>
-							</td>
-							<td>
-								<div class="actions-group">
-									<button class="action-btn btn-view" title="Ver detalles">
-										<i class='bx bx-show'></i>
-									</button>
-									<button class="action-btn btn-edit" title="Editar">
-										<i class='bx bx-edit'></i>
-									</button>
-									<button class="action-btn btn-cancel" title="Cancelar">
-										<i class='bx bx-x'></i>
-									</button>
-								</div>
-							</td>
-						</tr>
-
-						<!-- Cita 2 -->
-						<tr class="appointment-row" data-status="proxima">
-							<td>2</td>
-							<td>
-								<div class="professional-info">
-									<div class="professional-avatar">
-										<img src="https://ui-avatars.com/api/?name=Pedro+Perez&background=f5576c&color=fff"
-											alt="Ing. Pedro">
-									</div>
-									<span>Ing. Pedro Pérez</span>
-								</div>
-							</td>
-							<td>
-								<span class="specialty-badge ingeniero">Ingeniero</span>
-							</td>
-							<td>
+								{% else %}
 								<span class="appointment-type presencial">
-									<i class='bx bx-building'></i>
-									PRESENCIAL
+									<i class='bx bx-building'></i> PRESENCIAL
 								</span>
+								{% endif %}
 							</td>
-							<td>
-								<span class="address-text">Av villa nueva</span>
-							</td>
-							<td>
-								<div class="datetime-info">
-									<span class="date">23/05/25</span>
-									<span class="time">11:30</span>
-								</div>
-							</td>
-							<td>
-								<div class="actions-group">
-									<button class="action-btn btn-view" title="Ver detalles">
-										<i class='bx bx-show'></i>
-									</button>
-									<button class="action-btn btn-edit" title="Editar">
-										<i class='bx bx-edit'></i>
-									</button>
-									<button class="action-btn btn-cancel" title="Cancelar">
-										<i class='bx bx-x'></i>
-									</button>
-								</div>
-							</td>
-						</tr>
 
-						<!-- Cita 3 -->
-						<tr class="appointment-row" data-status="proxima">
-							<td>3</td>
+							<!-- Dirección -->
 							<td>
-								<div class="professional-info">
-									<div class="professional-avatar">
-										<img src="https://ui-avatars.com/api/?name=Jose+Valdivia&background=00f2fe&color=fff"
-											alt="Arq. José">
-									</div>
-									<span>Arq. José Valdivia</span>
-								</div>
-							</td>
-							<td>
-								<span class="specialty-badge arquitecto">Arquitecto</span>
-							</td>
-							<td>
-								<span class="appointment-type online">
-									<i class='bx bx-video'></i>
-									ONLINE
+								<span class="address-text">
+									{{ c.relacion.profesional.aspectos_negocio.direccion|default:"-" }}
 								</span>
 							</td>
-							<td>
-								<span class="address-text">-</span>
-							</td>
-							<td>
-								<div class="datetime-info">
-									<span class="date">23/05/25</span>
-									<span class="time">11:30</span>
-								</div>
-							</td>
-							<td>
-								<div class="actions-group">
-									<button class="action-btn btn-view" title="Ver detalles">
-										<i class='bx bx-show'></i>
-									</button>
-									<button class="action-btn btn-edit" title="Editar">
-										<i class='bx bx-edit'></i>
-									</button>
-									<button class="action-btn btn-cancel" title="Cancelar">
-										<i class='bx bx-x'></i>
-									</button>
-								</div>
-							</td>
-						</tr>
 
-						<!-- Cita 4 -->
-						<tr class="appointment-row" data-status="proxima">
-							<td>4</td>
-							<td>
-								<div class="professional-info">
-									<div class="professional-avatar">
-										<img src="https://ui-avatars.com/api/?name=Andres+Rojas&background=fee140&color=333"
-											alt="Mg. Andrés">
-									</div>
-									<span>Mg. Andrés Rojas</span>
-								</div>
-							</td>
-							<td>
-								<span class="specialty-badge consultor">Consultor</span>
-							</td>
-							<td>
-								<span class="appointment-type presencial">
-									<i class='bx bx-building'></i>
-									PRESENCIAL
-								</span>
-							</td>
-							<td>
-								<span class="address-text">Av villa nueva</span>
-							</td>
+							<!-- Fecha -->
 							<td>
 								<div class="datetime-info">
-									<span class="date">23/05/25</span>
-									<span class="time">11:30</span>
+									<span class="date">{{ c.fecha|date:"d/m/Y" }}</span>
+									<span class="time">{{ c.fecha|time:"H:i" }}</span>
 								</div>
 							</td>
+
+							<!-- Acciones -->
 							<td>
 								<div class="actions-group">
-									<button class="action-btn btn-view" title="Ver detalles">
+									<button class="action-btn btn-view" data-id="{{ c.id }}">
 										<i class='bx bx-show'></i>
 									</button>
-									<button class="action-btn btn-edit" title="Editar">
-										<i class='bx bx-edit'></i>
-									</button>
-									<button class="action-btn btn-cancel" title="Cancelar">
+									{% if c.estado in "pendiente confirmada" %}
+									<button class="action-btn btn-cancel" data-id="{{ c.id }}">
 										<i class='bx bx-x'></i>
 									</button>
+									{% endif %}
 								</div>
 							</td>
+
 						</tr>
+						{% endfor %}
+						{% else %}
+						<tr>
+							<td colspan="7" class="text-center">No hay citas registradas</td>
+						</tr>
+						{% endif %}
 					</tbody>
 				</table>
 			</div>

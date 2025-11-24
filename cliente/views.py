@@ -1,15 +1,36 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from profesional.models import Profesional, Especialidad
+from profesional.models import Cita, Profesional, Especialidad, ProfesionalCliente
+
 
 @login_required(login_url='general:login_inicio_sesion')
 def mis_citas_option(request):
-    """Renderiza la vista de las citas de los clientes."""
+
+    cliente = request.user.cliente
+
+    filtro = request.GET.get("filtro", "todas")
+
+    citas = Cita.objects.filter(relacion__cliente=cliente).select_related(
+        "relacion__profesional__usuario",
+        "relacion__profesional__especialidad"
+    )
+
+    # Filtros por estado
+    if filtro == "proximas":
+        citas = citas.filter(estado__in=["pendiente", "confirmada"])
+    elif filtro == "completadas":
+        citas = citas.filter(estado="completada")
+    elif filtro == "canceladas":
+        citas = citas.filter(estado="cancelada")
+
     return render(request, 'cliente/mis_citas.html', {
         "choice": 1,
-        "option_name": "Mis citas"
-        })
+        "option_name": "Mis citas",
+        "citas": citas,
+        "filtro": filtro
+    })
+
 
 
 @login_required(login_url='general:login_inicio_sesion')
