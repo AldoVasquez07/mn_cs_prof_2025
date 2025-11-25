@@ -7,12 +7,16 @@
 # -------------------------------------------------------------
 
 import requests
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import logging
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from datetime import datetime
+from sistema.models import Disponibilidad, AspectosNegocio
+from profesional.models import Profesional
 
 # -------------------------------------------------------------
 # CONFIGURACIÓN DE LOGGING
@@ -71,14 +75,126 @@ def productividad_ingresos_option(request):
         })
 
 
+
+
 @login_required(login_url='general:login_inicio_sesion')
 def horarios_option(request):
-    """Renderiza la vista de horarios."""
+    """Vista principal que maneja tanto GET (mostrar) como POST (guardar)."""
+    
     modelo_predictivo = request.session.get('modelo_predictivo', False)
-    return render(request, 'profesional/horarios.html', {
+    
+    try:
+        profesional = Profesional.objects.get(usuario=request.user)
+    except Profesional.DoesNotExist:
+        messages.error(request, 'No se encontró el perfil de profesional')
+        return redirect('general:login_inicio_sesion')
+    
+    # Crear AspectosNegocio si no existe
+    if not profesional.aspectos_negocio:
+        aspectos = AspectosNegocio.objects.create()
+        profesional.aspectos_negocio = aspectos
+        profesional.save()
+    
+    # MANEJAR POST - Guardar datos
+    if request.method == 'POST':
+        accion = request.POST.get('accion')
+        
+        # Guardar aspectos de negocio
+        if accion == 'guardar_aspectos':
+            aspectos = profesional.aspectos_negocio
+            aspectos.direccion = request.POST.get('direccion', '')
+            aspectos.permite_presencial = request.POST.get('permite_presencial') == 'on'
+            aspectos.permite_virtual = request.POST.get('permite_virtual') == 'on'
+            
+            # Horarios generales
+            hora_apertura = request.POST.get('hora_apertura')
+            if hora_apertura:
+                aspectos.hora_apertura = datetime.strptime(hora_apertura, '%H:%M').time()
+            
+            hora_cierre = request.POST.get('hora_cierre')
+            if hora_cierre:
+                aspectos.hora_cierre = datetime.strptime(hora_cierre, '%H:%M').time()
+            
+            # Precios
+            precio_presencial = request.POST.get('precio_presencial')
+            if precio_presencial:
+                aspectos.precio_presencial = float(precio_presencial)
+            
+            precio_online = request.POST.get('precio_online')
+            if precio_online:
+                aspectos.precio_online = float(precio_online)
+            
+            aspectos.save()
+            messages.success(request, 'Aspectos de negocio guardados correctamente')
+        
+        # Guardar disponibilidad
+        elif accion == 'guardar_disponibilidad':
+            dia = request.POST.get('dia')
+            hora_inicio_str = request.POST.get('hora_inicio')
+            hora_fin_str = request.POST.get('hora_fin')
+            
+            if dia and hora_inicio_str and hora_fin_str:
+                hora_inicio = datetime.strptime(hora_inicio_str, '%H:%M').time()
+                hora_fin = datetime.strptime(hora_fin_str, '%H:%M').time()
+                
+                # Validar
+                if hora_inicio >= hora_fin:
+                    messages.error(request, 'La hora de inicio debe ser menor que la hora de fin')
+                else:
+                    # Crear o actualizar
+                    disponibilidad, created = Disponibilidad.objects.update_or_create(
+                        aspectos_negocio=profesional.aspectos_negocio,
+                        dia=dia.lower(),
+                        defaults={
+                            'hora_inicio': hora_inicio,
+                            'hora_fin': hora_fin
+                        }
+                    )
+                    
+                    if created:
+                        messages.success(request, f'Horario para {dia} agregado correctamente')
+                    else:
+                        messages.success(request, f'Horario para {dia} actualizado correctamente')
+            else:
+                messages.error(request, 'Por favor completa todos los campos')
+        
+        # Eliminar disponibilidad
+        elif accion == 'eliminar_disponibilidad':
+            disp_id = request.POST.get('disponibilidad_id')
+            try:
+                disponibilidad = Disponibilidad.objects.get(
+                    id=disp_id,
+                    aspectos_negocio=profesional.aspectos_negocio
+                )
+                dia = disponibilidad.dia
+                disponibilidad.delete()
+                messages.success(request, f'Horario de {dia} eliminado correctamente')
+            except Disponibilidad.DoesNotExist:
+                messages.error(request, 'Horario no encontrado')
+        
+        return redirect('profesional:horarios_option')
+    
+    # MANEJAR GET - Mostrar datos
+    disponibilidades = Disponibilidad.objects.filter(
+        aspectos_negocio=profesional.aspectos_negocio
+    ).order_by('dia', 'hora_inicio')
+    
+    # Ordenar disponibilidades por día de la semana
+    dias_orden = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo']
+    disponibilidades = sorted(
+        disponibilidades,
+        key=lambda x: dias_orden.index(x.dia) if x.dia in dias_orden else 999
+    )
+    
+    context = {
         "choice": 5,
-        "modelo_predictivo": modelo_predictivo
-        })
+        "modelo_predictivo": modelo_predictivo,
+        "profesional": profesional,
+        "disponibilidades": disponibilidades,
+        "aspectos_negocio": profesional.aspectos_negocio,
+    }
+    
+    return render(request, 'profesional/horarios.html', context)
 
 
 @login_required(login_url='general:login_inicio_sesion')

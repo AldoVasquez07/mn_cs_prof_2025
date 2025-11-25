@@ -163,12 +163,12 @@ def bandeja_mensaje_option(request):
                 "especialidad": r.profesional.especialidad.nombre if r.profesional.especialidad else "Sin especialidad",
                 "ultimo_mensaje": ultimo_mensaje.contenido[:120] + ("..." if len(ultimo_mensaje.contenido) > 120 else ""),
                 "fecha": ultimo_mensaje.fecha_envio,
-                "unread": ultimo_mensaje.emisor == "profesional",   # Ejemplo simple: si lo envió el profesional y no es cliente
+                "unread": ultimo_mensaje.emisor == "profesional",
             })
 
     return render(request, 'cliente/bandeja_mensaje.html', {
         "choice": 3,
         "option_name": "Bandeja de mensajes",
         "conversaciones": conversaciones,
-        "profesionales": [r.profesional for r in relaciones]  # para el select del modal
+        "profesionales": [r.profesional for r in relaciones]
     })
