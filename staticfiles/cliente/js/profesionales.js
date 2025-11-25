@@ -1,152 +1,55 @@
 // ===================================
-// NAVBAR FUNCTIONALITY
+// PROFESIONALES JS
+// Solo funcionalidad específica de profesionales
 // ===================================
 
-// Toggle del formulario de búsqueda en móviles
-const searchButton = document.querySelector('#content nav form .form-input button');
-const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
-const searchForm = document.querySelector('#content nav form');
-
-if (searchButton && searchButtonIcon && searchForm) {
-    searchButton.addEventListener('click', function (e) {
-        if (window.innerWidth < 576) {
-            e.preventDefault();
-            searchForm.classList.toggle('show');
-            if (searchForm.classList.contains('show')) {
-                searchButtonIcon.classList.replace('bx-search', 'bx-x');
-            } else {
-                searchButtonIcon.classList.replace('bx-x', 'bx-search');
-            }
-        }
-    });
-}
-
-// Dark Mode Switch
-const switchMode = document.getElementById('switch-mode');
-
-if (switchMode) {
-    switchMode.addEventListener('change', function () {
-        if (this.checked) {
-            document.body.classList.add('dark');
-            localStorage.setItem('darkMode', 'enabled');
-        } else {
-            document.body.classList.remove('dark');
-            localStorage.setItem('darkMode', 'disabled');
-        }
-    });
-
-    // Cargar preferencia de dark mode
-    if (localStorage.getItem('darkMode') === 'enabled') {
-        document.body.classList.add('dark');
-        switchMode.checked = true;
-    }
-}
-
-// Profile Menu Toggle
-const profileIcon = document.querySelector('.profile');
-const profileMenu = document.querySelector('.profile-menu');
-
-if (profileIcon && profileMenu) {
-    profileIcon.addEventListener('click', function (e) {
-        e.preventDefault();
-        profileMenu.classList.toggle('show');
-    });
-}
-
-// Cerrar menú de perfil al hacer clic fuera
-window.addEventListener('click', function (e) {
-    if (!e.target.closest('.profile')) {
-        if (profileMenu) {
-            profileMenu.classList.remove('show');
-        }
-    }
-});
+(function() {
+'use strict';
 
 // ===================================
 // SEARCH AND FILTER FUNCTIONALITY
 // ===================================
 
 const mainSearch = document.getElementById('mainSearch');
-const navSearch = document.getElementById('searchProfessional');
 const specialtyFilter = document.getElementById('specialtyFilter');
 const typeFilter = document.getElementById('typeFilter');
 const ratingFilter = document.getElementById('ratingFilter');
-const clearFiltersBtn = document.getElementById('clearFilters');
 const professionalCards = document.querySelectorAll('.professional-card');
 const emptyState = document.getElementById('emptyState');
 const professionalsGrid = document.getElementById('professionalsGrid');
 
-// Búsqueda principal
 if (mainSearch) {
-    mainSearch.addEventListener('input', function() {
-        applyFilters();
-    });
+    mainSearch.addEventListener('input', applyFilters);
 }
 
-// Búsqueda en navbar
-if (navSearch) {
-    navSearch.addEventListener('input', function() {
-        if (mainSearch) {
-            mainSearch.value = this.value;
-            applyFilters();
-        }
-    });
-}
-
-// Filtros
-if (specialtyFilter) {
-    specialtyFilter.addEventListener('change', applyFilters);
-}
-
-if (typeFilter) {
-    typeFilter.addEventListener('change', applyFilters);
-}
-
-if (ratingFilter) {
-    ratingFilter.addEventListener('change', applyFilters);
-}
-
-// Limpiar filtros
-if (clearFiltersBtn) {
-    clearFiltersBtn.addEventListener('click', function() {
-        mainSearch.value = '';
-        navSearch.value = '';
-        specialtyFilter.value = '';
-        typeFilter.value = '';
-        ratingFilter.value = '';
-        applyFilters();
-    });
-}
+if (specialtyFilter) specialtyFilter.addEventListener('change', applyFilters);
+if (typeFilter) typeFilter.addEventListener('change', applyFilters);
+if (ratingFilter) ratingFilter.addEventListener('change', applyFilters);
 
 function applyFilters() {
-    const searchTerm = mainSearch.value.toLowerCase().trim();
-    const specialty = specialtyFilter.value.toLowerCase();
-    const type = typeFilter.value.toLowerCase();
-    const rating = parseInt(ratingFilter.value) || 0;
+    const searchTerm = mainSearch ? mainSearch.value.toLowerCase().trim() : '';
+    const specialty = specialtyFilter ? specialtyFilter.value.toLowerCase() : '';
+    const type = typeFilter ? typeFilter.value.toLowerCase() : '';
+    const rating = ratingFilter ? parseInt(ratingFilter.value) || 0 : 0;
     
     let visibleCount = 0;
     
     professionalCards.forEach(card => {
-        const cardSpecialty = card.dataset.specialty.toLowerCase();
-        const cardRating = parseInt(card.dataset.rating);
-        const cardTypes = card.dataset.types.toLowerCase();
+        const cardSpecialty = card.dataset.specialty?.toLowerCase() || '';
+        const cardRating = parseInt(card.dataset.rating) || 0;
+        const cardTypes = card.dataset.types?.toLowerCase() || '';
         
-        // Obtener texto de búsqueda
-        const professionalName = card.querySelector('.professional-name').textContent.toLowerCase();
-        const professionalSpecialtyText = card.querySelector('.professional-specialty').textContent.toLowerCase();
+        const professionalName = card.querySelector('.professional-name')?.textContent.toLowerCase() || '';
+        const professionalSpecialtyText = card.querySelector('.professional-specialty')?.textContent.toLowerCase() || '';
         
-        // Evaluar condiciones
         const matchesSearch = searchTerm === '' || 
                             professionalName.includes(searchTerm) || 
                             professionalSpecialtyText.includes(searchTerm);
         
         const matchesSpecialty = specialty === '' || cardSpecialty === specialty;
-        
         const matchesType = type === '' || cardTypes.includes(type);
-        
         const matchesRating = rating === 0 || cardRating >= rating;
         
-        // Mostrar u ocultar card
         if (matchesSearch && matchesSpecialty && matchesType && matchesRating) {
             card.style.display = '';
             visibleCount++;
@@ -155,13 +58,14 @@ function applyFilters() {
         }
     });
     
-    // Mostrar estado vacío si no hay resultados
-    if (visibleCount === 0) {
-        professionalsGrid.style.display = 'none';
-        emptyState.style.display = 'block';
-    } else {
-        professionalsGrid.style.display = 'grid';
-        emptyState.style.display = 'none';
+    if (professionalsGrid && emptyState) {
+        if (visibleCount === 0) {
+            professionalsGrid.style.display = 'none';
+            emptyState.style.display = 'block';
+        } else {
+            professionalsGrid.style.display = 'grid';
+            emptyState.style.display = 'none';
+        }
     }
     
     console.log(`Filtros aplicados. ${visibleCount} profesionales encontrados.`);
@@ -179,63 +83,185 @@ const bookButtons = document.querySelectorAll('.btn-book-appointment');
 
 let selectedProfessional = null;
 
-// Abrir modal al hacer clic en "Agendar Cita"
+function openAppointmentModal() {
+    console.log('🔵 Intentando abrir modal...');
+    
+    if (!appointmentModal) {
+        console.error('❌ Modal no encontrado en el DOM!');
+        return;
+    }
+    
+    // Llenar información del profesional
+    const modalName = document.getElementById('modalProfessionalName');
+    const modalSpecialty = document.getElementById('modalProfessionalSpecialty');
+    const modalAvatar = document.getElementById('modalProfessionalAvatar');
+    
+    if (modalName) modalName.textContent = selectedProfessional.name;
+    if (modalSpecialty) modalSpecialty.textContent = selectedProfessional.specialty;
+    if (modalAvatar) {
+        modalAvatar.src = selectedProfessional.avatar;
+        modalAvatar.alt = selectedProfessional.name;
+    }
+    
+    // Configurar opciones de tipo de consulta
+    const consultationType = document.getElementById('consultationType');
+    if (consultationType) {
+        consultationType.innerHTML = '<option value="">Selecciona el tipo</option>';
+        
+        console.log('Tipos disponibles:', selectedProfessional.types);
+        
+        if (selectedProfessional.types.includes('presencial')) {
+            consultationType.innerHTML += `<option value="presencial" data-price="${selectedProfessional.precioPresencial}">Presencial - S/ ${selectedProfessional.precioPresencial}</option>`;
+        }
+        
+        if (selectedProfessional.types.includes('online')) {
+            consultationType.innerHTML += `<option value="online" data-price="${selectedProfessional.precioOnline}">Online - S/ ${selectedProfessional.precioOnline}</option>`;
+        }
+        
+        if (selectedProfessional.types.length === 0) {
+            consultationType.innerHTML += `<option value="presencial" data-price="200">Presencial - S/ 200</option>`;
+            consultationType.innerHTML += `<option value="online" data-price="200">Online - S/ 200</option>`;
+        }
+    }
+    
+    // Resetear formulario
+    const appointmentForm = document.getElementById('appointmentForm');
+    if (appointmentForm) appointmentForm.reset();
+    
+    const priceElement = document.getElementById('consultationPrice');
+    if (priceElement) priceElement.textContent = 'S/ 0.00';
+    
+    // Establecer fecha mínima (hoy)
+    const dateInput = document.getElementById('appointmentDate');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+    }
+    
+    // MOSTRAR EL MODAL
+    appointmentModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
+    
+    setTimeout(() => {
+        appointmentModal.classList.add('show');
+        console.log('✅ Modal mostrado correctamente');
+    }, 10);
+}
+
+function closeAppointmentModal() {
+    console.log('🔴 Cerrando modal...');
+    
+    if (appointmentModal) {
+        appointmentModal.classList.remove('show');
+        
+        setTimeout(() => {
+            appointmentModal.style.display = 'none';
+            document.body.style.overflow = '';
+            document.body.classList.remove('modal-open');
+        }, 300);
+    }
+    
+    selectedProfessional = null;
+}
+
+// Event listeners para los botones de "Agendar Cita"
 bookButtons.forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log('🟢 Click en botón Agendar Cita');
+        
         const professionalName = this.dataset.professional;
         const card = this.closest('.professional-card');
         
+        if (!card) {
+            console.error('❌ No se encontró la card del profesional');
+            return;
+        }
+        
+        console.log('Profesional:', professionalName);
+        
+        // Obtener tipos de consulta disponibles
+        const typesString = card.dataset.types || '';
+        let types = [];
+        
+        if (typesString) {
+            types = typesString.split(',').map(t => t.trim()).filter(t => t);
+        }
+        
+        // Si no hay data-types, buscar en los badges
+        if (types.length === 0) {
+            const badges = card.querySelectorAll('.type-badge');
+            badges.forEach(badge => {
+                const text = badge.textContent.toLowerCase();
+                if (text.includes('presencial')) types.push('presencial');
+                if (text.includes('online')) types.push('online');
+            });
+        }
+        
+        console.log('Tipos encontrados:', types);
+        
+        // Obtener precios
+        const servicePrices = card.querySelectorAll('.service-price');
+        let precioPresencial = '200';
+        let precioOnline = '200';
+        
+        servicePrices.forEach(priceElement => {
+            const label = priceElement.previousElementSibling;
+            if (label) {
+                const labelText = label.textContent.toLowerCase();
+                const price = priceElement.textContent.replace('S/', '').trim();
+                
+                if (labelText.includes('presencial')) {
+                    precioPresencial = price;
+                }
+                if (labelText.includes('online')) {
+                    precioOnline = price;
+                }
+            }
+        });
+        
+        console.log('Precios - Presencial:', precioPresencial, 'Online:', precioOnline);
+        
         selectedProfessional = {
             name: professionalName,
-            specialty: card.querySelector('.professional-specialty').textContent,
-            avatar: card.querySelector('.professional-avatar-large img').src,
-            types: card.dataset.types.split(',')
+            specialty: card.querySelector('.professional-specialty')?.textContent || 'Especialidad',
+            avatar: card.querySelector('.professional-avatar-large img')?.src || '',
+            types: types,
+            precioPresencial: precioPresencial,
+            precioOnline: precioOnline
         };
+        
+        console.log('Profesional seleccionado:', selectedProfessional);
         
         openAppointmentModal();
     });
 });
 
-function openAppointmentModal() {
-    // Llenar información del profesional
-    document.getElementById('modalProfessionalName').textContent = selectedProfessional.name;
-    document.getElementById('modalProfessionalSpecialty').textContent = selectedProfessional.specialty;
-    document.getElementById('modalProfessionalAvatar').src = selectedProfessional.avatar;
-    document.getElementById('modalProfessionalAvatar').alt = selectedProfessional.name;
-    
-    // Configurar opciones de tipo de consulta
-    const consultationType = document.getElementById('consultationType');
-    consultationType.innerHTML = '<option value="">Selecciona el tipo</option>';
-    
-    if (selectedProfessional.types.includes('presencial')) {
-        consultationType.innerHTML += '<option value="presencial">Presencial - S/ 200</option>';
-    }
-    if (selectedProfessional.types.includes('online')) {
-        consultationType.innerHTML += '<option value="online">Online - S/ 200</option>';
-    }
-    
-    // Resetear formulario
-    document.getElementById('appointmentForm').reset();
-    document.getElementById('consultationPrice').textContent = 'S/ 0.00';
-    
-    // Establecer fecha mínima (hoy)
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('appointmentDate').min = today;
-    
-    appointmentModal.classList.add('show');
-}
-
-function closeAppointmentModal() {
-    appointmentModal.classList.remove('show');
-    selectedProfessional = null;
-}
-
+// Event listeners para cerrar el modal
 if (closeAppointment) {
-    closeAppointment.addEventListener('click', closeAppointmentModal);
+    closeAppointment.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeAppointmentModal();
+    });
 }
 
 if (cancelAppointment) {
-    cancelAppointment.addEventListener('click', closeAppointmentModal);
+    cancelAppointment.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeAppointmentModal();
+    });
+}
+
+// Cerrar modal al hacer click fuera
+if (appointmentModal) {
+    appointmentModal.addEventListener('click', function(e) {
+        if (e.target === appointmentModal) {
+            closeAppointmentModal();
+        }
+    });
 }
 
 // Actualizar precio cuando se selecciona tipo de consulta
@@ -243,19 +269,19 @@ const consultationType = document.getElementById('consultationType');
 if (consultationType) {
     consultationType.addEventListener('change', function() {
         const selectedOption = this.options[this.selectedIndex];
-        const price = selectedOption.text.match(/S\/\s*(\d+)/);
+        const price = selectedOption.getAttribute('data-price') || '0';
         
-        if (price) {
-            document.getElementById('consultationPrice').textContent = `S/ ${price[1]}.00`;
-        } else {
-            document.getElementById('consultationPrice').textContent = 'S/ 0.00';
+        const priceElement = document.getElementById('consultationPrice');
+        if (priceElement) {
+            priceElement.textContent = `S/ ${price}.00`;
         }
     });
 }
 
 // Confirmar cita
 if (confirmAppointment) {
-    confirmAppointment.addEventListener('click', function() {
+    confirmAppointment.addEventListener('click', function(e) {
+        e.preventDefault();
         if (validateAppointmentForm()) {
             bookAppointment();
         }
@@ -263,22 +289,22 @@ if (confirmAppointment) {
 }
 
 function validateAppointmentForm() {
-    const consultationType = document.getElementById('consultationType').value;
-    const appointmentDate = document.getElementById('appointmentDate').value;
-    const appointmentTime = document.getElementById('appointmentTime').value;
+    const consultationType = document.getElementById('consultationType')?.value;
+    const appointmentDate = document.getElementById('appointmentDate')?.value;
+    const appointmentTime = document.getElementById('appointmentTime')?.value;
     
     if (!consultationType) {
-        showNotification('Por favor, selecciona el tipo de consulta', 'error');
+        alert('Por favor, selecciona el tipo de consulta');
         return false;
     }
     
     if (!appointmentDate) {
-        showNotification('Por favor, selecciona una fecha', 'error');
+        alert('Por favor, selecciona una fecha');
         return false;
     }
     
     if (!appointmentTime) {
-        showNotification('Por favor, selecciona una hora', 'error');
+        alert('Por favor, selecciona una hora');
         return false;
     }
     
@@ -299,165 +325,23 @@ function bookAppointment() {
     
     console.log('Agendando cita:', appointmentData);
     
-    // Simular proceso de agendado
-    confirmAppointment.disabled = true;
-    confirmAppointment.textContent = 'Procesando...';
+    if (confirmAppointment) {
+        confirmAppointment.disabled = true;
+        confirmAppointment.textContent = 'Procesando...';
+    }
     
     setTimeout(() => {
         closeAppointmentModal();
-        showNotification(`¡Cita agendada exitosamente con ${appointmentData.professional}!`, 'success');
+        alert(`¡Cita agendada exitosamente con ${appointmentData.professional}!`);
         
-        // Resetear botón
-        confirmAppointment.disabled = false;
-        confirmAppointment.textContent = 'Confirmar Cita';
-        
-        // Aquí iría la lógica para enviar al backend
-        // fetch('/api/appointments/create/', { method: 'POST', body: JSON.stringify(appointmentData) })
-    }, 2000);
-}
-
-// ===================================
-// NOTIFICATION SYSTEM
-// ===================================
-
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <i class='bx ${getNotificationIcon(type)}'></i>
-        <span>${message}</span>
-    `;
-    
-    if (!document.getElementById('notification-styles')) {
-        const style = document.createElement('style');
-        style.id = 'notification-styles';
-        style.textContent = `
-            .notification {
-                position: fixed;
-                top: 80px;
-                right: 24px;
-                background: white;
-                padding: 16px 20px;
-                border-radius: 12px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                z-index: 10001;
-                animation: slideIn 0.3s ease;
-                min-width: 300px;
-                font-family: var(--poppins);
-            }
-            
-            @keyframes slideIn {
-                from {
-                    transform: translateX(400px);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-            
-            @keyframes slideOut {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(400px);
-                    opacity: 0;
-                }
-            }
-            
-            .notification.slide-out {
-                animation: slideOut 0.3s ease;
-            }
-            
-            .notification i {
-                font-size: 24px;
-            }
-            
-            .notification span {
-                font-size: 14px;
-                font-weight: 500;
-                color: var(--dark);
-            }
-            
-            .notification-info {
-                border-left: 4px solid var(--blue);
-            }
-            
-            .notification-info i {
-                color: var(--blue);
-            }
-            
-            .notification-success {
-                border-left: 4px solid #28a745;
-            }
-            
-            .notification-success i {
-                color: #28a745;
-            }
-            
-            .notification-warning {
-                border-left: 4px solid #ffc107;
-            }
-            
-            .notification-warning i {
-                color: #ffc107;
-            }
-            
-            .notification-error {
-                border-left: 4px solid #dc3545;
-            }
-            
-            .notification-error i {
-                color: #dc3545;
-            }
-            
-            @media screen and (max-width: 576px) {
-                .notification {
-                    right: 16px;
-                    left: 16px;
-                    min-width: auto;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.classList.add('slide-out');
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
-    }, 3000);
-}
-
-function getNotificationIcon(type) {
-    const icons = {
-        'info': 'bx-info-circle',
-        'success': 'bx-check-circle',
-        'warning': 'bx-error-circle',
-        'error': 'bx-x-circle'
-    };
-    return icons[type] || icons.info;
-}
-
-// ===================================
-// CLOSE MODAL ON CLICK OUTSIDE
-// ===================================
-
-if (appointmentModal) {
-    appointmentModal.addEventListener('click', function(e) {
-        if (e.target === appointmentModal) {
-            closeAppointmentModal();
+        if (confirmAppointment) {
+            confirmAppointment.disabled = false;
+            confirmAppointment.textContent = 'Confirmar Cita';
         }
-    });
+        
+        // Aquí puedes agregar la lógica para enviar al backend
+        // fetch('/api/appointments/', { method: 'POST', body: JSON.stringify(appointmentData) })
+    }, 1500);
 }
 
 // ===================================
@@ -466,24 +350,14 @@ if (appointmentModal) {
 
 document.addEventListener('keydown', function(e) {
     // ESC para cerrar modal
-    if (e.key === 'Escape' && appointmentModal.classList.contains('show')) {
+    if (e.key === 'Escape' && appointmentModal && appointmentModal.classList.contains('show')) {
         closeAppointmentModal();
     }
     
     // Ctrl/Cmd + K para enfocar búsqueda
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
-        if (mainSearch) {
-            mainSearch.focus();
-        }
-    }
-    
-    // Ctrl/Cmd + F para enfocar búsqueda
-    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-        e.preventDefault();
-        if (mainSearch) {
-            mainSearch.focus();
-        }
+        if (mainSearch) mainSearch.focus();
     }
 });
 
@@ -497,18 +371,18 @@ function sortProfessionals(criteria) {
     cardsArray.sort((a, b) => {
         switch(criteria) {
             case 'name':
-                const nameA = a.querySelector('.professional-name').textContent;
-                const nameB = b.querySelector('.professional-name').textContent;
+                const nameA = a.querySelector('.professional-name')?.textContent || '';
+                const nameB = b.querySelector('.professional-name')?.textContent || '';
                 return nameA.localeCompare(nameB);
                 
             case 'rating':
-                const ratingA = parseInt(a.dataset.rating);
-                const ratingB = parseInt(b.dataset.rating);
+                const ratingA = parseInt(a.dataset.rating) || 0;
+                const ratingB = parseInt(b.dataset.rating) || 0;
                 return ratingB - ratingA;
                 
             case 'specialty':
-                const specialtyA = a.dataset.specialty;
-                const specialtyB = b.dataset.specialty;
+                const specialtyA = a.dataset.specialty || '';
+                const specialtyB = b.dataset.specialty || '';
                 return specialtyA.localeCompare(specialtyB);
                 
             default:
@@ -516,11 +390,11 @@ function sortProfessionals(criteria) {
         }
     });
     
-    // Reordenar en el DOM
-    cardsArray.forEach(card => professionalsGrid.appendChild(card));
+    if (professionalsGrid) {
+        cardsArray.forEach(card => professionalsGrid.appendChild(card));
+    }
 }
 
-// Agregar botones de ordenamiento si es necesario
 const sortButtons = document.querySelectorAll('[data-sort]');
 sortButtons.forEach(button => {
     button.addEventListener('click', function() {
@@ -535,8 +409,9 @@ sortButtons.forEach(button => {
 
 function initializeFavorites() {
     professionalCards.forEach(card => {
-        // Agregar botón de favorito
         const cardHeader = card.querySelector('.card-header');
+        if (!cardHeader) return;
+        
         const favoriteBtn = document.createElement('button');
         favoriteBtn.className = 'btn-favorite';
         favoriteBtn.innerHTML = '<i class="bx bx-heart"></i>';
@@ -557,21 +432,22 @@ function initializeFavorites() {
             color: #dc3545;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: all 0.3s;
+            z-index: 10;
         `;
         
         cardHeader.style.position = 'relative';
         cardHeader.appendChild(favoriteBtn);
         
-        // Cargar estado de favorito
-        const professionalName = card.querySelector('.professional-name').textContent;
+        const professionalName = card.querySelector('.professional-name')?.textContent || '';
         const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
         
         if (favorites.includes(professionalName)) {
-            favoriteBtn.querySelector('i').classList.replace('bx-heart', 'bxs-heart');
+            const icon = favoriteBtn.querySelector('i');
+            if (icon) icon.classList.replace('bx-heart', 'bxs-heart');
         }
         
-        // Toggle favorito
-        favoriteBtn.addEventListener('click', function() {
+        favoriteBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
             toggleFavorite(professionalName, this);
         });
     });
@@ -581,37 +457,19 @@ function toggleFavorite(professionalName, button) {
     let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     const icon = button.querySelector('i');
     
+    if (!icon) return;
+    
     if (favorites.includes(professionalName)) {
-        // Remover de favoritos
         favorites = favorites.filter(name => name !== professionalName);
         icon.classList.replace('bxs-heart', 'bx-heart');
-        showNotification('Removido de favoritos', 'info');
+        console.log('Removido de favoritos:', professionalName);
     } else {
-        // Agregar a favoritos
         favorites.push(professionalName);
         icon.classList.replace('bx-heart', 'bxs-heart');
-        showNotification('Agregado a favoritos', 'success');
+        console.log('Agregado a favoritos:', professionalName);
     }
     
     localStorage.setItem('favorites', JSON.stringify(favorites));
-}
-
-// ===================================
-// LOADING SIMULATION
-// ===================================
-
-function simulateLoading() {
-    const loadingState = document.getElementById('loadingState');
-    
-    if (loadingState) {
-        professionalsGrid.style.display = 'none';
-        loadingState.style.display = 'block';
-        
-        setTimeout(() => {
-            loadingState.style.display = 'none';
-            professionalsGrid.style.display = 'grid';
-        }, 1000);
-    }
 }
 
 // ===================================
@@ -619,49 +477,38 @@ function simulateLoading() {
 // ===================================
 
 professionalCards.forEach(card => {
-    // Hacer que la card sea clickeable (excepto los botones)
     card.addEventListener('click', function(e) {
-        // Ignorar clicks en botones
         if (e.target.closest('button')) return;
         
-        const professionalName = this.querySelector('.professional-name').textContent;
+        const professionalName = this.querySelector('.professional-name')?.textContent || '';
         console.log(`Ver detalles de ${professionalName}`);
         
-        // Aquí podrías abrir un modal con más detalles o redirigir
+        // Aquí podrías redirigir a la página de detalles
         // window.location.href = `/cliente/profesionales/${professionalId}/`;
     });
     
-    // Agregar cursor pointer
     card.style.cursor = 'pointer';
 });
-
-// ===================================
-// ANALYTICS & TRACKING
-// ===================================
-
-function trackProfessionalView(professionalName) {
-    console.log(`[Analytics] Usuario vio perfil de: ${professionalName}`);
-}
-
-function trackAppointmentBooked(appointmentData) {
-    console.log(`[Analytics] Cita agendada:`, appointmentData);
-}
 
 // ===================================
 // INICIALIZACIÓN
 // ===================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Sistema de profesionales inicializado correctamente');
+    console.log('📋 Sistema de profesionales inicializado');
+    console.log('Modal encontrado:', !!appointmentModal);
+    console.log('Botones de agendar encontrados:', bookButtons.length);
+    console.log('Profesionales cargados:', professionalCards.length);
     
-    // Inicializar favoritos
+    if (!appointmentModal) {
+        console.error('❌ CRÍTICO: El modal no fue encontrado. Verifica el HTML.');
+    }
+    
     initializeFavorites();
     
-    // Simular carga inicial
-    // simulateLoading();
-    
-    console.log(`${professionalCards.length} profesionales cargados`);
     console.log('Atajos de teclado disponibles:');
-    console.log('- Ctrl/Cmd + K o F: Buscar');
+    console.log('- Ctrl/Cmd + K: Buscar');
     console.log('- ESC: Cerrar modal');
 });
+
+})(); // Fin del IIFE

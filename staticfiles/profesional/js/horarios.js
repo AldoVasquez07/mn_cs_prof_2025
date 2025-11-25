@@ -1,379 +1,391 @@
 // ===================================
 // CONFIGURACIÓN INICIAL
 // ===================================
-let currentDate = new Date();
-let selectedDate = new Date();
-const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
-                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+let disponibilidades = [];
+let aspectosNegocio = null;
 
 // ===================================
-// NAVBAR FUNCTIONALITY
+// UTILIDADES
 // ===================================
 
-// Toggle del formulario de búsqueda en móviles
-const searchButton = document.querySelector('#content nav form .form-input button');
-const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
-const searchForm = document.querySelector('#content nav form');
-
-if (searchButton && searchButtonIcon && searchForm) {
-    searchButton.addEventListener('click', function (e) {
-        if (window.innerWidth < 576) {
-            e.preventDefault();
-            searchForm.classList.toggle('show');
-            if (searchForm.classList.contains('show')) {
-                searchButtonIcon.classList.replace('bx-search', 'bx-x');
-            } else {
-                searchButtonIcon.classList.replace('bx-x', 'bx-search');
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
             }
         }
-    });
+    }
+    return cookieValue;
 }
 
-// Dark Mode Switch
-const switchMode = document.getElementById('switch-mode');
+const csrftoken = getCookie('csrftoken');
 
-if (switchMode) {
-    switchMode.addEventListener('change', function () {
-        if (this.checked) {
-            document.body.classList.add('dark');
-            localStorage.setItem('darkMode', 'enabled');
+function showNotification(message, type = 'info') {
+    // Sistema simple de notificaciones
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Agregar estilos de animación solo si no existen
+if (!document.getElementById('notification-styles')) {
+    const style = document.createElement('style');
+    style.id = 'notification-styles';
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// ===================================
+// API CALLS
+// ===================================
+
+async function cargarDisponibilidades() {
+    try {
+        const response = await fetch('/profesional/api/disponibilidades/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            disponibilidades = data.disponibilidades;
+            aspectosNegocio = data.aspectos_negocio;
+            renderDisponibilidades();
+            cargarAspectosNegocio();
         } else {
-            document.body.classList.remove('dark');
-            localStorage.setItem('darkMode', 'disabled');
+            console.log('Mensaje:', data.message);
+            mostrarEstadoVacio();
         }
-    });
-
-    // Cargar preferencia de dark mode
-    if (localStorage.getItem('darkMode') === 'enabled') {
-        document.body.classList.add('dark');
-        switchMode.checked = true;
+    } catch (error) {
+        console.error('Error al cargar disponibilidades:', error);
+        showNotification('Error al cargar los horarios', 'error');
     }
 }
 
-// Profile Menu Toggle
-const profileIcon = document.querySelector('.profile');
-const profileMenu = document.querySelector('.profile-menu');
-
-if (profileIcon && profileMenu) {
-    profileIcon.addEventListener('click', function (e) {
-        e.preventDefault();
-        profileMenu.classList.toggle('show');
-    });
-}
-
-// Cerrar menú de perfil al hacer clic fuera
-window.addEventListener('click', function (e) {
-    if (!e.target.closest('.profile')) {
-        if (profileMenu) {
-            profileMenu.classList.remove('show');
-        }
-    }
-});
-
-// ===================================
-// CALENDARIO FUNCIONES
-// ===================================
-
-function renderMiniCalendar() {
-    const calendarDays = document.getElementById('calendarDays');
-    if (!calendarDays) return;
-
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    
-    // Actualizar título del mes
-    const currentMonthElement = document.getElementById('currentMonth');
-    if (currentMonthElement) {
-        currentMonthElement.textContent = `${months[month]} ${year}`;
-    }
-
-    // Primer día del mes
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const prevLastDay = new Date(year, month, 0);
-    
-    // Ajustar para que Lunes sea el primer día (0)
-    const firstDayIndex = (firstDay.getDay() + 6) % 7;
-    const lastDayDate = lastDay.getDate();
-    const prevLastDayDate = prevLastDay.getDate();
-    const nextDays = 7 - ((firstDayIndex + lastDayDate) % 7);
-
-    let days = '';
-
-    // Días del mes anterior
-    for (let x = firstDayIndex; x > 0; x--) {
-        days += `<div class="calendar-day other-month">${prevLastDayDate - x + 1}</div>`;
-    }
-
-    // Días del mes actual
-    const today = new Date();
-    for (let i = 1; i <= lastDayDate; i++) {
-        const isToday = i === today.getDate() && 
-                       month === today.getMonth() && 
-                       year === today.getFullYear();
-        
-        const isSelected = i === selectedDate.getDate() && 
-                          month === selectedDate.getMonth() && 
-                          year === selectedDate.getFullYear();
-        
-        const hasEvent = Math.random() > 0.7; // Simulación de eventos
-        
-        let classes = 'calendar-day';
-        if (isToday) classes += ' today';
-        if (isSelected) classes += ' selected';
-        if (hasEvent) classes += ' has-event';
-        
-        days += `<div class="${classes}" data-date="${year}-${month + 1}-${i}">${i}</div>`;
-    }
-
-    // Días del siguiente mes
-    for (let j = 1; j <= nextDays && nextDays < 7; j++) {
-        days += `<div class="calendar-day other-month">${j}</div>`;
-    }
-
-    calendarDays.innerHTML = days;
-    
-    // Agregar event listeners a los días
-    document.querySelectorAll('.calendar-day:not(.other-month)').forEach(day => {
-        day.addEventListener('click', function() {
-            const dateStr = this.getAttribute('data-date');
-            if (dateStr) {
-                const [year, month, date] = dateStr.split('-');
-                selectedDate = new Date(year, month - 1, date);
-                renderMiniCalendar();
-                updateWeekView();
-            }
+async function guardarDisponibilidad(dia, horaInicio, horaFin) {
+    try {
+        const response = await fetch('/profesional/api/disponibilidades/guardar/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+                dia: dia,
+                hora_inicio: horaInicio,
+                hora_fin: horaFin
+            })
         });
-    });
-}
-
-function updateWeekView() {
-    // Calcular el rango de la semana
-    const startOfWeek = new Date(selectedDate);
-    startOfWeek.setDate(selectedDate.getDate() - ((selectedDate.getDay() + 6) % 7));
-    
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 5); // Mostrar hasta sábado
-    
-    const weekRangeElement = document.getElementById('weekRange');
-    if (weekRangeElement) {
-        const startDay = startOfWeek.getDate();
-        const endDay = endOfWeek.getDate();
-        const monthName = months[startOfWeek.getMonth()].toLowerCase();
-        const year = startOfWeek.getFullYear();
         
-        weekRangeElement.textContent = `${String(startDay).padStart(2, '0')} - ${String(endDay).padStart(2, '0')} ${monthName}, ${year}`;
-    }
-    
-    // Actualizar los encabezados de los días
-    const dayColumns = document.querySelectorAll('.day-column');
-    const dayNames = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'];
-    
-    dayColumns.forEach((column, index) => {
-        const currentDay = new Date(startOfWeek);
-        currentDay.setDate(startOfWeek.getDate() + index);
+        const data = await response.json();
         
-        const dayNumber = column.querySelector('.day-number');
-        const dayName = column.querySelector('.day-name');
-        
-        if (dayNumber) dayNumber.textContent = currentDay.getDate();
-        if (dayName) dayName.textContent = dayNames[index];
-        
-        // Marcar día actual
-        const today = new Date();
-        if (currentDay.toDateString() === today.toDateString()) {
-            column.classList.add('active');
+        if (data.success) {
+            showNotification(data.message, 'success');
+            await cargarDisponibilidades();
+            limpiarFormularioDisponibilidad();
+            return true;
         } else {
-            column.classList.remove('active');
+            showNotification(data.message, 'error');
+            return false;
         }
-    });
-    
-    renderTimeSlots();
-}
-
-function renderTimeSlots() {
-    const slotsContainer = document.querySelector('.slots-container');
-    if (!slotsContainer) return;
-    
-    const daySlots = slotsContainer.querySelectorAll('.day-slots');
-    
-    daySlots.forEach((daySlot, dayIndex) => {
-        daySlot.innerHTML = '';
-        
-        // Crear 12 slots de 30 minutos (desde 09:00 hasta 15:00)
-        for (let i = 0; i < 12; i++) {
-            const slotCell = document.createElement('div');
-            slotCell.className = 'slot-cell';
-            slotCell.dataset.day = dayIndex;
-            slotCell.dataset.slot = i;
-            
-            // Simular algunas citas aleatoriamente
-            if (Math.random() > 0.85 && dayIndex < 5) {
-                const appointment = document.createElement('div');
-                appointment.className = 'appointment';
-                
-                const hour = 9 + Math.floor(i / 2);
-                const minute = i % 2 === 0 ? '00' : '30';
-                const nextMinute = i % 2 === 0 ? '30' : '00';
-                const nextHour = i % 2 === 0 ? hour : hour + 1;
-                
-                appointment.innerHTML = `
-                    <div class="appointment-time">${hour}:${minute} - ${nextHour}:${nextMinute}</div>
-                    <div class="appointment-client">Cliente ${dayIndex + 1}</div>
-                `;
-                
-                appointment.style.top = '2px';
-                appointment.style.height = 'calc(100% - 4px)';
-                
-                slotCell.appendChild(appointment);
-            }
-            
-            daySlot.appendChild(slotCell);
-        }
-    });
-    
-    // Agregar event listeners a las celdas vacías
-    document.querySelectorAll('.slot-cell:not(:has(.appointment))').forEach(cell => {
-        cell.addEventListener('click', function() {
-            openAppointmentModal(this.dataset.day, this.dataset.slot);
-        });
-    });
-}
-
-// ===================================
-// NAVEGACIÓN DE CALENDARIO
-// ===================================
-
-const prevMonthBtn = document.getElementById('prevMonth');
-const nextMonthBtn = document.getElementById('nextMonth');
-const prevWeekBtn = document.getElementById('prevWeek');
-const nextWeekBtn = document.getElementById('nextWeek');
-
-if (prevMonthBtn) {
-    prevMonthBtn.addEventListener('click', function() {
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        renderMiniCalendar();
-    });
-}
-
-if (nextMonthBtn) {
-    nextMonthBtn.addEventListener('click', function() {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        renderMiniCalendar();
-    });
-}
-
-if (prevWeekBtn) {
-    prevWeekBtn.addEventListener('click', function() {
-        selectedDate.setDate(selectedDate.getDate() - 7);
-        currentDate = new Date(selectedDate);
-        renderMiniCalendar();
-        updateWeekView();
-    });
-}
-
-if (nextWeekBtn) {
-    nextWeekBtn.addEventListener('click', function() {
-        selectedDate.setDate(selectedDate.getDate() + 7);
-        currentDate = new Date(selectedDate);
-        renderMiniCalendar();
-        updateWeekView();
-    });
-}
-
-// ===================================
-// MODAL FUNCTIONALITY
-// ===================================
-
-const appointmentModal = document.getElementById('appointmentModal');
-const closeModal = document.getElementById('closeModal');
-const cancelModal = document.getElementById('cancelModal');
-
-function openAppointmentModal(day, slot) {
-    if (appointmentModal) {
-        appointmentModal.classList.add('show');
-        
-        // Calcular fecha y hora
-        const startOfWeek = new Date(selectedDate);
-        startOfWeek.setDate(selectedDate.getDate() - ((selectedDate.getDay() + 6) % 7));
-        
-        const appointmentDate = new Date(startOfWeek);
-        appointmentDate.setDate(startOfWeek.getDate() + parseInt(day));
-        
-        const hour = 9 + Math.floor(slot / 2);
-        const minute = slot % 2 === 0 ? '00' : '30';
-        
-        appointmentDate.setHours(hour, minute);
-        
-        // Formatear fecha para input datetime-local
-        const dateTimeInput = appointmentModal.querySelector('input[type="datetime-local"]');
-        if (dateTimeInput) {
-            const formattedDate = appointmentDate.toISOString().slice(0, 16);
-            dateTimeInput.value = formattedDate;
-        }
+    } catch (error) {
+        console.error('Error al guardar disponibilidad:', error);
+        showNotification('Error al guardar el horario', 'error');
+        return false;
     }
 }
 
-function closeAppointmentModal() {
-    if (appointmentModal) {
-        appointmentModal.classList.remove('show');
-        
-        // Limpiar formulario
-        const inputs = appointmentModal.querySelectorAll('input, textarea, select');
-        inputs.forEach(input => {
-            if (input.type !== 'datetime-local') {
-                input.value = '';
+async function eliminarDisponibilidad(id) {
+    if (!confirm('¿Estás seguro de eliminar este horario?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/profesional/api/disponibilidades/${id}/eliminar/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
             }
         });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification(data.message, 'success');
+            await cargarDisponibilidades();
+        } else {
+            showNotification(data.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error al eliminar disponibilidad:', error);
+        showNotification('Error al eliminar el horario', 'error');
     }
 }
 
-if (closeModal) {
-    closeModal.addEventListener('click', closeAppointmentModal);
-}
-
-if (cancelModal) {
-    cancelModal.addEventListener('click', closeAppointmentModal);
-}
-
-// Cerrar modal al hacer clic fuera
-if (appointmentModal) {
-    appointmentModal.addEventListener('click', function(e) {
-        if (e.target === appointmentModal) {
-            closeAppointmentModal();
-        }
-    });
-}
-
-// ===================================
-// BOTONES DE ACCIÓN SIDEBAR
-// ===================================
-
-const actionButtons = document.querySelectorAll('.action-btn');
-
-actionButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        const buttonText = this.querySelector('span').textContent;
-        console.log(`Acción seleccionada: ${buttonText}`);
+async function guardarAspectosNegocio() {
+    const direccion = document.getElementById('direccion').value;
+    const horaApertura = document.getElementById('hora_apertura').value;
+    const horaCierre = document.getElementById('hora_cierre').value;
+    const permitePresencial = document.getElementById('permite_presencial').checked;
+    const permiteVirtual = document.getElementById('permite_virtual').checked;
+    const precioPresencial = document.getElementById('precio_presencial').value;
+    const precioOnline = document.getElementById('precio_online').value;
+    
+    const data = {
+        direccion: direccion,
+        permite_presencial: permitePresencial,
+        permite_virtual: permiteVirtual
+    };
+    
+    if (horaApertura) data.hora_apertura = horaApertura;
+    if (horaCierre) data.hora_cierre = horaCierre;
+    if (permitePresencial && precioPresencial) data.precio_presencial = parseFloat(precioPresencial);
+    if (permiteVirtual && precioOnline) data.precio_online = parseFloat(precioOnline);
+    
+    try {
+        const response = await fetch('/profesional/api/aspectos-negocio/actualizar/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify(data)
+        });
         
-        // Aquí puedes agregar la lógica específica para cada botón
-        if (buttonText.includes('Bloquear')) {
-            alert('Funcionalidad de bloqueo de fechas');
-        } else if (buttonText.includes('presenciales')) {
-            alert('Filtrar citas presenciales');
-        } else if (buttonText.includes('virtuales')) {
-            alert('Filtrar citas virtuales');
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification(result.message, 'success');
+            aspectosNegocio = result.aspectos_negocio;
+        } else {
+            showNotification(result.message, 'error');
         }
-    });
-});
+    } catch (error) {
+        console.error('Error al guardar aspectos de negocio:', error);
+        showNotification('Error al guardar la configuración', 'error');
+    }
+}
 
 // ===================================
-// INICIALIZACIÓN
+// RENDERIZADO
+// ===================================
+
+function renderDisponibilidades() {
+    const grid = document.getElementById('disponibilidadesGrid');
+    const emptyState = document.getElementById('emptyState');
+    
+    if (!grid) return;
+    
+    if (disponibilidades.length === 0) {
+        mostrarEstadoVacio();
+        return;
+    }
+    
+    if (emptyState) emptyState.style.display = 'none';
+    grid.style.display = 'grid';
+    
+    // Ordenar por día de la semana
+    const diasOrden = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
+    const dispOrdenadas = [...disponibilidades].sort((a, b) => {
+        return diasOrden.indexOf(a.dia) - diasOrden.indexOf(b.dia);
+    });
+    
+    grid.innerHTML = dispOrdenadas.map(disp => `
+        <div class="disponibilidad-card">
+            <div class="card-header">
+                <h3 class="dia-nombre">${capitalizarPrimeraLetra(disp.dia)}</h3>
+                <button class="btn-delete" onclick="eliminarDisponibilidad(${disp.id})" title="Eliminar">
+                    <i class='bx bx-trash'></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="horario-info">
+                    <i class='bx bx-time'></i>
+                    <span>${disp.hora_inicio} - ${disp.hora_fin}</span>
+                </div>
+                <div class="duracion-info">
+                    <i class='bx bx-calendar'></i>
+                    <span>${calcularDuracion(disp.hora_inicio, disp.hora_fin)}</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function mostrarEstadoVacio() {
+    const grid = document.getElementById('disponibilidadesGrid');
+    const emptyState = document.getElementById('emptyState');
+    
+    if (grid) grid.style.display = 'none';
+    if (emptyState) emptyState.style.display = 'flex';
+}
+
+function cargarAspectosNegocio() {
+    if (!aspectosNegocio) return;
+    
+    if (aspectosNegocio.direccion) {
+        document.getElementById('direccion').value = aspectosNegocio.direccion;
+    }
+    
+    if (aspectosNegocio.hora_apertura) {
+        document.getElementById('hora_apertura').value = aspectosNegocio.hora_apertura;
+    }
+    
+    if (aspectosNegocio.hora_cierre) {
+        document.getElementById('hora_cierre').value = aspectosNegocio.hora_cierre;
+    }
+    
+    document.getElementById('permite_presencial').checked = aspectosNegocio.permite_presencial;
+    document.getElementById('permite_virtual').checked = aspectosNegocio.permite_virtual;
+    
+    if (aspectosNegocio.precio_presencial) {
+        document.getElementById('precio_presencial').value = aspectosNegocio.precio_presencial;
+    }
+    
+    if (aspectosNegocio.precio_online) {
+        document.getElementById('precio_online').value = aspectosNegocio.precio_online;
+    }
+    
+    togglePrecioInputs();
+}
+
+// ===================================
+// FUNCIONES AUXILIARES
+// ===================================
+
+function capitalizarPrimeraLetra(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function calcularDuracion(inicio, fin) {
+    const [horaI, minI] = inicio.split(':').map(Number);
+    const [horaF, minF] = fin.split(':').map(Number);
+    
+    const minutosInicio = horaI * 60 + minI;
+    const minutosFin = horaF * 60 + minF;
+    const duracion = minutosFin - minutosInicio;
+    
+    const horas = Math.floor(duracion / 60);
+    const minutos = duracion % 60;
+    
+    if (horas > 0 && minutos > 0) {
+        return `${horas}h ${minutos}min`;
+    } else if (horas > 0) {
+        return `${horas} horas`;
+    } else {
+        return `${minutos} minutos`;
+    }
+}
+
+function limpiarFormularioDisponibilidad() {
+    document.getElementById('dia_semana').value = '';
+    document.getElementById('hora_inicio').value = '';
+    document.getElementById('hora_fin').value = '';
+}
+
+function togglePrecioInputs() {
+    const permitePresencial = document.getElementById('permite_presencial').checked;
+    const permiteVirtual = document.getElementById('permite_virtual').checked;
+    
+    document.getElementById('precio_presencial_group').style.display = 
+        permitePresencial ? 'block' : 'none';
+    document.getElementById('precio_online_group').style.display = 
+        permiteVirtual ? 'block' : 'none';
+}
+
+// ===================================
+// EVENT LISTENERS
 // ===================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    renderMiniCalendar();
-    updateWeekView();
+    // Cargar datos iniciales
+    cargarDisponibilidades();
     
-    console.log('Sistema de horarios inicializado correctamente');
+    // Botón guardar aspectos
+    const btnGuardarAspectos = document.getElementById('guardarAspectos');
+    if (btnGuardarAspectos) {
+        btnGuardarAspectos.addEventListener('click', guardarAspectosNegocio);
+    }
+    
+    // Botón agregar disponibilidad
+    const btnAgregarDisp = document.getElementById('agregarDisponibilidad');
+    if (btnAgregarDisp) {
+        btnAgregarDisp.addEventListener('click', async function() {
+            const dia = document.getElementById('dia_semana').value;
+            const horaInicio = document.getElementById('hora_inicio').value;
+            const horaFin = document.getElementById('hora_fin').value;
+            
+            if (!dia || !horaInicio || !horaFin) {
+                showNotification('Por favor completa todos los campos', 'error');
+                return;
+            }
+            
+            await guardarDisponibilidad(dia, horaInicio, horaFin);
+        });
+    }
+    
+    // Toggle de inputs de precio
+    const checkPresencial = document.getElementById('permite_presencial');
+    const checkVirtual = document.getElementById('permite_virtual');
+    
+    if (checkPresencial) {
+        checkPresencial.addEventListener('change', togglePrecioInputs);
+    }
+    
+    if (checkVirtual) {
+        checkVirtual.addEventListener('change', togglePrecioInputs);
+    }
+    
+    console.log('Sistema de horarios inicializado');
 });
