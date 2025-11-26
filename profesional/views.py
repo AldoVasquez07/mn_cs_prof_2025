@@ -16,8 +16,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from datetime import datetime
 from sistema.models import Disponibilidad, AspectosNegocio
-from profesional.models import Profesional, ProfesionalCliente
+from profesional.models import Profesional, ProfesionalCliente, Mensaje
 from django.utils import timezone
+from django.views.decorators.http import require_http_methods
 
 # -------------------------------------------------------------
 # CONFIGURACIÓN DE LOGGING
@@ -36,14 +37,100 @@ API_BASE_URL = "http://localhost:5000"
 # -------------------------------------------------------------
 # VISTAS DEL PANEL PROFESIONAL (simples renders con "choice")
 # -------------------------------------------------------------
+
 @login_required(login_url='general:login_inicio_sesion')
 def campanias_puntuales_option(request):
-    """Renderiza la vista de campañas puntuales."""
+    """Renderiza la vista de campañas puntuales y maneja el envío de mensajes."""
+    
+    # Obtener el profesional actual
+    try:
+        profesional = request.user.profesional
+    except:
+        return render(request, 'profesional/campanias_puntuales.html', {
+            "choice": 1,
+            "error": "No se encontró el perfil de profesional",
+            "clientes": []
+        })
+    
+    # Manejar el envío de mensajes (POST)
+    if request.method == 'POST':
+        try:
+            # Obtener datos del POST
+            mensaje_contenido = request.POST.get('mensaje', '').strip()
+            clientes_ids = request.POST.getlist('clientes[]')
+            
+            # Validaciones
+            if not mensaje_contenido:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'El mensaje no puede estar vacío'
+                }, status=400)
+            
+            if not clientes_ids:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Debes seleccionar al menos un cliente'
+                }, status=400)
+            
+            # Crear los mensajes para cada cliente seleccionado
+            mensajes_creados = 0
+            for cliente_id in clientes_ids:
+                try:
+                    # Verificar que la relación existe y pertenece al profesional
+                    relacion = ProfesionalCliente.objects.get(
+                        id=cliente_id,
+                        profesional=profesional,
+                        estado='activo'
+                    )
+                    
+                    # Crear el mensaje
+                    Mensaje.objects.create(
+                        relacion=relacion,
+                        emisor='profesional',
+                        contenido=mensaje_contenido
+                    )
+                    mensajes_creados += 1
+                    
+                except ProfesionalCliente.DoesNotExist:
+                    continue
+            
+            return JsonResponse({
+                'success': True,
+                'mensaje': f'Mensaje enviado exitosamente a {mensajes_creados} cliente(s)',
+                'total_enviados': mensajes_creados
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': f'Error al enviar mensajes: {str(e)}'
+            }, status=500)
+    
+    # Obtener todos los clientes relacionados con el profesional (GET)
+    relaciones = ProfesionalCliente.objects.filter(
+        profesional=profesional,
+        estado='activo'
+    ).select_related('cliente__usuario').order_by('cliente__usuario__first_name')
+    
+    # Preparar la lista de clientes con sus datos
+    clientes = []
+    for relacion in relaciones:
+        cliente_usuario = relacion.cliente.usuario
+        clientes.append({
+            'id': relacion.id,
+            'nombre_completo': cliente_usuario.get_full_name(),
+            'email': cliente_usuario.email,
+            'telefono': cliente_usuario.telefono or 'Sin teléfono',
+        })
+    
     modelo_predictivo = request.session.get('modelo_predictivo', False)
+    
     return render(request, 'profesional/campanias_puntuales.html', {
         "choice": 1,
-        "modelo_predictivo": modelo_predictivo
-        })
+        "modelo_predictivo": modelo_predictivo,
+        "clientes": clientes,
+        "total_clientes": len(clientes)
+    })
 
 
 @login_required(login_url='general:login_inicio_sesion')

@@ -11,68 +11,88 @@
 	<div class="campaign-container">
 		<h1 class="page-title">Creando campaña</h1>
 
-		<!-- Message Input Section -->
-		<div class="message-section">
-			<textarea class="message-input" placeholder="Mensaje para mis clientes..." rows="6"></textarea>
-			<button class="btn-send-message">Enviar mensaje</button>
+		{% if error %}
+		<div class="alert alert-danger">
+			{{ error }}
 		</div>
+		{% endif %}
 
-		<!-- Client Selection Section -->
-		<div class="client-selection-section">
-			<h2 class="section-title">Selección de clientes</h2>
-
-			<div class="clients-grid">
-				<!-- Client Card 1 -->
-				<div class="client-card">
-					<div class="client-avatar">
-						<i class='bx bx-user'></i>
-					</div>
-					<span class="client-name">Arturo Juan Gómez Luz</span>
-					<button class="btn-select-client selected">
-						<i class='bx bx-check'></i>
-					</button>
-				</div>
-
-				<!-- Client Card 2 -->
-				<div class="client-card">
-					<div class="client-avatar">
-						<i class='bx bx-user'></i>
-					</div>
-					<span class="client-name">Arturo Juan Gómez Luz</span>
-					<button class="btn-select-client selected">
-						<i class='bx bx-check'></i>
-					</button>
-				</div>
-
-				<!-- Client Card 3 -->
-				<div class="client-card">
-					<div class="client-avatar">
-						<i class='bx bx-user'></i>
-					</div>
-					<span class="client-name">Arturo Juan Gómez Luz</span>
-					<button class="btn-select-client selected">
-						<i class='bx bx-check'></i>
-					</button>
-				</div>
-
-				<!-- Client Card 4 -->
-				<div class="client-card">
-					<div class="client-avatar">
-						<i class='bx bx-user'></i>
-					</div>
-					<span class="client-name">Arturo Juan Gómez Luz</span>
-					<button class="btn-select-client">
-						<i class='bx bx-plus'></i>
-					</button>
-				</div>
-
-				<!-- Add more client cards as needed -->
+		<!-- Message Input Section -->
+		<form id="form-campania" method="post">
+			{% csrf_token %}
+			
+			<div class="message-section">
+				<textarea 
+					class="message-input" 
+					name="mensaje"
+					id="mensaje-input"
+					placeholder="Mensaje para mis clientes..." 
+					rows="6"
+					required
+				></textarea>
+				<button type="submit" class="btn-send-message">Enviar mensaje</button>
 			</div>
+
+			<!-- Client Selection Section -->
+			<div class="client-selection-section">
+				<h2 class="section-title">
+					Selección de clientes
+					<span id="contador-seleccionados" class="contador-badge">0 seleccionados</span>
+				</h2>
+
+				{% if clientes %}
+				<div class="clients-grid">
+					{% for cliente in clientes %}
+					<div class="client-card">
+						<div class="client-avatar">
+							<i class='bx bx-user'></i>
+						</div>
+						<div class="client-info">
+							<span class="client-name">{{ cliente.nombre_completo }}</span>
+							<span class="client-email">{{ cliente.email }}</span>
+						</div>
+						<button 
+							type="button" 
+							class="btn-select-client" 
+							data-client-id="{{ cliente.id }}"
+							data-client-name="{{ cliente.nombre_completo }}"
+						>
+							<i class='bx bx-plus'></i>
+						</button>
+						<input 
+							type="checkbox" 
+							name="clientes[]" 
+							value="{{ cliente.id }}" 
+							class="client-checkbox" 
+							style="display: none;"
+						>
+					</div>
+					{% endfor %}
+				</div>
+				{% else %}
+				<div class="empty-state">
+					<i class='bx bx-user-x'></i>
+					<p>No tienes clientes registrados aún</p>
+				</div>
+				{% endif %}
+			</div>
+		</form>
+	</div>
+
+	<!-- Modal de confirmación -->
+	<div id="modal-confirmacion" class="modal" style="display: none;">
+		<div class="modal-content">
+			<span class="close-modal">&times;</span>
+			<div class="modal-icon success">
+				<i class='bx bx-check-circle'></i>
+			</div>
+			<h3 id="modal-titulo">Mensaje enviado</h3>
+			<p id="modal-mensaje"></p>
+			<button class="btn-modal-ok">Aceptar</button>
 		</div>
 	</div>
 </main>
 <!-- MAIN -->
-<!-- CONTENT -->
 {% endblock %}
 
 {% block scripts %}
