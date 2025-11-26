@@ -16,7 +16,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from datetime import datetime
 from sistema.models import Disponibilidad, AspectosNegocio
-from profesional.models import Profesional
+from profesional.models import Profesional, ProfesionalCliente
+from django.utils import timezone
 
 # -------------------------------------------------------------
 # CONFIGURACIÓN DE LOGGING
@@ -48,10 +49,63 @@ def campanias_puntuales_option(request):
 @login_required(login_url='general:login_inicio_sesion')
 def clientes_option(request):
     """Renderiza la vista de clientes."""
-    modelo_predictivo = request.session.get('modelo_predictivo', False)
-    return render(request, 'profesional/clientes.html', {
-        "choice": 2,
-        "modelo_predictivo": modelo_predictivo
+    try:
+        # Obtener el profesional actual
+        profesional = request.user.profesional
+        
+        # Obtener todas las relaciones activas del profesional
+        relaciones = ProfesionalCliente.objects.filter(
+            profesional=profesional,
+            estado='activo'
+        ).select_related(
+            'cliente__usuario'
+        ).prefetch_related(
+            'citas'
+        )
+        
+        # Preparar datos de clientes con información de citas
+        clientes_data = []
+        for relacion in relaciones:
+            cliente = relacion.cliente
+            usuario = cliente.usuario
+            
+            # Obtener última cita completada
+            ultima_cita = relacion.citas.filter(
+                estado='completada'
+            ).order_by('-fecha').first()
+            
+            # Obtener próxima cita pendiente o confirmada
+            proxima_cita = relacion.citas.filter(
+                estado__in=['pendiente', 'confirmada'],
+                fecha__gte=timezone.now()
+            ).order_by('fecha').first()
+            
+            clientes_data.append({
+                'id': cliente.id,
+                'nombre_completo': usuario.get_full_name(),
+                'email': usuario.email if usuario.email else None,
+                'telefono': usuario.telefono if usuario.telefono else None,
+                'ultima_visita': ultima_cita.fecha if ultima_cita else None,
+                'proxima_visita': proxima_cita.fecha if proxima_cita else None,
+                'relacion_id': relacion.id
+            })
+        
+        modelo_predictivo = request.session.get('modelo_predictivo', False)
+        
+        return render(request, 'profesional/clientes.html', {
+            "choice": 2,
+            "modelo_predictivo": modelo_predictivo,
+            "clientes": clientes_data
+        })
+        
+    except Exception as e:
+        # Log del error
+        print(f"Error en clientes_option: {str(e)}")
+        return render(request, 'profesional/clientes.html', {
+            "choice": 2,
+            "modelo_predictivo": False,
+            "clientes": [],
+            "error": "No se pudieron cargar los clientes"
         })
 
 

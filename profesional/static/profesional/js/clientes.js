@@ -150,21 +150,37 @@ if (searchInput) {
         const searchTerm = this.value.toLowerCase();
         const tableRows = document.querySelectorAll('.clientes-table tbody tr');
         
+        let visibleCount = 0;
         tableRows.forEach(row => {
+            // Ignorar fila de "no data"
+            if (row.querySelector('.no-data')) {
+                return;
+            }
+            
             const text = row.textContent.toLowerCase();
             if (text.includes(searchTerm)) {
                 row.style.display = '';
+                visibleCount++;
             } else {
                 row.style.display = 'none';
             }
         });
-    });
-}
-
-// Prevenir submit del formulario de búsqueda
-if (searchForm) {
-    searchForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+        
+        // Mostrar mensaje si no hay resultados
+        const tbody = document.querySelector('.clientes-table tbody');
+        let noResultsRow = tbody.querySelector('.no-results');
+        
+        if (visibleCount === 0 && searchTerm !== '') {
+            if (!noResultsRow) {
+                noResultsRow = document.createElement('tr');
+                noResultsRow.className = 'no-results';
+                noResultsRow.innerHTML = '<td colspan="5" class="no-data">No se encontraron resultados</td>';
+                tbody.appendChild(noResultsRow);
+            }
+            noResultsRow.style.display = '';
+        } else if (noResultsRow) {
+            noResultsRow.style.display = 'none';
+        }
     });
 }
 
@@ -173,10 +189,16 @@ const emailLinks = document.querySelectorAll('.link-email');
 emailLinks.forEach(link => {
     link.addEventListener('click', function (e) {
         e.preventDefault();
+        const clienteId = this.dataset.clienteId;
         const row = this.closest('tr');
         const clientName = row.cells[0].textContent;
-        console.log('Agregar email para:', clientName);
+        
+        // Aquí puedes abrir un modal o redirigir a un formulario
+        console.log('Agregar email para cliente ID:', clienteId);
         alert(`Agregar email para ${clientName}`);
+        
+        // Ejemplo: redirigir a una página de edición
+        // window.location.href = `/profesional/cliente/${clienteId}/editar/`;
     });
 });
 
@@ -185,9 +207,15 @@ const citaLinks = document.querySelectorAll('.link-cita');
 citaLinks.forEach(link => {
     link.addEventListener('click', function (e) {
         e.preventDefault();
+        const clienteId = this.dataset.clienteId;
+        const relacionId = this.dataset.relacionId;
         const row = this.closest('tr');
         const clientName = row.cells[0].textContent;
-        console.log('Crear cita para:', clientName);
+        
+        console.log('Crear cita para cliente ID:', clienteId, 'Relación ID:', relacionId);
         alert(`Crear cita para ${clientName}`);
+        
+        // Ejemplo: redirigir a crear cita
+        // window.location.href = `/profesional/cita/crear/?relacion=${relacionId}`;
     });
 });

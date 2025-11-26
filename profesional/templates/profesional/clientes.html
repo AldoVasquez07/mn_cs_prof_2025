@@ -17,6 +17,12 @@
 			</div>
 		</div>
 
+		{% if error %}
+		<div class="alert alert-error">
+			{{ error }}
+		</div>
+		{% endif %}
+
 		<!-- Tabla de Clientes -->
 		<div class="table-container">
 			<table class="clientes-table">
@@ -45,34 +51,47 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>Hernán Alvarado Torres</td>
-						<td><a href="#" class="link-email">Agregar email</a></td>
-						<td>+51 980 236 432</td>
-						<td>16-12-2024 12:00</td>
-						<td><a href="#" class="link-cita">Crear cita</a></td>
-					</tr>
-					<tr>
-						<td>Hernán Alvarado Torres</td>
-						<td><a href="#" class="link-email">Agregar email</a></td>
-						<td>+51 980 236 432</td>
-						<td>16-12-2024 12:00</td>
-						<td><a href="#" class="link-cita">Crear cita</a></td>
-					</tr>
-					<tr>
-						<td>Hernán Alvarado Torres</td>
-						<td><a href="#" class="link-email">Agregar email</a></td>
-						<td>+51 980 236 432</td>
-						<td>16-12-2024 12:00</td>
-						<td><a href="#" class="link-cita">Crear cita</a></td>
-					</tr>
-					<tr>
-						<td>Hernán Alvarado Torres</td>
-						<td><a href="#" class="link-email">Agregar email</a></td>
-						<td>+51 980 236 432</td>
-						<td>16-12-2024 12:00</td>
-						<td><a href="#" class="link-cita">Crear cita</a></td>
-					</tr>
+					{% if clientes %}
+						{% for cliente in clientes %}
+						<tr data-cliente-id="{{ cliente.id }}" data-relacion-id="{{ cliente.relacion_id }}">
+							<td>{{ cliente.nombre_completo }}</td>
+							<td>
+								{% if cliente.email %}
+									<span class="email-text">{{ cliente.email }}</span>
+								{% else %}
+									<a href="#" class="link-email" data-cliente-id="{{ cliente.id }}">Agregar email</a>
+								{% endif %}
+							</td>
+							<td>
+								{% if cliente.telefono %}
+									{{ cliente.telefono }}
+								{% else %}
+									<span class="text-muted">Sin teléfono</span>
+								{% endif %}
+							</td>
+							<td>
+								{% if cliente.ultima_visita %}
+									{{ cliente.ultima_visita|date:"d-m-Y H:i" }}
+								{% else %}
+									<span class="text-muted">Sin visitas</span>
+								{% endif %}
+							</td>
+							<td>
+								{% if cliente.proxima_visita %}
+									{{ cliente.proxima_visita|date:"d-m-Y H:i" }}
+								{% else %}
+									<a href="#" class="link-cita" data-cliente-id="{{ cliente.id }}" data-relacion-id="{{ cliente.relacion_id }}">Crear cita</a>
+								{% endif %}
+							</td>
+						</tr>
+						{% endfor %}
+					{% else %}
+						<tr>
+							<td colspan="5" class="no-data">
+								No tienes clientes registrados aún
+							</td>
+						</tr>
+					{% endif %}
 				</tbody>
 			</table>
 		</div>
