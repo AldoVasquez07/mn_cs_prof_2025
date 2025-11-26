@@ -62,4 +62,6 @@ urlpatterns = [
     # Endpoint para procesar la predicción de ACV (POST con imagen + datos)
     # ---------------------------------------------------------
     path('prediction-acv-option/realizar/', realizar_prediccion_acv, name='realizar_prediccion_acv'),
+    
+    path('mis-citas/', mis_citas_option, name='mis_citas_p_option'),
 ]

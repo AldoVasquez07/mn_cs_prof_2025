@@ -1,0 +1,250 @@
+{% extends 'profesional/base_home.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'profesional/css/mis_citas.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- MAIN -->
+<main>
+	<div class="appointments-container">
+		<div class="header-section">
+			<h1 class="page-title">Mis citas</h1>
+
+			<!-- Filters -->
+			<div class="filters-bar">
+				<a href="?filtro=todas" class="filter-btn {% if filtro == 'todas' %}active{% endif %}">
+					<i class='bx bx-calendar'></i> Todas
+				</a>
+				<a href="?filtro=proximas" class="filter-btn {% if filtro == 'proximas' %}active{% endif %}">
+					<i class='bx bx-time-five'></i> Próximas
+				</a>
+				<a href="?filtro=completadas" class="filter-btn {% if filtro == 'completadas' %}active{% endif %}">
+					<i class='bx bx-check-circle'></i> Completadas
+				</a>
+				<a href="?filtro=canceladas" class="filter-btn {% if filtro == 'canceladas' %}active{% endif %}">
+					<i class='bx bx-x-circle'></i> Canceladas
+				</a>
+			</div>
+
+		</div>
+
+		<!-- Appointments Table -->
+		<div class="table-container">
+			<div class="table-wrapper">
+				<table class="appointments-table" id="appointmentsTable">
+					<thead>
+						<tr>
+							<th>No.</th>
+							<th>Cliente</th>
+							<th>Tipo de cita</th>
+							<th>Dirección</th>
+							<th>Fecha/Hora</th>
+							<th>Estado</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if citas %}
+						{% for c in citas %}
+						<tr class="appointment-row" data-status="{{ c.estado }}">
+
+							<td>{{ forloop.counter }}</td>
+
+							<!-- Cliente -->
+							<td>
+								<div class="professional-info">
+									<div class="professional-avatar">
+										<img
+											src="https://ui-avatars.com/api/?name={{ c.relacion.cliente.usuario.first_name|urlencode }}+{{ c.relacion.cliente.usuario.apellido_paterno|urlencode }}&background=667eea&color=fff">
+									</div>
+									<span>
+										{{ c.relacion.cliente.usuario.first_name }} 
+										{{ c.relacion.cliente.usuario.apellido_paterno }}
+									</span>
+								</div>
+							</td>
+
+							<!-- Tipo de cita -->
+							<td>
+								{% if c.relacion.profesional.aspectos_negocio.permite_virtual %}
+								<span class="appointment-type online">
+									<i class='bx bx-video'></i> ONLINE
+								</span>
+								{% elif c.relacion.profesional.aspectos_negocio.permite_presencial %}
+								<span class="appointment-type presencial">
+									<i class='bx bx-building'></i> PRESENCIAL
+								</span>
+								{% else %}
+								<span class="appointment-type presencial">
+									<i class='bx bx-building'></i> N/A
+								</span>
+								{% endif %}
+							</td>
+
+							<!-- Dirección -->
+							<td>
+								<span class="address-text">
+									{{ c.relacion.profesional.aspectos_negocio.direccion|default:"-" }}
+								</span>
+							</td>
+
+							<!-- Fecha -->
+							<td>
+								<div class="datetime-info">
+									<span class="date">{{ c.fecha|date:"d/m/Y" }}</span>
+									<span class="time">{{ c.fecha|time:"H:i" }}</span>
+								</div>
+							</td>
+
+							<!-- Estado -->
+							<td>
+								{% if c.estado == 'pendiente' %}
+								<span class="status-badge pendiente">
+									<i class='bx bx-time-five'></i> Pendiente
+								</span>
+								{% elif c.estado == 'confirmada' %}
+								<span class="status-badge confirmada">
+									<i class='bx bx-check'></i> Confirmada
+								</span>
+								{% elif c.estado == 'completada' %}
+								<span class="status-badge completada">
+									<i class='bx bx-check-circle'></i> Completada
+								</span>
+								{% elif c.estado == 'cancelada' %}
+								<span class="status-badge cancelada">
+									<i class='bx bx-x-circle'></i> Cancelada
+								</span>
+								{% endif %}
+							</td>
+
+							<!-- Acciones -->
+							<td>
+								<div class="actions-group">
+									<button class="action-btn btn-view" data-id="{{ c.id }}">
+										<i class='bx bx-show'></i>
+									</button>
+									{% if c.estado in "pendiente,confirmada" %}
+									<button class="action-btn btn-cancel" data-id="{{ c.id }}">
+										<i class='bx bx-x'></i>
+									</button>
+									{% endif %}
+								</div>
+							</td>
+
+						</tr>
+						{% endfor %}
+						{% else %}
+						<tr>
+							<td colspan="7" class="text-center">No hay citas registradas</td>
+						</tr>
+						{% endif %}
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Empty State -->
+			<div class="empty-state" id="emptyState" style="display: none;">
+				<i class='bx bx-calendar-x'></i>
+				<h3>No hay citas</h3>
+				<p>No se encontraron citas con los filtros seleccionados</p>
+			</div>
+		</div>
+
+		<!-- Pagination -->
+		<div class="pagination-container">
+			<button class="pagination-btn" id="prevPage">
+				<i class='bx bx-chevron-left'></i>
+				Anterior
+			</button>
+			<div class="pagination-info">
+				Página <span id="currentPage">1</span> de <span id="totalPages">1</span>
+			</div>
+			<button class="pagination-btn" id="nextPage">
+				Siguiente
+				<i class='bx bx-chevron-right'></i>
+			</button>
+		</div>
+	</div>
+</main>
+
+<!-- CONTENT -->
+
+<!-- Modal de Detalles -->
+<div class="modal" id="detailsModal">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h3>Detalles de la Cita</h3>
+			<button class="modal-close" id="closeDetails">
+				<i class='bx bx-x'></i>
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="detail-section">
+				<div class="detail-item">
+					<label>Cliente:</label>
+					<p id="detailClient">Juan Pérez García</p>
+				</div>
+				<div class="detail-item">
+					<label>Tipo de cita:</label>
+					<p id="detailType">Online</p>
+				</div>
+				<div class="detail-item">
+					<label>Dirección:</label>
+					<p id="detailAddress">-</p>
+				</div>
+				<div class="detail-item">
+					<label>Fecha y hora:</label>
+					<p id="detailDateTime">23/05/25 - 11:30</p>
+				</div>
+				<div class="detail-item">
+					<label>Estado:</label>
+					<p id="detailStatus"><span class="status-badge pendiente">Pendiente</span></p>
+				</div>
+				<div class="detail-item">
+					<label>Motivo:</label>
+					<p id="detailReason">Sin motivo especificado</p>
+				</div>
+			</div>
+
+			<div class="detail-actions">
+				<button class="btn btn-primary" id="joinMeeting" style="display: none;">
+					<i class='bx bx-video'></i>
+					Unirse a la reunión
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal de Cancelación -->
+<div class="modal" id="cancelModal">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h3>Cancelar Cita</h3>
+			<button class="modal-close" id="closeCancel">
+				<i class='bx bx-x'></i>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p class="cancel-warning">
+				<i class='bx bx-error-circle'></i>
+				¿Estás seguro de que deseas cancelar esta cita?
+			</p>
+			<div class="form-group">
+				<label>Motivo de cancelación (opcional):</label>
+				<textarea class="form-control" id="cancelReason" rows="4" placeholder="Escribe el motivo..."></textarea>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-secondary" id="cancelCancelBtn">No, mantener cita</button>
+			<button class="btn btn-danger" id="confirmCancelBtn">Sí, cancelar cita</button>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'profesional/js/mis_citas.js' %}"></script>
+{% endblock %}

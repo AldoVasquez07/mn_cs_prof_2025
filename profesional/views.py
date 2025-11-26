@@ -198,8 +198,6 @@ def clientes_option(request):
         })
 
 
-
-
 @login_required(login_url='general:login_inicio_sesion')
 def bandeja_mensaje_option(request):
     """Renderiza la vista de bandeja de mensajes."""
@@ -258,8 +256,6 @@ def bandeja_mensaje_option(request):
     }
     
     return render(request, 'profesional/bandeja_entrada.html', context)
-
-
 
 
 @login_required(login_url='general:login_inicio_sesion')
@@ -455,8 +451,6 @@ def productividad_ingresos_option(request):
     return render(request, 'profesional/productividad_ingresos.html', context)
 
 
-
-
 @login_required(login_url='general:login_inicio_sesion')
 def horarios_option(request):
     """Vista principal que maneja tanto GET (mostrar) como POST (guardar)."""
@@ -613,6 +607,38 @@ def prediction_acv_option(request):
         "choice": 7,
         "modelo_predictivo": modelo_predictivo
         })
+
+
+@login_required(login_url='general:login_inicio_sesion')
+def mis_citas_option(request):    
+    modelo_predictivo = request.session.get('modelo_predictivo', False)
+
+    # Obtener el profesional del usuario autenticado
+    profesional = request.user.profesional
+
+    filtro = request.GET.get("filtro", "todas")
+
+    # Filtrar citas donde el profesional está involucrado
+    citas = Cita.objects.filter(relacion__profesional=profesional).select_related(
+        "relacion__cliente__usuario",  # Cambiado de profesional a cliente
+        "relacion__profesional__especialidad"
+    )
+
+    # Filtros por estado
+    if filtro == "proximas":
+        citas = citas.filter(estado__in=["pendiente", "confirmada"])
+    elif filtro == "completadas":
+        citas = citas.filter(estado="completada")
+    elif filtro == "canceladas":
+        citas = citas.filter(estado="cancelada")
+
+    return render(request, 'profesional/mis_citas.html', {
+        "choice": 8,
+        "option_name": "Mis citas",
+        "citas": citas,
+        "filtro": filtro,
+        "modelo_predictivo": modelo_predictivo
+    })
 
 
 # -------------------------------------------------------------

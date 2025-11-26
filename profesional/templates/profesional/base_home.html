@@ -115,6 +115,17 @@
 				</a>
 			</li>
 			{% endif %}
+
+			{% if choice and choice == 8 %}
+			<li class="active">
+            {% else %}
+			<li>
+            {% endif %}
+				<a href="{% url 'profesional:mis_citas_p_option' %}">
+					<i class='bx bx-credit-card bx-sm'></i>
+					<span class="text">Citas</span>
+				</a>
+			</li>
 		</ul>
 		<ul class="side-menu bottom">
 			<li>

@@ -1,0 +1,703 @@
+/* ===================================
+   CSS ESPECÍFICO PARA MIS CITAS (CLIENTE)
+   =================================== */
+
+
+/* ===================================
+   MAIN CONTENT
+   =================================== */
+#content main {
+	width: 100%;
+	padding: 36px 24px;
+	font-family: var(--poppins);
+	max-height: calc(100vh - 56px);
+	overflow-y: auto;
+	background: #f8f9fa;
+}
+
+.appointments-container {
+	max-width: 1400px;
+	margin: 0 auto;
+}
+
+.header-section {
+	margin-bottom: 32px;
+}
+
+.page-title {
+	font-size: 32px;
+	font-weight: 700;
+	color: var(--dark);
+	margin: 0 0 24px 0;
+}
+
+/* ===================================
+   FILTERS BAR
+   =================================== */
+.filters-bar {
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.filter-btn {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 20px;
+	background: white;
+	border: 2px solid #e8ecef;
+	border-radius: 10px;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--dark);
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-family: var(--poppins);
+}
+
+.filter-btn:hover {
+	border-color: var(--blue);
+	background: rgba(60, 145, 230, 0.05);
+}
+
+.filter-btn.active {
+	background: var(--blue);
+	border-color: var(--blue);
+	color: white;
+}
+
+.filter-btn i {
+	font-size: 18px;
+}
+
+/* ===================================
+   TABLE CONTAINER
+   =================================== */
+.table-container {
+	background: var(--light);
+	border-radius: 16px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	border: 3px solid var(--blue);
+	overflow: hidden;
+	margin-bottom: 24px;
+}
+
+.table-wrapper {
+	overflow-x: auto;
+}
+
+.appointments-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-family: var(--poppins);
+}
+
+.appointments-table thead {
+	background: var(--blue);
+	color: white;
+}
+
+.appointments-table thead th {
+	padding: 16px 12px;
+	text-align: left;
+	font-size: 14px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.appointments-table tbody tr {
+	border-bottom: 1px solid #e8ecef;
+	transition: background 0.2s ease;
+}
+
+.appointments-table tbody tr:hover {
+	background: rgba(60, 145, 230, 0.05);
+}
+
+.appointments-table tbody tr:last-child {
+	border-bottom: none;
+}
+
+.appointments-table tbody td {
+	padding: 16px 12px;
+	font-size: 14px;
+	color: var(--dark);
+	vertical-align: middle;
+}
+
+/* Professional Info */
+.professional-info {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.professional-avatar {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	overflow: hidden;
+	flex-shrink: 0;
+}
+
+.professional-avatar img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* Specialty Badge */
+.specialty-badge {
+	display: inline-block;
+	padding: 6px 12px;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.specialty-badge.medico {
+	background: #e3f2fd;
+	color: #1976d2;
+}
+
+.specialty-badge.ingeniero {
+	background: #fce4ec;
+	color: #c2185b;
+}
+
+.specialty-badge.arquitecto {
+	background: #e0f7fa;
+	color: #00838f;
+}
+
+.specialty-badge.consultor {
+	background: #fff3e0;
+	color: #e65100;
+}
+
+/* Appointment Type */
+.appointment-type {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 12px;
+	border-radius: 8px;
+	font-size: 12px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.appointment-type i {
+	font-size: 16px;
+}
+
+.appointment-type.online {
+	background: #e8f5e9;
+	color: #2e7d32;
+}
+
+.appointment-type.presencial {
+	background: #fff3e0;
+	color: #f57c00;
+}
+
+/* Address */
+.address-text {
+	font-size: 13px;
+	color: var(--dark-grey);
+}
+
+/* DateTime Info */
+.datetime-info {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.datetime-info .date {
+	font-weight: 600;
+	color: var(--dark);
+	font-size: 13px;
+}
+
+.datetime-info .time {
+	font-size: 12px;
+	color: var(--dark-grey);
+}
+
+/* Actions Group */
+.actions-group {
+	display: flex;
+	gap: 8px;
+}
+
+.action-btn {
+	width: 36px;
+	height: 36px;
+	border: none;
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-size: 18px;
+}
+
+.btn-view {
+	background: #e3f2fd;
+	color: #1976d2;
+}
+
+.btn-view:hover {
+	background: #1976d2;
+	color: white;
+	transform: translateY(-2px);
+}
+
+.btn-edit {
+	background: #fff3e0;
+	color: #f57c00;
+}
+
+.btn-edit:hover {
+	background: #f57c00;
+	color: white;
+	transform: translateY(-2px);
+}
+
+.btn-cancel {
+	background: #ffebee;
+	color: #c62828;
+}
+
+.btn-cancel:hover {
+	background: #c62828;
+	color: white;
+	transform: translateY(-2px);
+}
+
+/* ===================================
+   EMPTY STATE
+   =================================== */
+.empty-state {
+	text-align: center;
+	padding: 60px 20px;
+}
+
+.empty-state i {
+	font-size: 80px;
+	color: var(--dark-grey);
+	margin-bottom: 20px;
+}
+
+.empty-state h3 {
+	font-size: 24px;
+	font-weight: 600;
+	color: var(--dark);
+	margin: 0 0 12px 0;
+}
+
+.empty-state p {
+	font-size: 16px;
+	color: var(--dark-grey);
+	margin: 0;
+}
+
+/* ===================================
+   PAGINATION
+   =================================== */
+.pagination-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px;
+	background: var(--light);
+	border-radius: 12px;
+}
+
+.pagination-btn {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 20px;
+	background: var(--blue);
+	color: white;
+	border: none;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-family: var(--poppins);
+}
+
+.pagination-btn:hover {
+	background: #2d7bc7;
+	transform: translateY(-2px);
+}
+
+.pagination-btn:disabled {
+	background: var(--dark-grey);
+	cursor: not-allowed;
+	opacity: 0.5;
+	transform: none;
+}
+
+.pagination-info {
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--dark);
+}
+
+.pagination-info span {
+	color: var(--blue);
+}
+
+/* ===================================
+   MODAL
+   =================================== */
+.modal {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 10000;
+	align-items: center;
+	justify-content: center;
+}
+
+.modal.show {
+	display: flex;
+}
+
+.modal-content {
+	background: var(--light);
+	border-radius: 16px;
+	width: 90%;
+	max-width: 600px;
+	max-height: 90vh;
+	overflow-y: auto;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px 24px;
+	border-bottom: 2px solid var(--grey);
+}
+
+.modal-header h3 {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 600;
+	color: var(--dark);
+}
+
+.modal-close {
+	width: 32px;
+	height: 32px;
+	border: none;
+	background: var(--grey);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	color: var(--dark);
+	font-size: 20px;
+	transition: all 0.2s;
+}
+
+.modal-close:hover {
+	background: var(--dark-grey);
+	color: white;
+}
+
+.modal-body {
+	padding: 24px;
+}
+
+/* Detail Section */
+.detail-section {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.detail-item {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.detail-item label {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--dark-grey);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.detail-item p {
+	margin: 0;
+	font-size: 16px;
+	color: var(--dark);
+	font-weight: 500;
+}
+
+.status-badge {
+	display: inline-block;
+	padding: 6px 16px;
+	border-radius: 20px;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.status-badge.proxima {
+	background: #e3f2fd;
+	color: #1976d2;
+}
+
+.status-badge.completada {
+	background: #e8f5e9;
+	color: #2e7d32;
+}
+
+.status-badge.cancelada {
+	background: #ffebee;
+	color: #c62828;
+}
+
+.detail-actions {
+	margin-top: 20px;
+}
+
+/* Cancel Warning */
+.cancel-warning {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 16px;
+	background: #fff3cd;
+	border-left: 4px solid #ffc107;
+	border-radius: 8px;
+	margin-bottom: 20px;
+	color: #856404;
+	font-weight: 500;
+}
+
+.cancel-warning i {
+	font-size: 24px;
+	flex-shrink: 0;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.form-group label {
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--dark);
+}
+
+.form-control {
+	width: 100%;
+	padding: 12px 16px;
+	border: 2px solid #e8ecef;
+	border-radius: 10px;
+	font-family: var(--poppins);
+	font-size: 14px;
+	color: var(--dark);
+	outline: none;
+	transition: all 0.3s;
+	background: white;
+	resize: vertical;
+}
+
+.form-control:focus {
+	border-color: var(--blue);
+	box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.1);
+}
+
+.modal-footer {
+	display: flex;
+	gap: 12px;
+	padding: 20px 24px;
+	border-top: 2px solid var(--grey);
+	justify-content: flex-end;
+}
+
+.btn {
+	padding: 12px 24px;
+	border: none;
+	border-radius: 10px;
+	font-size: 15px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s;
+	font-family: var(--poppins);
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.btn-secondary {
+	background: var(--grey);
+	color: var(--dark);
+}
+
+.btn-secondary:hover {
+	background: #d1d5db;
+}
+
+.btn-primary {
+	background: var(--blue);
+	color: white;
+	box-shadow: 0 2px 8px rgba(60, 145, 230, 0.3);
+}
+
+.btn-primary:hover {
+	background: #2d7bc7;
+	box-shadow: 0 4px 16px rgba(60, 145, 230, 0.4);
+}
+
+.btn-danger {
+	background: #dc3545;
+	color: white;
+	box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-danger:hover {
+	background: #c82333;
+	box-shadow: 0 4px 16px rgba(220, 53, 69, 0.4);
+}
+
+/* ===================================
+   ANIMATIONS
+   =================================== */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.table-container {
+	animation: fadeInUp 0.5s ease backwards;
+}
+
+/* ===================================
+   MEDIA QUERIES
+   =================================== */
+@media screen and (max-width: 768px) {
+	#content {
+		width: calc(100% - 60px);
+		left: 60px;
+	}
+
+	#content nav .nav-title {
+		font-size: 16px;
+	}
+
+	.page-title {
+		font-size: 26px;
+	}
+
+	.table-wrapper {
+		overflow-x: scroll;
+	}
+
+	.appointments-table {
+		min-width: 900px;
+	}
+
+	.pagination-container {
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.modal-footer {
+		flex-direction: column;
+	}
+
+	.btn {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+@media screen and (max-width: 576px) {
+	/* Search form toggle for mobile */
+	#content nav form .form-input input {
+		display: none;
+	}
+
+	#content nav form .form-input button {
+		width: auto;
+		height: auto;
+		background: transparent;
+		border-radius: none;
+		color: var(--dark);
+	}
+
+	#content nav form.show .form-input input {
+		display: block;
+		width: 100%;
+	}
+
+	#content nav form.show .form-input button {
+		width: 36px;
+		height: 100%;
+		border-radius: 0 36px 36px 0;
+		color: var(--light);
+		background: var(--blue);
+	}
+
+	#content nav form.show ~ .swith-lm,
+	#content nav form.show ~ .profile {
+		display: none;
+	}
+
+	#content main {
+		padding: 24px 16px;
+	}
+
+	.page-title {
+		font-size: 24px;
+		margin-bottom: 20px;
+	}
+
+	.filters-bar {
+		gap: 8px;
+	}
+
+	.filter-btn {
+		font-size: 13px;
+		padding: 8px 16px;
+	}
+
+	.appointments-table thead th {
+		font-size: 12px;
+		padding: 12px 8px;
+	}
+
+	.appointments-table tbody td {
+		font-size: 13px;
+		padding: 12px 8px;
+	}
+}
