@@ -774,7 +774,7 @@ def realizar_prediccion_acv(request):
         return JsonResponse({
             'success': False,
             'error': 'No se pudo conectar con el servidor de predicción. '
-                     'Verifica que la API esté activa en http://localhost:5000'
+                     'Verifica que la API esté activa en http://localhost:5001'
         }, status=503)
 
     except requests.exceptions.Timeout as e:
