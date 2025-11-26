@@ -66,6 +66,9 @@ if (searchInput) {
         const allRows = document.querySelectorAll('.messages-table tbody tr');
         
         allRows.forEach(row => {
+            // Evitar aplicar búsqueda en filas vacías (mensajes de "sin datos")
+            if (row.cells.length === 1) return;
+            
             const text = row.textContent.toLowerCase();
             if (text.includes(searchTerm)) {
                 row.style.display = '';
@@ -88,85 +91,18 @@ const messageRows = document.querySelectorAll('.message-row');
 
 messageRows.forEach(row => {
     row.addEventListener('click', function () {
-        // Obtener datos de la fila
-        const consultor = this.cells[0].textContent;
-        const mensaje = this.cells[1].textContent;
-        const fecha = this.cells[3].textContent;
+        const relacionId = this.getAttribute('data-relacion-id');
         const isManaged = this.getAttribute('data-managed') === 'true';
         
-        console.log('Mensaje seleccionado:', {
-            consultor: consultor,
-            mensaje: mensaje,
-            fecha: fecha,
-            gestionado: isManaged
-        });
-        
-        // Aquí puedes abrir un modal o redirigir a la vista de detalle del mensaje
-        openMessageDetail(consultor, mensaje, fecha, isManaged);
+        if (relacionId) {
+            // Redirigir a la vista de chat/conversación con el cliente
+            // Ajusta esta URL según tu configuración de URLs
+            window.location.href = `/profesional/chat/${relacionId}/`;
+        }
     });
 });
 
-// Función para abrir detalle del mensaje (ejemplo)
-function openMessageDetail(consultor, mensaje, fecha, isManaged) {
-    // Esta función puede abrir un modal o redirigir a otra página
-    const action = isManaged ? 'Ver conversación' : 'Gestionar mensaje';
-    
-    alert(`${action}\n\nConsultor: ${consultor}\nMensaje: ${mensaje}\nFecha: ${fecha}`);
-    
-    // Si es no gestionado, podrías marcarlo como gestionado
-    if (!isManaged) {
-        // Aquí puedes agregar lógica para marcar como gestionado
-        console.log('Mensaje marcado para gestión');
-    }
-}
-
-// Función para mover mensaje de no gestionado a gestionado
-function markAsManaged(messageRow) {
-    messageRow.setAttribute('data-managed', 'true');
-    messageRow.style.opacity = '0.8';
-    
-    // Mover la fila a la tabla de gestionados
-    const gestionadosTable = document.querySelectorAll('.messages-table')[1];
-    if (gestionadosTable) {
-        const tbody = gestionadosTable.querySelector('tbody');
-        tbody.insertBefore(messageRow, tbody.firstChild);
-    }
-}
-
-// Contador de mensajes no gestionados
-function updateUnmanagedCount() {
-    const unmanagedRows = document.querySelectorAll('.message-row[data-managed="false"]');
-    const count = unmanagedRows.length;
-    
-    // Actualizar título si existe un contador
-    const noGestionadosTitle = document.querySelector('.messages-section:first-of-type .section-title');
-    if (noGestionadosTitle) {
-        const baseText = 'No Gestionados';
-        noGestionadosTitle.textContent = count > 0 ? `${baseText} (${count})` : baseText;
-    }
-    
-    return count;
-}
-
-// Inicializar contador
-updateUnmanagedCount();
-
-// Actualizar contador cada vez que cambia el DOM
-const observer = new MutationObserver(function() {
-    updateUnmanagedCount();
-});
-
-const tablesContainer = document.querySelector('.bandeja-container');
-if (tablesContainer) {
-    observer.observe(tablesContainer, { 
-        childList: true, 
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['data-managed']
-    });
-}
-
-// Marcar mensaje como leído al hacer hover (opcional)
+// Marcar mensaje como leído al hacer hover
 messageRows.forEach(row => {
     row.addEventListener('mouseenter', function () {
         if (this.getAttribute('data-managed') === 'false') {
@@ -216,3 +152,25 @@ function highlightRow(index) {
         });
     }
 }
+
+// Actualizar contador de mensajes no gestionados en el título
+function updateUnmanagedCount() {
+    const unmanagedRows = document.querySelectorAll('.message-row[data-managed="false"]');
+    const count = unmanagedRows.length;
+    
+    // Actualizar título si existe un contador
+    const noGestionadosTitle = document.querySelector('.messages-section:first-of-type .section-title');
+    if (noGestionadosTitle && !noGestionadosTitle.querySelector('.badge-count')) {
+        const baseText = noGestionadosTitle.textContent.trim();
+        if (count > 0) {
+            noGestionadosTitle.innerHTML = `${baseText} <span class="badge-count">(${count})</span>`;
+        }
+    }
+    
+    return count;
+}
+
+// Inicializar contador al cargar
+document.addEventListener('DOMContentLoaded', function() {
+    updateUnmanagedCount();
+});

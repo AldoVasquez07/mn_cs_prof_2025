@@ -13,7 +13,12 @@
 
 		<!-- No Gestionados Section -->
 		<div class="messages-section">
-			<h2 class="section-title">No Gestionados</h2>
+			<h2 class="section-title">
+				No Gestionados
+				{% if total_no_gestionados > 0 %}
+					<span class="badge-count">({{ total_no_gestionados }})</span>
+				{% endif %}
+			</h2>
 			<div class="table-container">
 				<table class="messages-table">
 					<thead>
@@ -25,30 +30,29 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr class="message-row" data-managed="false">
-							<td>Hernán Alvarado Torres</td>
-							<td>Buen día, tengo una consulta...</td>
-							<td>
-								<span class="badge-cliente">Mi cliente</span>
-							</td>
-							<td>16 Abril, 10:02</td>
-						</tr>
-						<tr class="message-row" data-managed="false">
-							<td>Hernán Alvarado Torres</td>
-							<td>Buen día, tengo una consulta...</td>
-							<td>
-								<span class="badge-cliente">Mi cliente</span>
-							</td>
-							<td>16 Abril, 10:02</td>
-						</tr>
-						<tr class="message-row" data-managed="false">
-							<td>Hernán Alvarado Torres</td>
-							<td>Buen día, tengo una consulta...</td>
-							<td>
-								<span class="badge-cliente">Mi cliente</span>
-							</td>
-							<td>16 Abril, 10:02</td>
-						</tr>
+						{% if mensajes_no_gestionados %}
+							{% for mensaje in mensajes_no_gestionados %}
+								<tr class="message-row" 
+									data-managed="false" 
+									data-relacion-id="{{ mensaje.relacion_id }}"
+									style="cursor: pointer;">
+									<td>{{ mensaje.cliente_nombre }}</td>
+									<td>{{ mensaje.contenido }}</td>
+									<td>
+										{% if mensaje.es_mi_cliente %}
+											<span class="badge-cliente">Mi cliente</span>
+										{% endif %}
+									</td>
+									<td>{{ mensaje.fecha_envio|date:"d M, H:i" }}</td>
+								</tr>
+							{% endfor %}
+						{% else %}
+							<tr>
+								<td colspan="4" style="text-align: center; padding: 2rem; color: #888;">
+									No hay mensajes sin gestionar
+								</td>
+							</tr>
+						{% endif %}
 					</tbody>
 				</table>
 			</div>
@@ -68,30 +72,29 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr class="message-row" data-managed="true">
-							<td>Hernán Alvarado Torres</td>
-							<td>Buen día, tengo una consulta...</td>
-							<td>
-								<span class="badge-cliente">Mi cliente</span>
-							</td>
-							<td>16 Abril, 10:02</td>
-						</tr>
-						<tr class="message-row" data-managed="true">
-							<td>Hernán Alvarado Torres</td>
-							<td>Buen día, tengo una consulta...</td>
-							<td>
-								<span class="badge-cliente">Mi cliente</span>
-							</td>
-							<td>16 Abril, 10:02</td>
-						</tr>
-						<tr class="message-row" data-managed="true">
-							<td>Hernán Alvarado Torres</td>
-							<td>Buen día, tengo una consulta...</td>
-							<td>
-								<span class="badge-cliente">Mi cliente</span>
-							</td>
-							<td>16 Abril, 10:02</td>
-						</tr>
+						{% if mensajes_gestionados %}
+							{% for mensaje in mensajes_gestionados %}
+								<tr class="message-row" 
+									data-managed="true" 
+									data-relacion-id="{{ mensaje.relacion_id }}"
+									style="cursor: pointer;">
+									<td>{{ mensaje.cliente_nombre }}</td>
+									<td>{{ mensaje.contenido }}</td>
+									<td>
+										{% if mensaje.es_mi_cliente %}
+											<span class="badge-cliente">Mi cliente</span>
+										{% endif %}
+									</td>
+									<td>{{ mensaje.fecha_envio|date:"d M, H:i" }}</td>
+								</tr>
+							{% endfor %}
+						{% else %}
+							<tr>
+								<td colspan="4" style="text-align: center; padding: 2rem; color: #888;">
+									No hay mensajes gestionados
+								</td>
+							</tr>
+						{% endif %}
 					</tbody>
 				</table>
 			</div>

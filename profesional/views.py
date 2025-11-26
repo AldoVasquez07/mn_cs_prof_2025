@@ -19,6 +19,8 @@ from sistema.models import Disponibilidad, AspectosNegocio
 from profesional.models import Profesional, ProfesionalCliente, Mensaje
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
+from django.db.models import Q, Max
+
 
 # -------------------------------------------------------------
 # CONFIGURACIÓN DE LOGGING
@@ -196,14 +198,68 @@ def clientes_option(request):
         })
 
 
+
+
 @login_required(login_url='general:login_inicio_sesion')
 def bandeja_mensaje_option(request):
     """Renderiza la vista de bandeja de mensajes."""
+    
+    # Obtener el profesional actual
+    try:
+        profesional = Profesional.objects.get(usuario=request.user)
+    except Profesional.DoesNotExist:
+        profesional = None
+    
+    mensajes_no_gestionados = []
+    mensajes_gestionados = []
+    
+    if profesional:
+        # Obtener todas las relaciones del profesional
+        relaciones = ProfesionalCliente.objects.filter(
+            profesional=profesional,
+            estado='activo'
+        ).select_related('cliente', 'cliente__usuario')
+        
+        # Para cada relación, obtener el último mensaje
+        for relacion in relaciones:
+            ultimo_mensaje = Mensaje.objects.filter(
+                relacion=relacion
+            ).order_by('-fecha_envio').first()
+            
+            if ultimo_mensaje:
+                mensaje_data = {
+                    'relacion_id': relacion.id,
+                    'cliente_nombre': relacion.cliente.usuario.get_full_name(),
+                    'contenido': ultimo_mensaje.contenido[:50] + '...' if len(ultimo_mensaje.contenido) > 50 else ultimo_mensaje.contenido,
+                    'fecha_envio': ultimo_mensaje.fecha_envio,
+                    'emisor': ultimo_mensaje.emisor,
+                    'es_mi_cliente': True,  # Siempre es True porque estamos filtrando por relaciones activas
+                }
+                
+                # Clasificar como gestionado o no gestionado
+                # Consideramos "no gestionado" si el último mensaje fue del cliente
+                if ultimo_mensaje.emisor == 'cliente':
+                    mensajes_no_gestionados.append(mensaje_data)
+                else:
+                    mensajes_gestionados.append(mensaje_data)
+    
+    # Ordenar por fecha (más recientes primero)
+    mensajes_no_gestionados.sort(key=lambda x: x['fecha_envio'], reverse=True)
+    mensajes_gestionados.sort(key=lambda x: x['fecha_envio'], reverse=True)
+    
     modelo_predictivo = request.session.get('modelo_predictivo', False)
-    return render(request, 'profesional/bandeja_entrada.html', {
+    
+    context = {
         "choice": 3,
-        "modelo_predictivo": modelo_predictivo
-        })
+        "modelo_predictivo": modelo_predictivo,
+        "mensajes_no_gestionados": mensajes_no_gestionados,
+        "mensajes_gestionados": mensajes_gestionados,
+        "total_no_gestionados": len(mensajes_no_gestionados),
+    }
+    
+    return render(request, 'profesional/bandeja_entrada.html', context)
+
+
 
 
 @login_required(login_url='general:login_inicio_sesion')
