@@ -59,14 +59,16 @@
 							</label>
 						</div>
 
-						<div class="form-group" id="precio_presencial_group" 
-							 style="display: {% if aspectos_negocio.permite_presencial %}block{% else %}none{% endif %};">
+						{% if aspectos_negocio.permite_presencial %}
+						<div class="form-group" id="precio_presencial_group">
+						{% else %}
+						<div class="form-group d-none" id="precio_presencial_group">
+						{% endif %}
 							<label>Precio Presencial (S/.)</label>
 							<input type="number" name="precio_presencial" class="form-control" 
-								   step="0.01" min="0"
-								   value="{{ aspectos_negocio.precio_presencial|default:'' }}">
+								step="0.01" min="0"
+								value="{{ aspectos_negocio.precio_presencial|default:'' }}">
 						</div>
-
 						<div class="form-group">
 							<label class="checkbox-label">
 								<input type="checkbox" name="permite_virtual"
@@ -76,12 +78,15 @@
 							</label>
 						</div>
 
-						<div class="form-group" id="precio_online_group"
-							 style="display: {% if aspectos_negocio.permite_virtual %}block{% else %}none{% endif %};">
+						{% if aspectos_negocio.permite_virtual %}
+						<div class="form-group" id="precio_online_group">
+						{% else %}
+						<div class="form-group d-none" id="precio_online_group">
+						{% endif %}
 							<label>Precio Online (S/.)</label>
 							<input type="number" name="precio_online" class="form-control" 
-								   step="0.01" min="0"
-								   value="{{ aspectos_negocio.precio_online|default:'' }}">
+								step="0.01" min="0"
+								value="{{ aspectos_negocio.precio_online|default:'' }}">
 						</div>
 
 						<button type="submit" class="btn btn-primary btn-block">

@@ -8,15 +8,24 @@
 {% block content %}
 <!-- MAIN -->
 <main>
+	<!-- Mensajes de éxito/error -->
+	{% if messages %}
+		<div class="messages-container">
+			{% for message in messages %}
+				<div class="alert alert-{{ message.tags }}">
+					{{ message }}
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+
 	<div class="professionals-container">
 		<div class="header-section">
 			<h1 class="page-title">Profesionales</h1>
 
 			<!-- Search and Filters -->
 			<div class="search-filter-bar">
-
 				<form method="GET" action="" class="filters-form">
-
 					<div class="search-box">
 						<i class='bx bx-search'></i>
 						<input type="text" name="search" placeholder="Buscar por nombre, especialidad..."
@@ -24,7 +33,6 @@
 					</div>
 
 					<div class="filters-group">
-
 						<!-- Especialidades desde BD -->
 						<select class="filter-select" name="especialidad" id="specialtyFilter">
 							<option value="">Todas las especialidades</option>
@@ -60,12 +68,9 @@
 							<i class='bx bx-x'></i>
 							Limpiar
 						</a>
-
 					</div>
 				</form>
-
 			</div>
-
 		</div>
 
 		<!-- Professionals Grid -->
@@ -74,6 +79,15 @@
 			<div class="professional-card" 
 				 data-specialty="{{ p.especialidad|lower }}" 
 				 data-rating="{{ p.rating_int }}"
+				 data-professional-id="{{ p.id }}"
+				 data-professional-name="{{ p.nombre }}"
+				 data-professional-specialty="{{ p.especialidad }}"
+				 data-professional-avatar="{{ p.foto }}"
+				 data-precio-presencial="{{ p.opciones.precio_presencial|default:'0' }}"
+				 data-precio-online="{{ p.opciones.precio_online|default:'0' }}"
+				 data-permite-presencial="{{ p.opciones.presencial|yesno:'true,false' }}"
+				 data-permite-online="{{ p.opciones.online|yesno:'true,false' }}"
+				 data-disponibilidades='{{ p.disponibilidad_completa|safe }}'
 				 data-types="{% if p.opciones.presencial %}presencial{% endif %}{% if p.opciones.presencial and p.opciones.online %},{% endif %}{% if p.opciones.online %}online{% endif %}">
 
 				<div class="card-header">
@@ -99,7 +113,6 @@
 				</div>
 
 				<div class="card-body">
-
 					<div class="consultation-types">
 						{% if p.opciones.presencial %}
 						<span class="type-badge presencial">
@@ -134,20 +147,20 @@
 				</div>
 
 				<div class="card-footer">
-					<h4>Disponibilidad:</h4>
+					<h4>Próximos horarios disponibles:</h4>
 					<div class="availability-days">
-						{% if p.disponibilidad %}
-							{% for d in p.disponibilidad %}
+						{% if p.disponibilidad_preview %}
+							{% for slot in p.disponibilidad_preview %}
 							<span class="day-badge available">
-								{{ d.get_dia_display }}<br>
-								{{ d.fecha|date:"d M" }}<br>
-								<small>{{ d.hora }}</small>
+								{{ slot.dia }}<br>
+								{{ slot.fecha_display }}<br>
+								<small>{{ slot.hora }}</small>
 							</span>
 							{% endfor %}
 						{% else %}
 							<span class="day-badge">
-								Consultar<br>
-								disponibilidad
+								Sin horarios<br>
+								disponibles
 							</span>
 						{% endif %}
 					</div>
@@ -167,7 +180,6 @@
 				<p>Intenta ajustar los filtros de búsqueda</p>
 			</div>
 			{% endfor %}
-
 		</div>
 
 		<!-- Empty State -->
@@ -176,21 +188,12 @@
 			<h3>No se encontraron profesionales</h3>
 			<p>Intenta ajustar los filtros de búsqueda</p>
 		</div>
-
-		<!-- Loading State -->
-		<div class="loading-state" id="loadingState" style="display: none;">
-			<div class="spinner"></div>
-			<p>Cargando profesionales...</p>
-		</div>
 	</div>
 </main>
-
 {% endblock %}
 
 {% block modals %}
-<!-- ============================================ -->
-<!-- MODAL - Ahora está fuera de #content -->
-<!-- ============================================ -->
+<!-- MODAL AGENDAR CITA -->
 <div class="modal" id="appointmentModal">
 	<div class="modal-content modal-large">
 		<div class="modal-header">
@@ -210,35 +213,34 @@
 				</div>
 			</div>
 
-			<form class="appointment-form" id="appointmentForm" onsubmit="return false;">
+			<form method="POST" class="appointment-form" id="appointmentForm">
+				{% csrf_token %}
+				<input type="hidden" name="profesional_id" id="hiddenProfessionalId">
+				
 				<div class="form-group">
-					<label>Tipo de consulta</label>
-					<select class="form-control" id="consultationType" required>
+					<label>Tipo de consulta *</label>
+					<select class="form-control" name="tipo_consulta" id="consultationType" required>
 						<option value="">Selecciona el tipo</option>
 					</select>
 				</div>
 
 				<div class="form-group">
-					<label>Fecha</label>
-					<input type="date" class="form-control" id="appointmentDate" required>
+					<label>Fecha *</label>
+					<select class="form-control" name="fecha" id="appointmentDate" required>
+						<option value="">Selecciona una fecha</option>
+					</select>
 				</div>
 
 				<div class="form-group">
-					<label>Hora</label>
-					<select class="form-control" id="appointmentTime" required>
-						<option value="">Selecciona la hora</option>
-						<option value="09:00">09:00 AM</option>
-						<option value="10:00">10:00 AM</option>
-						<option value="11:00">11:00 AM</option>
-						<option value="14:00">02:00 PM</option>
-						<option value="15:00">03:00 PM</option>
-						<option value="16:00">04:00 PM</option>
+					<label>Hora *</label>
+					<select class="form-control" name="hora" id="appointmentTime" required>
+						<option value="">Primero selecciona una fecha</option>
 					</select>
 				</div>
 
 				<div class="form-group">
 					<label>Motivo de consulta (opcional)</label>
-					<textarea class="form-control" id="appointmentReason" rows="4"
+					<textarea class="form-control" name="motivo" id="appointmentReason" rows="4"
 						placeholder="Describe brevemente el motivo de tu consulta..."></textarea>
 				</div>
 
@@ -257,5 +259,23 @@
 {% endblock %}
 
 {% block scripts %}
+<script>
+	// Pasar disponibilidades de Django a JavaScript
+	const profesionalesData = [
+		{% for p in profesionales %}
+		{
+			id: {{ p.id }},
+			nombre: "{{ p.nombre|escapejs }}",
+			especialidad: "{{ p.especialidad|escapejs }}",
+			foto: "{{ p.foto|escapejs }}",
+			permite_presencial: {{ p.opciones.presencial|yesno:"true,false" }},
+			permite_online: {{ p.opciones.online|yesno:"true,false" }},
+			precio_presencial: {{ p.opciones.precio_presencial|default:"0" }},
+			precio_online: {{ p.opciones.precio_online|default:"0" }},
+			disponibilidades: {{ p.disponibilidad_completa|safe }}
+		}{% if not forloop.last %},{% endif %}
+		{% endfor %}
+	];
+</script>
 <script src="{% static 'cliente/js/profesionales.js' %}"></script>
 {% endblock %}
