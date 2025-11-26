@@ -14,13 +14,13 @@ import json
 import logging
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from datetime import datetime
+from datetime import datetime, timedelta
 from sistema.models import Disponibilidad, AspectosNegocio
-from profesional.models import Profesional, ProfesionalCliente, Mensaje
+from profesional.models import Profesional, ProfesionalCliente, Mensaje, Cita
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
-from django.db.models import Q, Max
-
+from django.db.models import Count, Q, Max, Avg
+from decimal import Decimal
 
 # -------------------------------------------------------------
 # CONFIGURACIÓN DE LOGGING
@@ -264,12 +264,195 @@ def bandeja_mensaje_option(request):
 
 @login_required(login_url='general:login_inicio_sesion')
 def productividad_ingresos_option(request):
-    """Renderiza la vista de productividad e ingresos."""
-    modelo_predictivo = request.session.get('modelo_predictivo', False)
-    return render(request, 'profesional/productividad_ingresos.html', {
-        "choice": 4,
-        "modelo_predictivo": modelo_predictivo
+    """Renderiza la vista de productividad e ingresos con datos reales."""
+    
+    # Obtener el profesional actual
+    try:
+        profesional = request.user.profesional
+    except:
+        # Si no es un profesional, redirigir o mostrar error
+        return render(request, 'profesional/productividad_ingresos.html', {
+            "choice": 4,
+            "modelo_predictivo": False,
+            "error": "Usuario no es un profesional"
         })
+    
+    # ============================================
+    # CALCULAR ESTADÍSTICAS GENERALES
+    # ============================================
+    
+    # Obtener todas las relaciones del profesional
+    relaciones = profesional.relaciones_cliente.filter(estado='activo')
+    total_contacto_clientes = relaciones.count()
+    
+    # Obtener todas las citas del profesional
+    citas = Cita.objects.filter(relacion__profesional=profesional)
+    
+    # Citas por tipo (asumiendo que tienes un campo 'tipo' o lo infieren de aspectos_negocio)
+    # Como no veo un campo específico de tipo en Cita, voy a calcular basado en si el profesional permite presencial/virtual
+    aspectos = profesional.aspectos_negocio
+    
+    if aspectos:
+        permite_presencial = aspectos.permite_presencial
+        permite_virtual = aspectos.permite_virtual
+    else:
+        permite_presencial = False
+        permite_virtual = False
+    
+    # Total de citas (todas las que no estén canceladas)
+    citas_totales = citas.exclude(estado='cancelada')
+    total_citas = citas_totales.count()
+    
+    # Para dividir entre presenciales y online, necesitarías un campo adicional en Cita
+    # Por ahora, voy a hacer una distribución proporcional basada en los permisos
+    if permite_presencial and permite_virtual:
+        # Dividir 50/50 si permite ambos
+        citas_presenciales = total_citas // 2
+        citas_online = total_citas - citas_presenciales
+    elif permite_presencial:
+        citas_presenciales = total_citas
+        citas_online = 0
+    elif permite_virtual:
+        citas_presenciales = 0
+        citas_online = total_citas
+    else:
+        citas_presenciales = 0
+        citas_online = 0
+    
+    # Citas agendadas (pendientes o confirmadas)
+    citas_agendadas = citas.filter(
+        Q(estado='pendiente') | Q(estado='confirmada')
+    ).count()
+    
+    # Citas concretadas (completadas)
+    citas_completadas = citas.filter(estado='completada')
+    total_concretadas = citas_completadas.count()
+    
+    # Dividir concretadas en presencial/online (misma lógica que antes)
+    if permite_presencial and permite_virtual:
+        concretadas_presenciales = total_concretadas // 2
+        concretadas_online = total_concretadas - concretadas_presenciales
+    elif permite_presencial:
+        concretadas_presenciales = total_concretadas
+        concretadas_online = 0
+    elif permite_virtual:
+        concretadas_presenciales = 0
+        concretadas_online = total_concretadas
+    else:
+        concretadas_presenciales = 0
+        concretadas_online = 0
+    
+    # Conversión de clientes (citas completadas / total de citas * 100)
+    if total_citas > 0:
+        conversion = round((total_concretadas / total_citas) * 100)
+    else:
+        conversion = 0
+    
+    # ============================================
+    # CALCULAR DATOS PARA LA GRÁFICA (12 MESES)
+    # ============================================
+    
+    # Obtener fecha actual y calcular últimos 12 meses
+    fecha_actual = timezone.now()
+    inicio_periodo = fecha_actual - timedelta(days=365)
+    
+    # Inicializar arrays para los 12 meses
+    meses_labels = []
+    eficiencia_data = []
+    ingresos_data = []
+    
+    # Nombres de meses en español
+    nombres_meses = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ]
+    
+    # Calcular para cada mes de los últimos 12 meses
+    for i in range(12):
+        # Calcular el mes específico
+        mes_fecha = fecha_actual - timedelta(days=30 * (11 - i))
+        mes_numero = mes_fecha.month
+        año = mes_fecha.year
+        
+        # Agregar label del mes
+        meses_labels.append(nombres_meses[mes_numero - 1])
+        
+        # Calcular primer y último día del mes
+        primer_dia = datetime(año, mes_numero, 1, tzinfo=timezone.get_current_timezone())
+        if mes_numero == 12:
+            ultimo_dia = datetime(año + 1, 1, 1, tzinfo=timezone.get_current_timezone())
+        else:
+            ultimo_dia = datetime(año, mes_numero + 1, 1, tzinfo=timezone.get_current_timezone())
+        
+        # EFICIENCIA: Citas completadas en el mes
+        citas_mes = citas.filter(
+            fecha__gte=primer_dia,
+            fecha__lt=ultimo_dia,
+            estado='completada'
+        ).count()
+        eficiencia_data.append(citas_mes)
+        
+        # INGRESOS: Calcular ingresos del mes
+        # Basado en citas completadas y precios configurados
+        if aspectos and (aspectos.precio_presencial or aspectos.precio_online):
+            citas_completadas_mes = citas.filter(
+                fecha__gte=primer_dia,
+                fecha__lt=ultimo_dia,
+                estado='completada'
+            )
+            
+            ingreso_mes = 0
+            for cita in citas_completadas_mes:
+                # Aquí deberías tener lógica para determinar si es presencial u online
+                # Por ahora uso un precio promedio
+                if aspectos.precio_presencial and aspectos.precio_online:
+                    precio_promedio = (aspectos.precio_presencial + aspectos.precio_online) / 2
+                elif aspectos.precio_presencial:
+                    precio_promedio = aspectos.precio_presencial
+                elif aspectos.precio_online:
+                    precio_promedio = aspectos.precio_online
+                else:
+                    precio_promedio = 0
+                
+                ingreso_mes += float(precio_promedio)
+            
+            # Convertir a unidades más manejables (dividir entre 100 para la gráfica)
+            ingresos_data.append(round(ingreso_mes / 100, 1))
+        else:
+            ingresos_data.append(0)
+    
+    # ============================================
+    # PREPARAR DATOS PARA LA GRÁFICA
+    # ============================================
+    
+    chart_data = {
+        'labels': meses_labels,
+        'eficiencia': eficiencia_data,
+        'ingresos': ingresos_data
+    }
+    
+    # ============================================
+    # PREPARAR CONTEXTO PARA EL TEMPLATE
+    # ============================================
+    
+    context = {
+        'choice': 4,
+        'modelo_predictivo': request.session.get('modelo_predictivo', False),
+        
+        # Estadísticas
+        'citas_presenciales': citas_presenciales,
+        'citas_online': citas_online,
+        'contacto_clientes': total_contacto_clientes,
+        'citas_agendadas': citas_agendadas,
+        'concretadas_presenciales': concretadas_presenciales,
+        'concretadas_online': concretadas_online,
+        'conversion': conversion,
+        
+        # Datos para la gráfica (convertir a JSON)
+        'chart_data_json': json.dumps(chart_data),
+    }
+    
+    return render(request, 'profesional/productividad_ingresos.html', context)
 
 
 

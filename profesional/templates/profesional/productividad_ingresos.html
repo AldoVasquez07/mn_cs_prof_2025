@@ -29,11 +29,11 @@
 					<div class="stat-content">
 						<div class="stat-values">
 							<div class="stat-value-item">
-								<span class="stat-number">0</span>
+								<span class="stat-number">{{ citas_presenciales }}</span>
 								<span class="stat-label">Presenciales</span>
 							</div>
 							<div class="stat-value-item">
-								<span class="stat-number">0</span>
+								<span class="stat-number">{{ citas_online }}</span>
 								<span class="stat-label">Online</span>
 							</div>
 						</div>
@@ -47,7 +47,7 @@
 						<i class='bx bx-group'></i>
 					</div>
 					<div class="stat-content">
-						<div class="stat-number-large">23</div>
+						<div class="stat-number-large">{{ contacto_clientes }}</div>
 						<div class="stat-title">Contacto con clientes</div>
 					</div>
 				</div>
@@ -58,7 +58,7 @@
 						<i class='bx bx-calendar-check'></i>
 					</div>
 					<div class="stat-content">
-						<div class="stat-number-large">0</div>
+						<div class="stat-number-large">{{ citas_agendadas }}</div>
 						<div class="stat-title">Citas agendadas</div>
 					</div>
 				</div>
@@ -71,11 +71,11 @@
 					<div class="stat-content">
 						<div class="stat-values">
 							<div class="stat-value-item">
-								<span class="stat-number">0</span>
+								<span class="stat-number">{{ concretadas_presenciales }}</span>
 								<span class="stat-label">Presenciales</span>
 							</div>
 							<div class="stat-value-item">
-								<span class="stat-number">0</span>
+								<span class="stat-number">{{ concretadas_online }}</span>
 								<span class="stat-label">Online</span>
 							</div>
 						</div>
@@ -89,7 +89,7 @@
 						<i class='bx bx-trending-up'></i>
 					</div>
 					<div class="stat-content">
-						<div class="stat-number-large">76%</div>
+						<div class="stat-number-large">{{ conversion }}%</div>
 						<div class="stat-title">Conversión de clientes</div>
 					</div>
 				</div>
@@ -98,15 +98,10 @@
 	</div>
 </main>
 
-
 <!-- Datos para la gráfica (desde Django) -->
 <script id="chart-data" type="application/json">
-		{
-			"labels": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-			"eficiencia": [6, 19, 3, 5, 2, 3, 10, 12, 19, 3, 5, 2],
-			"ingresos": [4, 3, 4, 5, 2, 2, 8, 2, 13, 2, 5, 3]
-		}
-	</script>
+{{ chart_data_json|safe }}
+</script>
 {% endblock %}
 
 {% block scripts %}
