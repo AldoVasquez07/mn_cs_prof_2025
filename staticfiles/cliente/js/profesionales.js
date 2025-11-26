@@ -1,13 +1,24 @@
 // ===================================
-// PROFESIONALES JS
-// Solo funcionalidad específica de profesionales
+// PROFESIONALES JS - VERSIÓN CORREGIDA
 // ===================================
 
 (function() {
 'use strict';
 
 // ===================================
-// SEARCH AND FILTER FUNCTIONALITY
+// VARIABLES GLOBALES
+// ===================================
+
+let selectedProfessional = null;
+let currentDisponibilidades = [];
+
+// Verificar que profesionalesData existe (viene del template)
+if (typeof profesionalesData === 'undefined') {
+    console.error('profesionalesData no está definida. Verifica el template.');
+}
+
+// ===================================
+// ELEMENTOS DEL DOM
 // ===================================
 
 const mainSearch = document.getElementById('mainSearch');
@@ -18,13 +29,62 @@ const professionalCards = document.querySelectorAll('.professional-card');
 const emptyState = document.getElementById('emptyState');
 const professionalsGrid = document.getElementById('professionalsGrid');
 
-if (mainSearch) {
-    mainSearch.addEventListener('input', applyFilters);
+const appointmentModal = document.getElementById('appointmentModal');
+const closeAppointment = document.getElementById('closeAppointment');
+const cancelAppointment = document.getElementById('cancelAppointment');
+const confirmAppointment = document.getElementById('confirmAppointment');
+const appointmentForm = document.getElementById('appointmentForm');
+const bookButtons = document.querySelectorAll('.btn-book-appointment');
+
+// ===================================
+// UTILIDADES
+// ===================================
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
 }
 
-if (specialtyFilter) specialtyFilter.addEventListener('change', applyFilters);
-if (typeFilter) typeFilter.addEventListener('change', applyFilters);
-if (ratingFilter) ratingFilter.addEventListener('change', applyFilters);
+// Agregar estilos de animación
+if (!document.getElementById('notification-styles')) {
+    const style = document.createElement('style');
+    style.id = 'notification-styles';
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(400px); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// ===================================
+// FILTROS Y BÚSQUEDA
+// ===================================
 
 function applyFilters() {
     const searchTerm = mainSearch ? mainSearch.value.toLowerCase().trim() : '';
@@ -67,27 +127,36 @@ function applyFilters() {
             emptyState.style.display = 'none';
         }
     }
-    
-    console.log(`Filtros aplicados. ${visibleCount} profesionales encontrados.`);
 }
+
+if (mainSearch) mainSearch.addEventListener('input', applyFilters);
+if (specialtyFilter) specialtyFilter.addEventListener('change', applyFilters);
+if (typeFilter) typeFilter.addEventListener('change', applyFilters);
+if (ratingFilter) ratingFilter.addEventListener('change', applyFilters);
 
 // ===================================
 // MODAL DE AGENDAR CITA
 // ===================================
 
-const appointmentModal = document.getElementById('appointmentModal');
-const closeAppointment = document.getElementById('closeAppointment');
-const cancelAppointment = document.getElementById('cancelAppointment');
-const confirmAppointment = document.getElementById('confirmAppointment');
-const bookButtons = document.querySelectorAll('.btn-book-appointment');
-
-let selectedProfessional = null;
-
 function openAppointmentModal() {
-    console.log('🔵 Intentando abrir modal...');
+    console.log('Abriendo modal de cita...');
     
     if (!appointmentModal) {
-        console.error('❌ Modal no encontrado en el DOM!');
+        console.error('Modal no encontrado');
+        return;
+    }
+    
+    if (!selectedProfessional) {
+        console.error('No hay profesional seleccionado');
+        return;
+    }
+
+    console.log('Datos del profesional:', selectedProfessional);
+    console.log('Disponibilidades:', currentDisponibilidades);
+    
+    // Verificar si hay disponibilidades
+    if (!currentDisponibilidades || currentDisponibilidades.length === 0) {
+        showNotification('Este profesional no tiene horarios disponibles en este momento', 'error');
         return;
     }
     
@@ -95,62 +164,71 @@ function openAppointmentModal() {
     const modalName = document.getElementById('modalProfessionalName');
     const modalSpecialty = document.getElementById('modalProfessionalSpecialty');
     const modalAvatar = document.getElementById('modalProfessionalAvatar');
+    const hiddenId = document.getElementById('hiddenProfessionalId');
     
-    if (modalName) modalName.textContent = selectedProfessional.name;
-    if (modalSpecialty) modalSpecialty.textContent = selectedProfessional.specialty;
+    if (modalName) modalName.textContent = selectedProfessional.nombre;
+    if (modalSpecialty) modalSpecialty.textContent = selectedProfessional.especialidad;
     if (modalAvatar) {
-        modalAvatar.src = selectedProfessional.avatar;
-        modalAvatar.alt = selectedProfessional.name;
+        modalAvatar.src = selectedProfessional.foto;
+        modalAvatar.alt = selectedProfessional.nombre;
     }
+    if (hiddenId) hiddenId.value = selectedProfessional.id;
+    
+    console.log('Hidden ID set to:', hiddenId?.value);
     
     // Configurar opciones de tipo de consulta
     const consultationType = document.getElementById('consultationType');
     if (consultationType) {
         consultationType.innerHTML = '<option value="">Selecciona el tipo</option>';
         
-        console.log('Tipos disponibles:', selectedProfessional.types);
-        
-        if (selectedProfessional.types.includes('presencial')) {
-            consultationType.innerHTML += `<option value="presencial" data-price="${selectedProfessional.precioPresencial}">Presencial - S/ ${selectedProfessional.precioPresencial}</option>`;
+        if (selectedProfessional.permite_presencial) {
+            const precio = selectedProfessional.precio_presencial || '0';
+            consultationType.innerHTML += `<option value="presencial" data-price="${precio}">Presencial - S/ ${precio}</option>`;
         }
         
-        if (selectedProfessional.types.includes('online')) {
-            consultationType.innerHTML += `<option value="online" data-price="${selectedProfessional.precioOnline}">Online - S/ ${selectedProfessional.precioOnline}</option>`;
+        if (selectedProfessional.permite_online) {
+            const precio = selectedProfessional.precio_online || '0';
+            consultationType.innerHTML += `<option value="online" data-price="${precio}">Online - S/ ${precio}</option>`;
         }
         
-        if (selectedProfessional.types.length === 0) {
-            consultationType.innerHTML += `<option value="presencial" data-price="200">Presencial - S/ 200</option>`;
-            consultationType.innerHTML += `<option value="online" data-price="200">Online - S/ 200</option>`;
-        }
+        console.log('Tipos de consulta configurados');
     }
     
-    // Resetear formulario
-    const appointmentForm = document.getElementById('appointmentForm');
+    // Resetear el formulario pero mantener el ID
+    const hiddenIdValue = hiddenId ? hiddenId.value : null;
     if (appointmentForm) appointmentForm.reset();
+    if (hiddenId && hiddenIdValue) hiddenId.value = hiddenIdValue;
+    
+    // Cargar fechas disponibles
+    const dateSelect = document.getElementById('appointmentDate');
+    const timeSelect = document.getElementById('appointmentTime');
+    
+    if (dateSelect) {
+        dateSelect.innerHTML = '<option value="">Selecciona una fecha</option>';
+        cargarFechasDisponibles();
+        console.log('Fechas cargadas');
+    }
+    
+    if (timeSelect) {
+        timeSelect.innerHTML = '<option value="">Primero selecciona una fecha</option>';
+    }
     
     const priceElement = document.getElementById('consultationPrice');
     if (priceElement) priceElement.textContent = 'S/ 0.00';
     
-    // Establecer fecha mínima (hoy)
-    const dateInput = document.getElementById('appointmentDate');
-    if (dateInput) {
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.min = today;
-    }
-    
-    // MOSTRAR EL MODAL
+    // Mostrar modal
     appointmentModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     document.body.classList.add('modal-open');
     
     setTimeout(() => {
         appointmentModal.classList.add('show');
-        console.log('✅ Modal mostrado correctamente');
+        console.log('Modal mostrado correctamente');
     }, 10);
 }
 
 function closeAppointmentModal() {
-    console.log('🔴 Cerrando modal...');
+    console.log('Cerrando modal...');
     
     if (appointmentModal) {
         appointmentModal.classList.remove('show');
@@ -163,84 +241,149 @@ function closeAppointmentModal() {
     }
     
     selectedProfessional = null;
+    currentDisponibilidades = [];
 }
 
-// Event listeners para los botones de "Agendar Cita"
+function cargarFechasDisponibles() {
+    const dateSelect = document.getElementById('appointmentDate');
+    if (!dateSelect || !currentDisponibilidades || currentDisponibilidades.length === 0) {
+        console.warn('No se pueden cargar fechas: dateSelect o disponibilidades no disponibles');
+        return;
+    }
+    
+    console.log('Cargando fechas desde:', currentDisponibilidades);
+    
+    // Agrupar slots por fecha
+    const fechasUnicas = {};
+    currentDisponibilidades.forEach(slot => {
+        const fecha = slot.fecha;
+        if (!fechasUnicas[fecha]) {
+            fechasUnicas[fecha] = {
+                fecha: fecha,
+                display: `${slot.dia} ${slot.fecha_display}`,
+                horarios: []
+            };
+        }
+        fechasUnicas[fecha].horarios.push(slot);
+    });
+    
+    console.log('Fechas únicas agrupadas:', Object.keys(fechasUnicas).length);
+    
+    // Llenar el select de fechas
+    dateSelect.innerHTML = '<option value="">Selecciona una fecha</option>';
+    Object.values(fechasUnicas).forEach(fechaData => {
+        const option = document.createElement('option');
+        option.value = fechaData.fecha;
+        option.textContent = fechaData.display;
+        option.dataset.horarios = JSON.stringify(fechaData.horarios);
+        dateSelect.appendChild(option);
+    });
+    
+    console.log('Fechas cargadas en select:', dateSelect.options.length - 1);
+}
+
+function cargarHorasDisponibles(fecha) {
+    const timeSelect = document.getElementById('appointmentTime');
+    const dateSelect = document.getElementById('appointmentDate');
+    
+    if (!timeSelect || !dateSelect) {
+        console.warn('timeSelect o dateSelect no encontrados');
+        return;
+    }
+    
+    const selectedOption = dateSelect.options[dateSelect.selectedIndex];
+    if (!selectedOption || !selectedOption.dataset.horarios) {
+        timeSelect.innerHTML = '<option value="">Selecciona una fecha primero</option>';
+        return;
+    }
+    
+    const horarios = JSON.parse(selectedOption.dataset.horarios);
+    console.log('Horarios para la fecha seleccionada:', horarios.length);
+    
+    timeSelect.innerHTML = '<option value="">Selecciona una hora</option>';
+    horarios.forEach(slot => {
+        const option = document.createElement('option');
+        option.value = slot.hora;
+        option.textContent = slot.hora_display || slot.hora;
+        timeSelect.appendChild(option);
+    });
+    
+    console.log('Horas cargadas:', timeSelect.options.length - 1);
+}
+
+// ===================================
+// EVENT LISTENERS PARA AGENDAR CITA
+// ===================================
+
 bookButtons.forEach(button => {
     button.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         
-        console.log('🟢 Click en botón Agendar Cita');
+        console.log('═══════════════════════════════════');
+        console.log('CLICK EN AGENDAR CITA');
+        console.log('═══════════════════════════════════');
         
-        const professionalName = this.dataset.professional;
-        const card = this.closest('.professional-card');
+        // Obtener el ID del profesional desde el botón
+        const professionalId = this.dataset.professionalId;
+        console.log('Buscando profesional con ID:', professionalId);
         
-        if (!card) {
-            console.error('❌ No se encontró la card del profesional');
+        // Verificar que profesionalesData existe
+        if (typeof profesionalesData === 'undefined') {
+            console.error('profesionalesData no definida');
+            showNotification('Error: Datos de profesionales no disponibles', 'error');
             return;
         }
         
-        console.log('Profesional:', professionalName);
+        console.log('Total profesionales disponibles:', profesionalesData.length);
         
-        // Obtener tipos de consulta disponibles
-        const typesString = card.dataset.types || '';
-        let types = [];
+        // Buscar el profesional en profesionalesData
+        const professional = profesionalesData.find(p => p.id == professionalId);
         
-        if (typesString) {
-            types = typesString.split(',').map(t => t.trim()).filter(t => t);
+        if (!professional) {
+            console.error('Profesional no encontrado en profesionalesData');
+            console.log('IDs disponibles:', profesionalesData.map(p => p.id));
+            showNotification('Error: Profesional no encontrado', 'error');
+            return;
         }
         
-        // Si no hay data-types, buscar en los badges
-        if (types.length === 0) {
-            const badges = card.querySelectorAll('.type-badge');
-            badges.forEach(badge => {
-                const text = badge.textContent.toLowerCase();
-                if (text.includes('presencial')) types.push('presencial');
-                if (text.includes('online')) types.push('online');
-            });
+        console.log('Profesional encontrado:', professional.nombre);
+        console.log('Datos completos:', professional);
+        
+        // Verificar disponibilidades
+        if (!professional.disponibilidades || professional.disponibilidades.length === 0) {
+            console.warn('⚠️ Sin disponibilidades para este profesional');
+            showNotification('Este profesional no tiene horarios disponibles actualmente', 'error');
+            return;
         }
         
-        console.log('Tipos encontrados:', types);
+        console.log('Disponibilidades:', professional.disponibilidades.length, 'slots');
         
-        // Obtener precios
-        const servicePrices = card.querySelectorAll('.service-price');
-        let precioPresencial = '200';
-        let precioOnline = '200';
-        
-        servicePrices.forEach(priceElement => {
-            const label = priceElement.previousElementSibling;
-            if (label) {
-                const labelText = label.textContent.toLowerCase();
-                const price = priceElement.textContent.replace('S/', '').trim();
-                
-                if (labelText.includes('presencial')) {
-                    precioPresencial = price;
-                }
-                if (labelText.includes('online')) {
-                    precioOnline = price;
-                }
-            }
-        });
-        
-        console.log('Precios - Presencial:', precioPresencial, 'Online:', precioOnline);
-        
+        // Guardar datos globalmente
         selectedProfessional = {
-            name: professionalName,
-            specialty: card.querySelector('.professional-specialty')?.textContent || 'Especialidad',
-            avatar: card.querySelector('.professional-avatar-large img')?.src || '',
-            types: types,
-            precioPresencial: precioPresencial,
-            precioOnline: precioOnline
+            id: professional.id,
+            nombre: professional.nombre,
+            especialidad: professional.especialidad,
+            foto: professional.foto,
+            precio_presencial: professional.precio_presencial,
+            precio_online: professional.precio_online,
+            permite_presencial: professional.permite_presencial,
+            permite_online: professional.permite_online
         };
         
-        console.log('Profesional seleccionado:', selectedProfessional);
+        currentDisponibilidades = professional.disponibilidades;
         
+        console.log('Datos guardados globalmente');
+        console.log('selectedProfessional:', selectedProfessional);
+        console.log('currentDisponibilidades:', currentDisponibilidades.length);
+        console.log('═══════════════════════════════════');
+        
+        // Abrir el modal
         openAppointmentModal();
     });
 });
 
-// Event listeners para cerrar el modal
+// Cerrar modal
 if (closeAppointment) {
     closeAppointment.addEventListener('click', function(e) {
         e.preventDefault();
@@ -255,7 +398,7 @@ if (cancelAppointment) {
     });
 }
 
-// Cerrar modal al hacer click fuera
+// Cerrar al hacer click fuera
 if (appointmentModal) {
     appointmentModal.addEventListener('click', function(e) {
         if (e.target === appointmentModal) {
@@ -268,80 +411,94 @@ if (appointmentModal) {
 const consultationType = document.getElementById('consultationType');
 if (consultationType) {
     consultationType.addEventListener('change', function() {
+        console.log('Tipo de consulta seleccionado:', this.value);
+        
         const selectedOption = this.options[this.selectedIndex];
         const price = selectedOption.getAttribute('data-price') || '0';
         
         const priceElement = document.getElementById('consultationPrice');
         if (priceElement) {
             priceElement.textContent = `S/ ${price}.00`;
+            console.log('Precio actualizado:', price);
         }
     });
 }
 
-// Confirmar cita
+// Cargar horas cuando se selecciona fecha
+const appointmentDate = document.getElementById('appointmentDate');
+if (appointmentDate) {
+    appointmentDate.addEventListener('change', function() {
+        console.log('Fecha seleccionada:', this.value);
+        cargarHorasDisponibles(this.value);
+    });
+}
+
+// Confirmar cita - enviar formulario
 if (confirmAppointment) {
     confirmAppointment.addEventListener('click', function(e) {
         e.preventDefault();
-        if (validateAppointmentForm()) {
-            bookAppointment();
+        
+        console.log('═══════════════════════════════════');
+        console.log('CONFIRMAR CITA - INICIANDO');
+        console.log('═══════════════════════════════════');
+        
+        // Obtener valores del formulario
+        const professionalId = document.getElementById('hiddenProfessionalId')?.value;
+        const consultationType = document.getElementById('consultationType')?.value;
+        const appointmentDate = document.getElementById('appointmentDate')?.value;
+        const appointmentTime = document.getElementById('appointmentTime')?.value;
+        const appointmentReason = document.getElementById('appointmentReason')?.value;
+        
+        console.log('Datos del formulario:');
+        console.log('  - Professional ID:', professionalId);
+        console.log('  - Tipo Consulta:', consultationType);
+        console.log('  - Fecha:', appointmentDate);
+        console.log('  - Hora:', appointmentTime);
+        console.log('  - Motivo:', appointmentReason);
+        
+        // Validaciones
+        if (!professionalId) {
+            console.error('Falta professional ID');
+            showNotification('Error: No se detectó el profesional', 'error');
+            return;
         }
-    });
-}
-
-function validateAppointmentForm() {
-    const consultationType = document.getElementById('consultationType')?.value;
-    const appointmentDate = document.getElementById('appointmentDate')?.value;
-    const appointmentTime = document.getElementById('appointmentTime')?.value;
-    
-    if (!consultationType) {
-        alert('Por favor, selecciona el tipo de consulta');
-        return false;
-    }
-    
-    if (!appointmentDate) {
-        alert('Por favor, selecciona una fecha');
-        return false;
-    }
-    
-    if (!appointmentTime) {
-        alert('Por favor, selecciona una hora');
-        return false;
-    }
-    
-    return true;
-}
-
-function bookAppointment() {
-    const appointmentData = {
-        professional: selectedProfessional.name,
-        specialty: selectedProfessional.specialty,
-        consultationType: document.getElementById('consultationType').value,
-        date: document.getElementById('appointmentDate').value,
-        time: document.getElementById('appointmentTime').value,
-        reason: document.getElementById('appointmentReason').value,
-        price: document.getElementById('consultationPrice').textContent,
-        timestamp: new Date().toISOString()
-    };
-    
-    console.log('Agendando cita:', appointmentData);
-    
-    if (confirmAppointment) {
+        
+        if (!consultationType) {
+            console.warn('Falta tipo de consulta');
+            showNotification('Por favor, selecciona el tipo de consulta', 'error');
+            return;
+        }
+        
+        if (!appointmentDate) {
+            console.warn('Falta fecha');
+            showNotification('Por favor, selecciona una fecha', 'error');
+            return;
+        }
+        
+        if (!appointmentTime) {
+            console.warn('Falta hora');
+            showNotification('Por favor, selecciona una hora', 'error');
+            return;
+        }
+        
+        console.log('Todas las validaciones pasadas');
+        
+        // Deshabilitar botón mientras se procesa
         confirmAppointment.disabled = true;
         confirmAppointment.textContent = 'Procesando...';
-    }
-    
-    setTimeout(() => {
-        closeAppointmentModal();
-        alert(`¡Cita agendada exitosamente con ${appointmentData.professional}!`);
         
-        if (confirmAppointment) {
+        console.log('Enviando formulario...');
+        console.log('═══════════════════════════════════');
+        
+        // Enviar el formulario
+        if (appointmentForm) {
+            appointmentForm.submit();
+        } else {
+            console.error('Formulario no encontrado');
             confirmAppointment.disabled = false;
             confirmAppointment.textContent = 'Confirmar Cita';
         }
-        
-        // Aquí puedes agregar la lógica para enviar al backend
-        // fetch('/api/appointments/', { method: 'POST', body: JSON.stringify(appointmentData) })
-    }, 1500);
+    });
 }
 
 // ===================================
@@ -354,7 +511,7 @@ document.addEventListener('keydown', function(e) {
         closeAppointmentModal();
     }
     
-    // Ctrl/Cmd + K para enfocar búsqueda
+    // Ctrl/Cmd + K para buscar
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
         if (mainSearch) mainSearch.focus();
@@ -362,49 +519,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ===================================
-// SORTING FUNCTIONALITY
-// ===================================
-
-function sortProfessionals(criteria) {
-    const cardsArray = Array.from(professionalCards);
-    
-    cardsArray.sort((a, b) => {
-        switch(criteria) {
-            case 'name':
-                const nameA = a.querySelector('.professional-name')?.textContent || '';
-                const nameB = b.querySelector('.professional-name')?.textContent || '';
-                return nameA.localeCompare(nameB);
-                
-            case 'rating':
-                const ratingA = parseInt(a.dataset.rating) || 0;
-                const ratingB = parseInt(b.dataset.rating) || 0;
-                return ratingB - ratingA;
-                
-            case 'specialty':
-                const specialtyA = a.dataset.specialty || '';
-                const specialtyB = b.dataset.specialty || '';
-                return specialtyA.localeCompare(specialtyB);
-                
-            default:
-                return 0;
-        }
-    });
-    
-    if (professionalsGrid) {
-        cardsArray.forEach(card => professionalsGrid.appendChild(card));
-    }
-}
-
-const sortButtons = document.querySelectorAll('[data-sort]');
-sortButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        const criteria = this.dataset.sort;
-        sortProfessionals(criteria);
-    });
-});
-
-// ===================================
-// FAVORITOS FUNCTIONALITY
+// FAVORITOS
 // ===================================
 
 function initializeFavorites() {
@@ -462,53 +577,56 @@ function toggleFavorite(professionalName, button) {
     if (favorites.includes(professionalName)) {
         favorites = favorites.filter(name => name !== professionalName);
         icon.classList.replace('bxs-heart', 'bx-heart');
-        console.log('Removido de favoritos:', professionalName);
+        showNotification('Removido de favoritos', 'info');
     } else {
         favorites.push(professionalName);
         icon.classList.replace('bx-heart', 'bxs-heart');
-        console.log('Agregado a favoritos:', professionalName);
+        showNotification('Agregado a favoritos', 'success');
     }
     
     localStorage.setItem('favorites', JSON.stringify(favorites));
 }
 
 // ===================================
-// VIEW PROFESSIONAL DETAILS
+// AUTO-OCULTAR MENSAJES
 // ===================================
 
-professionalCards.forEach(card => {
-    card.addEventListener('click', function(e) {
-        if (e.target.closest('button')) return;
-        
-        const professionalName = this.querySelector('.professional-name')?.textContent || '';
-        console.log(`Ver detalles de ${professionalName}`);
-        
-        // Aquí podrías redirigir a la página de detalles
-        // window.location.href = `/cliente/profesionales/${professionalId}/`;
-    });
-    
-    card.style.cursor = 'pointer';
-});
+function autoHideMessages() {
+    const messagesContainer = document.querySelector('.messages-container');
+    if (messagesContainer) {
+        setTimeout(() => {
+            messagesContainer.style.transition = 'opacity 0.5s';
+            messagesContainer.style.opacity = '0';
+            setTimeout(() => messagesContainer.remove(), 500);
+        }, 5000);
+    }
+}
 
 // ===================================
 // INICIALIZACIÓN
 // ===================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('📋 Sistema de profesionales inicializado');
-    console.log('Modal encontrado:', !!appointmentModal);
-    console.log('Botones de agendar encontrados:', bookButtons.length);
+    console.log('═══════════════════════════════════');
+    console.log('SISTEMA DE PROFESIONALES');
+    console.log('═══════════════════════════════════');
     console.log('Profesionales cargados:', professionalCards.length);
+    console.log('Botones de agendar:', bookButtons.length);
+    console.log('profesionalesData disponible:', typeof profesionalesData !== 'undefined');
     
-    if (!appointmentModal) {
-        console.error('❌ CRÍTICO: El modal no fue encontrado. Verifica el HTML.');
+    if (typeof profesionalesData !== 'undefined') {
+        console.log('Total en profesionalesData:', profesionalesData.length);
+        profesionalesData.forEach((p, i) => {
+            console.log(`  ${i+1}. ID: ${p.id} - ${p.nombre} - Disp: ${p.disponibilidades?.length || 0}`);
+        });
     }
     
-    initializeFavorites();
+    console.log('═══════════════════════════════════');
     
-    console.log('Atajos de teclado disponibles:');
-    console.log('- Ctrl/Cmd + K: Buscar');
-    console.log('- ESC: Cerrar modal');
+    initializeFavorites();
+    autoHideMessages();
+    
+    console.log('Sistema listo y operativo');
 });
 
 })(); // Fin del IIFE

@@ -380,3 +380,32 @@
 		font-size: 13px;
 	}
 }
+
+.text-muted {
+    color: #999;
+    font-style: italic;
+}
+
+.email-text {
+    color: #333;
+}
+
+.no-data {
+    text-align: center;
+    padding: 2rem !important;
+    color: #999;
+    font-style: italic;
+}
+
+.alert-error {
+    background-color: #fee;
+    border: 1px solid #fcc;
+    color: #c33;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.no-results {
+    background-color: #fafafa;
+}
