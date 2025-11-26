@@ -117,7 +117,7 @@ docker-compose down
 
 ---
 
-## 📦 7. Descargar la imagen desde Docker Hub
+## 📦 7. Descargar la imagen desde Docker Hub de modelo hybrid
 
 Si quieres ejecutar el proyecto **sin clonar el código**, solo desde la imagen:
 
