@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  flask_app:
+    image: aldovasquez07/cs_prof_2025:flask
+    container_name: flask_app
+    ports:
+      - "5000:5000"
+    restart: always
+    networks:
+      - appnet
+
+  django_app:
+    image: aldovasquez07/cs_prof_2025:django
+    container_name: django_app
+    ports:
+      - "8000:8000"
+    restart: always
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    driver: bridge
