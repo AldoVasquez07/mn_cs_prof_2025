@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 # -------------------------------------------------------------
 # URL BASE DE LA API DE PREDICCIÓN (Flask u otro servicio externo)
 # -------------------------------------------------------------
-API_BASE_URL = "https://127.0.0.1:5000"
+API_BASE_URL = "http://flask_app:5000"
 
 
 
