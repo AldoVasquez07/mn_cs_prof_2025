@@ -7,6 +7,8 @@
 
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.conf import settings
+
 
 
 class Profesion(models.Model):
@@ -16,6 +18,26 @@ class Profesion(models.Model):
     """
     nombre = models.TextField(max_length=150, unique=True)
     descripcion = models.TextField(blank=True, null=True)
+    
+    # Auditoría
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_created"
+    )
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_modified"
+    )
+    modified_date = models.DateTimeField(null=True, blank=True, auto_now=True)
+    
     flag = models.BooleanField(default=True, help_text="Indica si el registro está activo o no.")
 
     def __str__(self):
@@ -37,6 +59,26 @@ class Especialidad(models.Model):
         null=True,
         help_text="Profesión a la que pertenece esta especialidad."
     )
+    
+    # Auditoría
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_created"
+    )
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_modified"
+    )
+    modified_date = models.DateTimeField(null=True, blank=True, auto_now=True)
+    
     flag = models.BooleanField(default=True, help_text="Indica si la especialidad está activa.")
 
     def __str__(self):
@@ -78,6 +120,26 @@ class Profesional(models.Model):
         related_name='profesionales',
         help_text="Organización o institución a la que pertenece el profesional."
     )
+    
+    # Auditoría
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_created"
+    )
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_modified"
+    )
+    modified_date = models.DateTimeField(null=True, blank=True, auto_now=True)
+    
     flag = models.BooleanField(default=True, help_text="Indica si el profesional está activo en el sistema.")
 
     def __str__(self):
@@ -105,6 +167,25 @@ class ProfesionalCliente(models.Model):
         default='activo',
         help_text='Estado de la relación (activo, finalizado, suspendido, etc.)'
     )
+    
+    # Auditoría
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_created"
+    )
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_modified"
+    )
+    modified_date = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         unique_together = ('profesional', 'cliente')
@@ -127,6 +208,25 @@ class Mensaje(models.Model):
     )
     contenido = models.TextField()
     fecha_envio = models.DateTimeField(auto_now_add=True)
+    
+    # Auditoría
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_created"
+    )
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_modified"
+    )
+    modified_date = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         ordering = ['-fecha_envio']
@@ -177,6 +277,25 @@ class Cita(models.Model):
         null=True,
         blank=True
     )
+    
+    # Auditoría
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_created"
+    )
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_modified"
+    )
+    modified_date = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         ordering = ['-fecha']

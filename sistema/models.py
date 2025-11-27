@@ -3,11 +3,32 @@ from datetime import datetime
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 
 class Pais(models.Model):
     nombre = models.CharField(max_length=100)
     codigo = models.CharField(max_length=10, unique=True)
+    
+    # Auditoría
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_created"
+    )
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_modified"
+    )
+    modified_date = models.DateTimeField(null=True, blank=True, auto_now=True)
+    
     flag = models.BooleanField(default=True)
 
     def __str__(self):
@@ -17,6 +38,26 @@ class Pais(models.Model):
 class Ciudad(models.Model):
     nombre = models.CharField(max_length=150)
     pais = models.ForeignKey(Pais, on_delete=models.CASCADE, related_name='ciudades')
+    
+    # Auditoría
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_created"
+    )
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_modified"
+    )
+    modified_date = models.DateTimeField(null=True, blank=True, auto_now=True)
+    
     flag = models.BooleanField(default=True)
 
     def __str__(self):
@@ -26,6 +67,26 @@ class Ciudad(models.Model):
 class Rol(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
     descripcion = models.TextField(blank=True, null=True)
+    
+    # Auditoría
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_created"
+    )
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_modified"
+    )
+    modified_date = models.DateTimeField(null=True, blank=True, auto_now=True)
+    
     flag = models.BooleanField(default=True)
 
     def __str__(self):
@@ -41,6 +102,26 @@ class Usuario(AbstractUser):
     ciudad = models.ForeignKey(Ciudad, on_delete=models.SET_NULL, null=True, blank=True)
     calificacion = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    # Auditoría
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_created"
+    )
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_modified"
+    )
+    modified_date = models.DateTimeField(null=True, blank=True, auto_now=True)
+    
     flag = models.BooleanField(default=True)
     
     def __str__(self):
@@ -101,6 +182,25 @@ class AspectosNegocio(models.Model):
     # CAMPOS FALTANTES (AGREGAR)
     precio_presencial = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     precio_online = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    
+    # Auditoría
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_created"
+    )
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_modified"
+    )
+    modified_date = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     flag = models.BooleanField(default=True)
 
@@ -128,6 +228,25 @@ class Disponibilidad(models.Model):
     )
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
+    
+    # Auditoría
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_created"
+    )
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_modified"
+    )
+    modified_date = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     def __str__(self):
         return f"{self.dia}: {self.hora_inicio.strftime('%H:%M')} - {self.hora_fin.strftime('%H:%M')}"
