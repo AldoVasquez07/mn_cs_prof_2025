@@ -169,6 +169,19 @@ class LogProcesos(models.Model):
         return f'{self.proceso} - {self.fecha}'
     
 
+
+class RegistroAcceso(models.Model):
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    accion = models.CharField(max_length=10)  # login / logout
+    ip = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(null=True, blank=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+    duracion_sesion = models.DurationField(null=True, blank=True)  # solo para logout
+
+    def __str__(self):
+        return f"{self.usuario.email} - {self.accion} - {self.fecha}"
+
+
 class AspectosNegocio(models.Model):
     direccion = models.CharField(max_length=255, blank=True)
     experiencia = models.TextField(blank=True)

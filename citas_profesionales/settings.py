@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'general', # modulo de la pagina principal
+    'general.apps.GeneralConfig', # modulo de la pagina principal
     'cliente', # modulo de la aplicacion de clientes
     'profesional', # modeulo de la aplicacion de profesionales
     'sistema', # modulo de la aplicacion de sistemas
